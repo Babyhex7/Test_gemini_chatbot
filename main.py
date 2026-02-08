@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from database.connection import engine
-from database.models.base import Base
+from database.base import Base
 from api.endpoints.conversation import router as conversation_router
 from api.endpoints.health import router as health_router
 

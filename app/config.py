@@ -2,9 +2,10 @@
 Konfigurasi aplikasi EduMindAI
 """
 from pydantic_settings import BaseSettings
-from pydantic import Field
-from typing import List, Optional
+from pydantic import Field, field_validator
+from typing import List, Optional, Union
 from functools import lru_cache
+from urllib.parse import quote_plus
 import os
 
 
@@ -13,24 +14,26 @@ class Settings(BaseSettings):
     
     # Aplikasi
     APP_NAME: str = "EduMindAI"
-    APP_ENV: str = "development"
+    ENVIRONMENT: str = "development"
     DEBUG: bool = True
+    API_HOST: str = "0.0.0.0"
+    API_PORT: int = 8000
     API_PREFIX: str = "/api"
     API_VERSION: str = "v1"
     
     # Google Gemini API
     GEMINI_API_KEY: str = Field(..., description="API Key untuk Google Gemini")
-    GEMINI_MODEL: str = "gemini-pro"
-    GEMINI_TIMEOUT_SECONDS: int = 30
-    GEMINI_RETRY_ATTEMPTS: int = 3
+    GEMINI_MODEL: str = "gemini-1.5-flash"
+    GEMINI_TIMEOUT: int = 30
+    GEMINI_MAX_RETRIES: int = 3
     GEMINI_MAX_CALLS_PER_SESSION: int = 2
     
     # PostgreSQL Database
-    DB_HOST: str = "localhost"
-    DB_PORT: int = 5432
-    DB_NAME: str = "edumind_db"
-    DB_USER: str = "postgres"
-    DB_PASSWORD: str = ""
+    DATABASE_HOST: str = "localhost"
+    DATABASE_PORT: int = 5432
+    DATABASE_NAME: str = "edumindai"
+    DATABASE_USER: str = "postgres"
+    DATABASE_PASSWORD: str = ""
     DATABASE_URL: str = ""
     
     # Knowledge Base
@@ -48,8 +51,17 @@ class Settings(BaseSettings):
     SESSION_TIMEOUT_MINUTES: int = 30
     
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8080"]
+    CORS_ORIGINS: Union[str, List[str]] = ["http://localhost:3000", "http://localhost:8080"]
     CORS_ALLOW_CREDENTIALS: bool = True
+    
+    @field_validator('CORS_ORIGINS', mode='before')
+    @classmethod
+    def parse_cors_origins(cls, v):
+        """Parse CORS origins from string or list"""
+        if isinstance(v, str):
+            # Split by comma if string
+            return [origin.strip() for origin in v.split(',')]
+        return v
     
     # Language
     DEFAULT_LANGUAGE: str = "id"
@@ -72,9 +84,11 @@ class Settings(BaseSettings):
         super().__init__(**kwargs)
         # Build DATABASE_URL if not provided
         if not self.DATABASE_URL:
+            # URL-encode password for special characters like # and $
+            encoded_password = quote_plus(self.DATABASE_PASSWORD)
             self.DATABASE_URL = (
-                f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}"
-                f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+                f"postgresql+asyncpg://{self.DATABASE_USER}:{encoded_password}"
+                f"@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
             )
 
 

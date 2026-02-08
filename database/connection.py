@@ -18,12 +18,12 @@ engine = create_async_engine(
     max_overflow=10
 )
 
-# Sync engine (untuk migrasi)
-sync_engine = create_engine(
-    settings.DATABASE_URL.replace("+asyncpg", ""),
-    echo=settings.DEBUG,
-    pool_pre_ping=True
-)
+# Sync engine (untuk migrasi) - commented out untuk sekarang
+# sync_engine = create_engine(
+#     settings.DATABASE_URL.replace("+asyncpg", ""),
+#     echo=settings.DEBUG,
+#     pool_pre_ping=True
+# )
 
 # Async session factory
 AsyncSessionLocal = async_sessionmaker(
@@ -34,12 +34,12 @@ AsyncSessionLocal = async_sessionmaker(
     autoflush=False
 )
 
-# Sync session factory (untuk migrasi)
-SessionLocal = sessionmaker(
-    bind=sync_engine,
-    autocommit=False,
-    autoflush=False
-)
+# Sync session factory (untuk migrasi) - commented out
+# SessionLocal = sessionmaker(
+#     bind=sync_engine,
+#     autocommit=False,
+#     autoflush=False
+# )
 
 
 async def get_async_db() -> AsyncGenerator[AsyncSession, None]:
@@ -55,10 +55,8 @@ async def get_async_db() -> AsyncGenerator[AsyncSession, None]:
             await session.close()
 
 
-def get_db():
-    """Dependency untuk mendapatkan sync database session"""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# Sync version - untuk compatibility (gunakan get_async_db untuk production)
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    """Dependency untuk mendapatkan database session (async wrapper)"""
+    async for session in get_async_db():
+        yield session
