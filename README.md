@@ -1,6 +1,6 @@
-# 🧠 EduMindAI - Chatbot Dukungan Emosional
+# 🧠 EduMindAI - Chatbot Pendamping Reflektif Emosional
 
-> Chatbot berbasis AI untuk **dukungan emosional** dan **bimbingan edukasi** menggunakan Google Gemini API dengan RAG (Retrieval-Augmented Generation) berbasis LangChain.
+> Chatbot pendamping reflektif awal (**front-door**) dalam ekosistem wellness sekolah. Membantu siswa menamai emosi, melakukan refleksi ringan & aman, dan memahami kapan perlu dukungan manusia — menggunakan **Google Gemini API**.
 
 ---
 
@@ -8,7 +8,7 @@
 
 - [Gambaran Umum](#-gambaran-umum)
 - [Fitur Utama](#-fitur-utama)
-- [Alur Sistem](#-alur-sistem)
+- [Alur Sistem — 4 Fase Percakapan](#-alur-sistem--4-fase-percakapan)
 - [Arsitektur](#-arsitektur)
 - [Struktur Project](#-struktur-project)
 - [Tech Stack](#-tech-stack)
@@ -17,7 +17,7 @@
 - [Konfigurasi](#-konfigurasi)
 - [API Endpoints](#-api-endpoints)
 - [Detail Module](#-detail-module)
-- [Alur Chat Detail + Endpoint](#-alur-chat-detail--endpoint)
+- [Alur Chat Detail — Multi-Turn](#-alur-chat-detail--multi-turn)
 - [API Design Best Practices](#-api-design-best-practices)
 - [Database Schema](#-database-schema-postgresql--sqlalchemy)
 - [Struktur Knowledge Base](#-struktur-knowledge-base)
@@ -27,11 +27,59 @@
 
 ## 🎯 Gambaran Umum
 
-**EduMindAI** adalah chatbot AI yang berfokus pada **dukungan emosional** dan **bimbingan edukasi** untuk mahasiswa. Sistem ini menggunakan **Google Gemini API** sebagai satu-satunya LLM untuk semua pemrosesan AI, termasuk deteksi emosi, analisis sentimen, dan generasi respons.
+**EduMindAI** adalah chatbot pendamping reflektif awal (**front-door**) dalam ekosistem wellness sekolah. Bukan alat diagnosis, terapi, atau pengambil keputusan — melainkan **teman refleksi yang aman** untuk siswa.
 
-### 🎡 Plutchik's Wheel of Emotion
+### Goals
 
-Model emosi 3 tingkat untuk deteksi emosi yang komprehensif (diproses oleh Gemini):
+| #   | Tujuan                           | Deskripsi                                                                      |
+| --- | -------------------------------- | ------------------------------------------------------------------------------ |
+| 1   | **Menamai emosi**          | Membantu siswa menamai emosi dengan tepat menggunakan Feeling Wheel (Plutchik) |
+| 2   | **Refleksi ringan & aman** | Guided self-reflection melalui 5 pertanyaan reflektif (MHCM-based)             |
+| 3   | **Respon natural & empatik** | Bot memberikan narasi reflektif yang manusiawi menggunakan Gemini            |
+
+### Scope & Batasan
+
+| ✅ Dalam Scope                        | ❌ Di Luar Scope              |
+| ------------------------------------- | ----------------------------- |
+| Pendamping refleksi emosi             | Diagnosis klinis              |
+| Guided self-reflection (5 pertanyaan) | Terapi / konseling            |
+| Emotion naming (Feeling Wheel)        | Pengambil keputusan           |
+| Narasi reflektif (MHCM)               | Pengganti profesional         |
+| Tips coping ringan                    | Assessment formal             |
+| Respon natural dari Gemini            | Label klinis / scoring klinis |
+
+### 🟢 Zona Kesejahteraan (Non-Klinis)
+
+| Zona                       | Indikator                              | Aksi Chatbot                          |
+| -------------------------- | -------------------------------------- | ------------------------------------- |
+| 🟢 **Seimbang**            | Emosi stabil, mampu mengelola perasaan | Validasi + tips ringan                |
+| 🟡 **Beradaptasi**         | Ada tekanan tapi masih coping          | Refleksi mendalam + coping strategies |
+| 🟠 **Butuh Dukungan**      | Emosi intens berulang, sulit coping    | Tips coping + saran cari dukungan     |
+| 🔴 **Perlu Perhatian**     | Indikasi intens/berulang               | Tips grounding + saran bicara orang terdekat |
+
+### Expected Outcomes (MVP)
+
+| Outcome                        | Deskripsi                                                    |
+| ------------------------------ | ------------------------------------------------------------ |
+| **Peningkatan literasi emosi** | Siswa mampu menamai emosi dengan tepat                       |
+| **Refleksi yang membantu**     | Siswa mendapat narasi reflektif yang manusiawi & validatif   |
+| **Tips actionable**            | Siswa mendapat coping tips praktis sesuai emosinya           |
+
+### Keputusan Arsitektur
+
+| Keputusan                    | Alasan                                                                                 |
+| ---------------------------- | -------------------------------------------------------------------------------------- |
+| **Hanya Gemini API**         | Cukup pintar untuk deteksi emosi + generate narasi reflektif                           |
+| **Multi-Turn 4 Fase**        | User bercerita → 5 refleksi → narasi MHCM → pilihan lanjutan. Bukan 1-shot Q&A         |
+| **Pertanyaan dari JSON**     | 5 self-reflection questions dari knowledge base per emosi, tidak di-generate tiap kali |
+| **Gemini hanya 2x per sesi** | Call #1: deteksi emosi (awal). Call #2: generate narasi reflektif (setelah 5 jawaban)  |
+| **Tanpa RAG/Embedding**      | Knowledge base di-inject langsung ke prompt sebagai JSON                               |
+| **Tanpa Redis**              | Session state cukup dari PostgreSQL                                                    |
+| **Safe Framing**             | Selalu buka dengan "Aku di sini untuk bantu refleksi, bukan mendiagnosis"              |
+
+### 🎡 Plutchik's Wheel of Emotion (Feeling Wheel)
+
+Model emosi 3 tingkat yang dipakai Gemini untuk **menamai & memetakan emosi** pengguna:
 
 | Level        | Emosi                                                                                      | Deskripsi                |
 | ------------ | ------------------------------------------------------------------------------------------ | ------------------------ |
@@ -39,131 +87,180 @@ Model emosi 3 tingkat untuk deteksi emosi yang komprehensif (diproses oleh Gemin
 | **Sekunder** | Love, Submission, Awe, Disapproval, Remorse, Contempt, Aggressiveness, Optimism            | Kombinasi 2 emosi primer |
 | **Tersier**  | Serenity, Acceptance, Apprehension, Distraction, Pensiveness, Boredom, Annoyance, Interest | Intensitas/nuansa emosi  |
 
-### Fitur Utama Sistem
+### Cara Kerja — 4 Fase Percakapan
 
-- 🎭 **Mengenali emosi** pengguna hingga level tersier menggunakan Wheel of Emotion via Gemini
-- 💬 **Memberikan respons empatik** dan supportif
-- 📚 **Menyediakan saran praktis** berbasis knowledge base (RAG)
-- 🔄 **Pertanyaan lanjutan** berdasarkan emosi terdeteksi untuk pemahaman lebih dalam
-
-### Cara Kerja Singkat
+| Fase | Nama                 | Apa yang Terjadi                                                                  | Gemini?    |
+| ---- | -------------------- | --------------------------------------------------------------------------------- | ---------- |
+| 1    | **BERCERITA**        | User curhat/cerita → Gemini deteksi emosi → Bot buka safe framing + validasi      | 🔷 Call #1 |
+| 2    | **REFLEKSI RINGAN**  | Bot tanya 5 pertanyaan reflektif (dari JSON per emosi) → User jawab satu per satu | ⚡ No LLM  |
+| 3    | **NARASI REFLEKTIF** | Setelah 5 jawaban → Gemini generate narasi MHCM + zona kesejahteraan              | 🔷 Call #2 |
+| 4    | **TIPS & CLOSING**   | Bot kasih tips coping ringan + closing message yang empatik                       | ⚡ No LLM  |
 
 ```
-Input Pengguna (Keluh Kesah/Curhat)
-    → Validasi Input
-    → Deteksi Emosi via Gemini (Primer → Sekunder → Tersier)
-    → Pertanyaan Lanjutan (Follow-up) berdasarkan Emosi
-    → Pencarian Konteks (RAG Retrieval)
-    → Pemrosesan LLM (Gemini)
-    → Respons + Saran
+Fase 1 — BERCERITA:
+  User: "Aku merasa tidak bisa fokus belajar, rasanya semua menumpuk..."
+  → 🔷 Gemini Call #1: Deteksi emosi (sadness + fear)
+  → Bot: "Aku di sini untuk bantu refleksi, bukan mendiagnosis.
+          Terima kasih sudah berbagi. Sepertinya ada perasaan berat
+          yang kamu rasakan. Boleh aku tanya beberapa hal?"
+
+Fase 2 — REFLEKSI RINGAN (5 pertanyaan dari JSON, tanpa Gemini):
+  Bot: Q1 "Kapan terakhir kali kamu merasa seperti ini?"
+  User: jawab → Bot: Q2 "Apa yang biasanya kamu lakukan saat merasa seperti ini?"
+  User: jawab → Bot: Q3 "Siapa yang biasanya kamu ajak cerita?"
+  User: jawab → Bot: Q4 "Bagaimana perasaan ini mempengaruhi aktivitasmu?"
+  User: jawab → Bot: Q5 "Apa yang kamu harapkan berubah dari situasi ini?"
+  User: jawab →
+
+Fase 3 — NARASI REFLEKTIF:
+  → 🔷 Gemini Call #2: Generate narasi + zona MHCM
+  → Bot: "Dalam beberapa waktu terakhir, perasaan yang muncul cukup
+          beragam dan terasa intens, terutama setelah kejadian yang
+          menuntut banyak energi. Ada kesan bahwa tubuh dan pikiranmu
+          sedang bekerja keras untuk beradaptasi."
+  → Zona: 🟡 Beradaptasi
+
+Fase 4 — TIPS & CLOSING:
+  Bot: "Berikut beberapa tips yang mungkin bisa membantu:
+  1. Grounding 5-4-3-2-1 (5 hal yang kamu lihat, 4 yang kamu dengar...)
+  2. Jeda sejenak dan tarik napas dalam
+  3. Tulis 3 hal yang kamu syukuri hari ini
+  
+  Terima kasih sudah berbagi. Kamu selalu bisa kembali kapan saja."
 ```
+
+> **Total: 2 panggilan Gemini per SESI percakapan (bukan per message).** 5 pertanyaan refleksi diambil dari JSON knowledge base tanpa Gemini call.
 
 ---
 
 ## ✨ Fitur Utama
 
-| Fitur                            | Deskripsi                                                                                |
-| -------------------------------- | ---------------------------------------------------------------------------------------- |
-| 🎡 **Wheel of Emotion**          | Deteksi emosi 3 tingkat (primer, sekunder, tersier) berbasis Plutchik's Wheel via Gemini |
-| 🎭 **Deteksi Emosi Multi-Level** | Mendeteksi emosi primer, sekunder, dan tersier secara bersamaan                          |
-| 📈 **Analisis Sentimen**         | Menganalisis sentimen (positif, negatif, netral) dengan skor kepercayaan via Gemini      |
-| ⚠️ **Deteksi Urgensi**           | Mendeteksi tingkat urgensi (rendah, sedang, tinggi, kritis) untuk penanganan krisis      |
-| 💡 **Saran Cerdas**              | Memberikan saran yang dapat ditindaklanjuti berdasarkan konteks emosi                    |
-| 🔄 **Pertanyaan Lanjutan**       | Pertanyaan klarifikasi berdasarkan emosi untuk memahami kondisi pengguna lebih baik      |
-| 📚 **Berbasis RAG**              | Respons diperkaya dengan knowledge base (tips kesehatan mental, strategi coping)         |
-| 💾 **Memori Percakapan**         | Mengingat konteks percakapan sebelumnya untuk respons yang konsisten                     |
-| 🛡️ **Filter Keamanan**           | Menyaring konten berbahaya atau tidak pantas                                             |
+| #   | Fitur                                 | Deskripsi                                                                                                                               | Fase   |
+| --- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 1   | 🎡 **Emotion Naming Assistant**       | Guided Feeling Wheel exploration — membantu user menamai emosi dengan tepat menggunakan Plutchik's Wheel via Gemini                     | Fase 1 |
+| 2   | 💬 **Reflective Questions**           | 5 pertanyaan terbuka & empatik dari JSON knowledge base per emosi — untuk memvalidasi dan mengeksplorasi perasaan user (tanpa Gemini)   | Fase 2 |
+| 3   | 📝 **Narrative Reflection Generator** | Gemini merangkum emosi dengan bahasa manusiawi tanpa label klinis — "Dalam beberapa waktu terakhir..." bukan "Kamu mengalami kecemasan" | Fase 3 |
+| 4   | 📊 **Wellness Zone Mapping**          | Mapping emosi ke zona kesejahteraan (Seimbang/Beradaptasi/Butuh Dukungan/Perlu Perhatian)                                               | Fase 3 |
+| 5   | 💡 **Coping Tips**                    | Tips ringan (grounding, jeda, journaling) berdasarkan emosi yang terdeteksi                                                             | Fase 4 |
+
+### 🛡️ Safety & Boundary Layer
+
+| Trigger                                  | Aksi Chatbot                                                                 |
+| ---------------------------------------- | ---------------------------------------------------------------------------- |
+| User minta diagnosis                     | Penolakan halus: "Aku tidak bisa mendiagnosis, tapi aku bisa bantu refleksi" |
+| Indikasi intens/berulang                 | Tips grounding + saran bicara orang terdekat atau profesional                |
+| User minta saran medis                   | Redirect ke profesional: "Untuk hal ini, sebaiknya konsultasi ke..."         |
+| Pertanyaan di luar scope (akademik, dll) | Batasan sopan: "Aku fokus membantu refleksi emosi, untuk hal lain..."        |
 
 ---
 
-## 🔄 Alur Sistem
+## 🔄 Alur Sistem — 4 Fase Percakapan
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           ALUR EDUMIND AI                                        │
+│                     EDUMIND AI — 4 FASE PERCAKAPAN                               │
+│                    (Total: 2 Gemini call per SESI)                               │
 └─────────────────────────────────────────────────────────────────────────────────┘
 
-┌──────────────┐     ┌──────────────────┐     ┌─────────────────────┐
-│   INPUT      │     │   VALIDASI       │     │   PRA-PEMROSESAN    │
-│   PENGGUNA   │────▶│   INPUT          │────▶│   & PEMBERSIHAN     │
-│ (Keluh Kesah)│     │                  │     │                     │
-└──────────────┘     └──────────────────┘     └──────────┬──────────┘
-                                                          │
-                                                          ▼
+┌──────────────┐
+│   USER       │
+│  "Aku merasa │
+│   tidak bisa │
+│   fokus..."  │
+└──────┬───────┘
+       │
+       ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│             MODUL ANALISIS EMOSI (WHEEL OF EMOTION via GEMINI)                   │
+│  FASE 1: BERCERITA                                           🔷 GEMINI CALL #1  │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│  ┌───────────────────────────────────────────────────────────────────────────┐  │
-│  │                    PLUTCHIK'S WHEEL OF EMOTION                            │  │
-│  ├───────────────────────────────────────────────────────────────────────────┤  │
-│  │  PRIMER (8 Emosi Dasar):                                                  │  │
-│  │  Joy, Trust, Fear, Surprise, Sadness, Disgust, Anger, Anticipation        │  │
-│  ├───────────────────────────────────────────────────────────────────────────┤  │
-│  │  SEKUNDER (Kombinasi 2 Primer):                                           │  │
-│  │  Love, Submission, Awe, Disapproval, Remorse, Contempt, Aggression, etc   │  │
-│  ├───────────────────────────────────────────────────────────────────────────┤  │
-│  │  TERSIER (Intensitas/Nuansa):                                             │  │
-│  │  Serenity, Acceptance, Apprehension, Pensiveness, Annoyance, Interest     │  │
-│  └───────────────────────────────────────────────────────────────────────────┘  │
 │                                                                                  │
-│  ┌──────────────────────────────────────┐   ┌─────────────────────────────────┐ │
-│  │       Analisis Sentimen              │   │        Cek Urgensi              │ │
-│  │  (positif, negatif, netral)          │   │  (rendah, sedang, tinggi,       │ │
-│  │       via Gemini API                 │   │   kritis) via Gemini API        │ │
-│  └──────────────────────────────────────┘   └─────────────────────────────────┘ │
+│  ┌────────────────────┐     ┌────────────────────┐     ┌────────────────────┐   │
+│  │   INPUT USER       │────▶│   GEMINI API       │────▶│   OUTPUT           │   │
+│  │   (Cerita/Curhat)  │     │   Deteksi Emosi    │     │   • Emosi detected │   │
+│  │                    │     │   via Feeling Wheel│     │   • Safe framing   │   │
+│  └────────────────────┘     └────────────────────┘     │   • Validasi awal  │   │
+│                                                         └────────────────────┘   │
+│                                                                                  │
+│  Bot: "Aku di sini untuk bantu refleksi, bukan mendiagnosis.                    │
+│        Terima kasih sudah berbagi. Sepertinya ada perasaan berat..."            │
+│                                                                                  │
 └─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
+       │
+       ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                        GENERATOR PERTANYAAN LANJUTAN                             │
+│  FASE 2: REFLEKSI RINGAN                                     ⚡ NO GEMINI CALL  │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│  • Membuat pertanyaan klarifikasi berdasarkan emosi yang terdeteksi              │
-│  • Memvalidasi kondisi emosional pengguna                                        │
-│  • Mengumpulkan konteks tambahan untuk respons yang lebih baik                   │
+│                                                                                  │
+│  ┌──────────────────────────────────────────────────────────────────────────┐   │
+│  │                    5 PERTANYAAN DARI JSON KNOWLEDGE BASE                  │   │
+│  │                    (Per emosi yang terdeteksi di Fase 1)                  │   │
+│  ├──────────────────────────────────────────────────────────────────────────┤   │
+│  │  Q1: "Kapan terakhir kali kamu merasa seperti ini?"           → User jawab│   │
+│  │  Q2: "Apa yang biasanya kamu lakukan saat merasa seperti ini?"→ User jawab│   │
+│  │  Q3: "Siapa yang biasanya kamu ajak cerita?"                  → User jawab│   │
+│  │  Q4: "Bagaimana perasaan ini mempengaruhi aktivitasmu?"       → User jawab│   │
+│  │  Q5: "Apa yang kamu harapkan berubah dari situasi ini?"       → User jawab│   │
+│  └──────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                  │
+│  💡 Pertanyaan diambil dari: data/knowledge_base/reflection_questions.json      │
+│  💡 Tidak ada Gemini call — pertanyaan sudah pre-defined per emosi              │
+│                                                                                  │
 └─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
+       │
+       ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                              PIPELINE RAG                                        │
+│  FASE 3: NARASI REFLEKTIF (MHCM)                             🔷 GEMINI CALL #2  │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│  ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐                │
-│  │ PENCARI         │   │ PENYIMPAN       │   │ BASIS           │                │
-│  │ DOKUMEN         │◀─▶│ VEKTOR          │◀──│ PENGETAHUAN     │                │
-│  │ (LangChain)     │   │ (ChromaDB)      │   │ - Kesehatan     │                │
-│  │                 │   │                 │   │   Mental        │                │
-│  │                 │   │                 │   │ - Tips Coping   │                │
-│  │                 │   │                 │   │ - Edukasi       │                │
-│  └─────────────────┘   └─────────────────┘   └─────────────────┘                │
+│                                                                                  │
+│  ┌────────────────────┐     ┌────────────────────┐     ┌────────────────────┐   │
+│  │   INPUT            │────▶│   GEMINI API       │────▶│   OUTPUT           │   │
+│  │   • Cerita awal    │     │   Generate Narasi  │     │   • Narasi MHCM    │   │
+│  │   • 5 jawaban user │     │   Reflektif        │     │   • Zona wellness  │   │
+│  │   • Emosi detected │     │                    │     │   • Insight        │   │
+│  └────────────────────┘     └────────────────────┘     └────────────────────┘   │
+│                                                                                  │
+│  ✅ NARASI YANG BENAR (tanpa label klinis):                                     │
+│  "Dalam beberapa waktu terakhir, perasaan yang muncul cukup beragam dan         │
+│   terasa intens, terutama setelah kejadian yang menuntut banyak energi.         │
+│   Ada kesan bahwa tubuh dan pikiranmu sedang bekerja keras untuk beradaptasi."  │
+│                                                                                  │
+│  ❌ NARASI YANG SALAH (dengan label klinis):                                    │
+│  "Kamu mengalami kecemasan tingkat tinggi dan berisiko stres."                  │
+│                                                                                  │
+│  📊 Zona Wellness: 🟡 Beradaptasi                                               │
+│                                                                                  │
 └─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
+       │
+       ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                        PEMROSESAN LLM (GEMINI API)                               │
+│  FASE 4: TIPS & CLOSING                                      ⚡ NO GEMINI CALL  │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│  ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐                │
-│  │ TEMPLATE        │   │ INJEKSI         │   │ PEMBUATAN       │                │
-│  │ PROMPT          │──▶│ KONTEKS         │──▶│ RESPONS         │                │
-│  │ (Sistem +       │   │ (RAG + Emosi    │   │                 │                │
-│  │  Konteks User)  │   │  + Riwayat)     │   │                 │                │
-│  └─────────────────┘   └─────────────────┘   └─────────────────┘                │
+│                                                                                  │
+│  ┌─────────────────────────────────────────────────────────────────────────┐          │
+│  │   TIPS COPING RINGAN (dari JSON knowledge base)                               │          │
+│  │                                                                               │          │
+│  │   • Grounding 5-4-3-2-1 (5 hal yang kamu lihat, 4 yang kamu dengar...)       │          │
+│  │   • Teknik jeda sejenak + tarik napas dalam                                  │          │
+│  │   • Journaling prompt (tulis 3 hal yang kamu syukuri)                        │          │
+│  │   • Latihan pernapasan kotak (4-4-4-4)                                       │          │
+│  └─────────────────────────────────────────────────────────────────────────┘          │
+│                                                                                  │
+│  💡 Tips diambil dari: data/knowledge_base/coping_tips.json                     │
+│  💡 Closing message: "Terima kasih sudah berbagi. Kamu selalu bisa kembali."   │
+│                                                                                  │
 └─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                         PASCA-PEMROSESAN RESPONS                                 │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│  • Filter keamanan (moderasi konten)                                             │
-│  • Pemformatan respons                                                           │
-│  • Ekstraksi saran/langkah aksi                                                  │
-│  • Pembuatan pertanyaan lanjutan                                                 │
-└─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-                           ┌──────────────────┐
-                           │  RESPONS AKHIR   │
-                           │  KE PENGGUNA     │
-                           └──────────────────┘
 ```
+
+### Ringkasan Penggunaan Gemini API (MVP)
+
+| Fase | Nama             | Gemini Call? | Deskripsi                             |
+| ---- | ---------------- | ------------ | ------------------------------------- |
+| 1    | BERCERITA        | 🔷 Call #1   | Deteksi emosi + safe framing          |
+| 2    | REFLEKSI RINGAN  | ⚡ Tidak     | 5 pertanyaan dari JSON knowledge base |
+| 3    | NARASI REFLEKTIF | 🔷 Call #2   | Generate narasi MHCM + zona wellness  |
+| 4    | TIPS & CLOSING   | ⚡ Tidak     | Tips coping ringan + closing message  |
+
+> **Total: 2 panggilan Gemini per SESI** — bukan per message. Ini menghemat biaya API dan memastikan konsistensi.
 
 ---
 
@@ -171,7 +268,8 @@ Input Pengguna (Keluh Kesah/Curhat)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                        EDUMIND AI - SYSTEM ARCHITECTURE                          │
+│            EDUMIND AI - SYSTEM ARCHITECTURE (Simplified)                         │
+│                         4-Fase Multi-Turn Conversation                          │
 └─────────────────────────────────────────────────────────────────────────────────┘
 
                               ┌─────────────────┐
@@ -196,11 +294,21 @@ Input Pengguna (Keluh Kesah/Curhat)
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                  │
 │  ┌─────────────────────────────────────────────────────────────────────────┐    │
-│  │                         CHAT SERVICE (Orchestrator)                      │    │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    │    │
-│  │  │  Emotion    │  │    RAG      │  │  Response   │  │  Session    │    │    │
-│  │  │  Service    │  │   Service   │  │  Service    │  │  Manager    │    │    │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘    │    │
+│  │                      CONVERSATION ORCHESTRATOR                           │    │
+│  │  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐  ┌────────────┐ │    │
+│  │  │  Phase       │  │  Emotion     │  │  Reflection  │  │  Narrative   │ │    │
+│  │  │  Manager     │  │  Service     │  │  Service     │  │  Service     │ │    │
+│  │  │  (4 Fase)    │  │  (Gemini)    │  │  (JSON KB)   │  │  (MHCM)      │ │    │
+│  │  └───────────────┘  └───────────────┘  └───────────────┘  └────────────┘ │    │
+│  └─────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                  │
+│  ┌─────────────────────────────────────────────────────────────────────────┐    │
+│  │                          SUPPORT SERVICES (MVP)                          │    │
+│  │  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐                 │    │
+│  │  │  Session     │  │  Coping      │  │  Safety      │                 │    │
+│  │  │  Manager     │  │  Tips        │  │  Layer       │                 │    │
+│  │  │              │  │  (JSON)      │  │              │                 │    │
+│  │  └───────────────┘  └───────────────┘  └───────────────┘                 │    │
 │  └─────────────────────────────────────────────────────────────────────────┘    │
 │                                                                                  │
 └─────────────────────────────────────────────────────────────────────────────────┘
@@ -211,58 +319,69 @@ Input Pengguna (Keluh Kesah/Curhat)
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                  │
 │  ┌──────────────────────────┐      ┌──────────────────────────┐                 │
-│  │       LLM MODULE         │      │       RAG MODULE          │                 │
+│  │       LLM MODULE         │      │   KNOWLEDGE BASE        │                 │
 │  │  ┌──────────────────┐   │      │  ┌──────────────────┐    │                 │
-│  │  │  Gemini Client   │   │      │  │    Retriever     │    │                 │
+│  │  │  Gemini Client   │   │      │  │ Reflection Q's   │    │                 │
+│  │  ├──────────────────┤   │      │  │ (5 per emosi)    │    │                 │
+│  │  │  Prompt Manager  │   │      │  ├──────────────────┤    │                 │
+│  │  ├──────────────────┤   │      │  │ Coping Tips      │    │                 │
+│  │  │  Emotion Prompt  │   │      │  ├──────────────────┤    │                 │
+│  │  ├──────────────────┤   │      │  │ Feeling Wheel    │    │                 │
+│  │  │  Narrative Prompt│   │      │  ├──────────────────┤    │                 │
+│  │  └──────────────────┘   │      │  │ Wellness Zones   │    │                 │
+│  └──────────────────────────┘      │  └──────────────────┘    │                 │
+│                                   └──────────────────────────┘                 │
+│                                                                                  │
+│  ┌──────────────────────────┐      ┌──────────────────────────┐                 │
+│  │    VALIDATION MODULE    │      │      EMOTION MODULE      │                 │
+│  │  ┌──────────────────┐   │      │  ┌──────────────────┐    │                 │
+│  │  │  Safety Checker  │   │      │  │  Wheel of Emotion│    │                 │
 │  │  ├──────────────────┤   │      │  ├──────────────────┤    │                 │
-│  │  │  Prompt Manager  │   │      │  │   Vector Store   │    │                 │
+│  │  │  Boundary Filter │   │      │  │  Zone Mapper     │    │                 │
 │  │  ├──────────────────┤   │      │  ├──────────────────┤    │                 │
-│  │  │  LLM Factory     │   │      │  │   Embeddings     │    │                 │
+│  │  │  Input Validator │   │      │  │  Trend Analyzer  │    │                 │
 │  │  └──────────────────┘   │      │  └──────────────────┘    │                 │
 │  └──────────────────────────┘      └──────────────────────────┘                 │
 │                                                                                  │
-│  ┌──────────────────────────┐      ┌──────────────────────────┐                 │
-│  │      CHAINS MODULE       │      │      MEMORY MODULE       │                 │
-│  │  ┌──────────────────┐   │      │  ┌──────────────────┐    │                 │
-│  │  │ Conversation     │   │      │  │  Chat History    │    │                 │
-│  │  ├──────────────────┤   │      │  ├──────────────────┤    │                 │
-│  │  │ Emotion Chain    │   │      │  │  Session Store   │    │                 │
-│  │  ├──────────────────┤   │      │  └──────────────────┘    │                 │
-│  │  │ Follow-up Chain  │   │      └──────────────────────────┘                 │
-│  │  └──────────────────┘   │                                                    │
-│  └──────────────────────────┘                                                    │
-│                                                                                  │
 └─────────────────────────────────────────────────────────────────────────────────┘
                                        │
                                        ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                              MODULES LAYER                                       │
+│                        EXTERNAL SERVICES (Simplified)                           │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                  │
-│  ┌────────────────────┐  ┌────────────────────┐  ┌────────────────────┐         │
-│  │  EMOTION MODULE    │  │ VALIDATION MODULE  │  │  RESPONSE MODULE   │         │
-│  │  ┌──────────────┐ │  │  ┌──────────────┐  │  │  ┌──────────────┐  │         │
-│  │  │  Detector    │ │  │  │  Validator   │  │  │  │  Generator   │  │         │
-│  │  │  Analyzer    │ │  │  │  Filter      │  │  │  │  Formatter   │  │         │
-│  │  │  Urgency     │ │  │  │  Safety      │  │  │  │  Extractor   │  │         │
-│  │  └──────────────┘ │  │  └──────────────┘  │  │  └──────────────┘  │         │
-│  └────────────────────┘  └────────────────────┘  └────────────────────┘         │
+│            ┌────────────────────┐          ┌────────────────────┐            │
+│            │   GOOGLE GEMINI   │          │   POSTGRESQL       │            │
+│            │   API             │          │   (Database)       │            │
+│            │                    │          │   + SQLAlchemy     │            │
+│            │   • Emotion Detect │          │                    │            │
+│            │   • Narrative Gen  │          │   • Sessions        │            │
+│            │                    │          │   • Messages        │            │
+│            │   (2 calls/session)│          │   • Emotion Logs    │            │
+│            └────────────────────┘          │   • Reflections     │            │
+│                                              └────────────────────┘            │
 │                                                                                  │
-└─────────────────────────────────────────────────────────────────────────────────┘
-                                       │
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           EXTERNAL SERVICES                                      │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
-│  │ GOOGLE       │  │  CHROMADB    │  │  POSTGRESQL  │  │    REDIS     │         │
-│  │ GEMINI API   │  │ (Vector DB)  │  │  (Database)  │  │   (Cache)    │         │
-│  │              │  │              │  │ + SQLAlchemy │  │              │         │
-│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘         │
+│  ❌ DIHAPUS: ChromaDB, Redis, LangChain, FAISS, Sentence-Transformers           │
+│  ✅ DISEDERHANAKAN: Knowledge Base langsung di-inject sebagai JSON               │
 │                                                                                  │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+### Keputusan Arsitektur
+
+| Komponen Dihapus         | Alasan                                                |
+| ------------------------ | ----------------------------------------------------- |
+| ❌ ChromaDB / FAISS      | Knowledge base cukup kecil, inject langsung ke prompt |
+| ❌ Sentence-Transformers | Tidak perlu embedding, JSON langsung dibaca           |
+| ❌ LangChain             | Over-engineering untuk 2 Gemini calls per sesi        |
+| ❌ Redis                 | Session state cukup dari PostgreSQL                   |
+
+| Komponen Dipertahankan     | Alasan                                                  |
+| -------------------------- | ------------------------------------------------------- |
+| ✅ Google Gemini API       | Cukup pintar untuk deteksi emosi + generate narasi      |
+| ✅ PostgreSQL + SQLAlchemy | Menyimpan sessions, messages, emotion logs, reflections |
+| ✅ FastAPI                 | REST API dengan async support                           |
+| ✅ Pydantic v2             | Validasi request/response                               |
 
 ---
 
@@ -283,18 +402,18 @@ edumind-ai-service/
 │   │
 │   ├── 📁 models/
 │   │   ├── 📄 __init__.py
-│   │   ├── 📄 user.py                 # Model User
-│   │   ├── 📄 session.py              # Model Chat Session
+│   │   ├── 📄 user.py                 # Model User (siswa)
+│   │   ├── 📄 session.py              # Model Chat Session (4 fase state)
 │   │   ├── 📄 message.py              # Model Chat Message
 │   │   ├── 📄 emotion_log.py          # Model log deteksi emosi
-│   │   └── 📄 feedback.py             # Model feedback user
+│   │   └── 📄 reflection.py           # Model refleksi (5 Q&A + narasi MHCM)
 │   │
 │   ├── 📁 repositories/
 │   │   ├── 📄 __init__.py
 │   │   ├── 📄 base_repository.py      # Generic CRUD repository
 │   │   ├── 📄 user_repository.py      # User data access
-│   │   ├── 📄 session_repository.py   # Session data access
-│   │   └── 📄 message_repository.py   # Message data access
+│   │   ├── 📄 session_repository.py   # Session data access (fase state)
+│   │   └── 📄 reflection_repository.py # Reflection data access
 │   │
 │   └── 📁 migrations/
 │       ├── 📄 env.py                  # Alembic environment config
@@ -307,27 +426,19 @@ edumind-ai-service/
 │   │
 │   ├── 📁 llm/
 │   │   ├── 📄 __init__.py
-│   │   ├── 📄 gemini_client.py        # Wrapper untuk Gemini API
-│   │   ├── 📄 llm_factory.py          # Pola factory untuk LLM
-│   │   └── 📄 prompts.py              # Template-template prompt
+│   │   ├── 📄 gemini_client.py        # Wrapper Gemini API (2 calls/session)
+│   │   └── 📄 prompts.py              # Template prompt (emotion + narrative)
 │   │
-│   ├── 📁
+│   ├── 📁 knowledge/                  # ✅ Langsung JSON, tanpa RAG
 │   │   ├── 📄 __init__.py
-│   │   ├── 📄 retriever.py            # Pencari dokumen
-│   │   ├── 📄 vector_stor rag/e.py         # Operasi database vektor
-│   │   ├── 📄 embeddings.py           # Generator embedding
-│   │   └── 📄 document_loader.py      # Pemuat dokumen knowledge base
+│   │   ├── 📄 loader.py               # Load JSON knowledge base
+│   │   └── 📄 question_selector.py    # Pilih 5 pertanyaan per emosi
 │   │
-│   ├── 📁 chains/
-│   │   ├── 📄 __init__.py
-│   │   ├── 📄 conversation_chain.py   # Chain percakapan utama
-│   │   ├── 📄 emotion_chain.py        # Chain analisis emosi
-│   │   └── 📄 followup_chain.py       # Chain pertanyaan lanjutan
-│   │
-│   └── 📁 memory/
+│   └── 📁 conversation/               # ✅ 4-Fase State Machine
 │       ├── 📄 __init__.py
-│       ├── 📄 conversation_memory.py  # Pengelolaan riwayat chat
-│       └── 📄 session_manager.py      # Penanganan sesi
+│       ├── 📄 phase_manager.py        # State machine (BERCERITA→REFLEKSI→NARASI→LANJUTAN)
+│       ├── 📄 phase_handlers.py       # Handler per fase
+│       └── 📄 session_context.py      # Session context (emosi, jawaban, zona)
 │
 ├── 📁 modules/
 │   ├── 📄 __init__.py
@@ -335,45 +446,44 @@ edumind-ai-service/
 │   ├── 📁 emotion/
 │   │   ├── 📄 __init__.py
 │   │   ├── 📄 wheel_of_emotion.py     # Plutchik's Wheel (primer, sekunder, tersier)
-│   │   ├── 📄 detector.py             # Logika deteksi emosi multi-level via Gemini
-│   │   ├── 📄 analyzer.py             # Analisis sentimen via Gemini
-│   │   ├── 📄 urgency_checker.py      # Deteksi tingkat urgensi via Gemini
-│   │   ├── 📄 followup_generator.py   # Generator pertanyaan lanjutan via Gemini
-│   │   └── 📄 emotion_types.py        # Enum emosi (primer/sekunder/tersier)
+│   │   ├── 📄 detector.py             # Deteksi emosi via Gemini (Fase 1)
+│   │   ├── 📄 zone_mapper.py          # Mapping ke zona kesejahteraan
+│   │   └── 📄 trend_analyzer.py       # Analisis trend emosi periodik
 │   │
-│   ├── 📁 validation/
+│   ├── 📁 reflection/                 # ✅ 5 Pertanyaan + Narasi MHCM
 │   │   ├── 📄 __init__.py
-│   │   ├── 📄 input_validator.py      # Validasi input
-│   │   ├── 📄 content_filter.py       # Moderasi konten
-│   │   └── 📄 safety_checker.py       # Pemeriksaan keamanan
+│   │   ├── 📄 question_service.py     # Ambil 5 pertanyaan dari JSON (Fase 2)
+│   │   └── 📄 narrative_generator.py  # Generate narasi MHCM via Gemini (Fase 3)
 │   │
-│   └── 📁 response/
+│   ├── 📁 safety/                     # ✅ Safety & Boundary Layer
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 boundary_checker.py     # Cek batasan (no diagnosis, no therapy)
+│   │   └── 📄 safe_framing.py         # Safe framing responses
+│   │
+│   └── 📁 tips/                       # ✅ Coping Tips (Fase 4)
 │       ├── 📄 __init__.py
-│       ├── 📄 generator.py            # Pembuatan respons
-│       ├── 📄 formatter.py            # Pemformatan respons
-│       └── 📄 suggestion_extractor.py # Ekstraksi item aksi
+│       └── 📄 tips_service.py         # Load & serve tips dari JSON
 │
 ├── 📁 services/
 │   ├── 📄 __init__.py
-│   ├── 📄 chat_service.py             # Orkestrator chat utama
-│   ├── 📄 emotion_service.py          # Layanan pemrosesan emosi
-│   └── 📄 rag_service.py              # Layanan pipeline RAG
+│   ├── 📄 conversation_service.py     # ✅ Orchestrator 4 Fase
+│   ├── 📄 emotion_service.py          # Layanan deteksi emosi
+│   └── 📄 reflection_service.py       # Layanan refleksi (5 Q + narasi)
 │
 ├── 📁 api/
 │   ├── 📄 __init__.py
 │   │
 │   ├── 📁 endpoints/
 │   │   ├── 📄 __init__.py
-│   │   ├── 📄 chat.py                 # Endpoint chat
-│   │   ├── 📄 emotion.py              # Endpoint analisis emosi (Wheel of Emotion)
-│   │   └── 📄 health.py               # Endpoint health check
+│   │   ├── 📄 conversation.py         # ✅ Multi-turn conversation (4 fase)
+│   │   └── 📄 health.py               # Health check
 │   │
 │   ├── 📄 router.py                   # Router API utama
 │   │
 │   ├── 📁 schemas/
 │   │   ├── 📄 __init__.py
-│   │   ├── 📄 chat_schema.py          # Model request/response chat
-│   │   ├── 📄 emotion_schema.py       # Model emosi (primer/sekunder/tersier)
+│   │   ├── 📄 conversation_schema.py  # Request/response multi-turn
+│   │   ├── 📄 reflection_schema.py    # Schema refleksi + narasi MHCM
 │   │   └── 📄 common_schema.py        # Model umum
 │   │
 │   └── 📁 middleware/
@@ -382,33 +492,28 @@ edumind-ai-service/
 │       └── 📄 error_handler.py        # Penanganan error global
 │
 ├── 📁 data/
-│   ├── 📁 knowledge_base/
-│   │   ├── 📄 wheel_of_emotion.json       # Data Plutchik's Wheel of Emotion (3 level)
-│   │   ├── 📄 mental_health_tips.json     # Tips kesehatan mental per emosi
-│   │   ├── 📄 coping_strategies.json      # Strategi coping per emosi
-│   │   ├── 📄 educational_resources.json  # Sumber edukasi
-│   │   └── 📄 emotional_responses.json    # Template respons emosional
-│   │
-│   └── 📁 vectorstore/
-│       └── 📄 .gitkeep                    # Penyimpanan database vektor
+│   └── 📁 knowledge_base/             # ✅ JSON files (tanpa RAG/embedding)
+│       ├── 📄 wheel_of_emotion.json       # Plutchik's Wheel (3 level)
+│       ├── 📄 reflection_questions.json   # ✅ 5 pertanyaan per emosi
+│       ├── 📄 coping_tips.json            # Tips grounding, jeda, journaling
+│       └── 📄 wellness_zones.json         # Definisi 4 zona kesejahteraan
 │
 ├── 📁 tests/
 │   ├── 📄 __init__.py
 │   ├── 📄 conftest.py                 # Konfigurasi pengujian
 │   │
 │   ├── 📁 unit/
+│   │   ├── 📄 test_phase_manager.py       # Test 4-fase state machine
 │   │   ├── 📄 test_emotion_detector.py    # Test deteksi emosi
-│   │   ├── 📄 test_chat_service.py        # Test layanan chat
-│   │   └── 📄 test_rag_service.py         # Test layanan RAG
+│   │   └── 📄 test_narrative_generator.py # Test narasi MHCM
 │   │
 │   └── 📁 integration/
-│       ├── 📄 test_chat_flow.py           # Test alur chat
+│       ├── 📄 test_conversation_flow.py   # Test 4-fase flow end-to-end
 │       └── 📄 test_api_endpoints.py       # Test endpoint API
 │
 ├── 📁 scripts/
-│   ├── 📄 setup_vectorstore.py        # Inisialisasi vector store
-│   ├── 📄 load_knowledge_base.py      # Muat dokumen ke vector DB
-│   └── 📄 test_gemini_connection.py   # Test koneksi API
+│   ├── 📄 seed_knowledge_base.py      # Seed JSON knowledge base
+│   └── 📄 test_gemini_connection.py   # Test koneksi Gemini API
 │
 ├── 📁 docs/
 │   ├── 📄 API.md                      # Dokumentasi API
@@ -429,20 +534,26 @@ edumind-ai-service/
 
 ## 🔧 Tech Stack
 
-| Komponen            | Teknologi             | Fungsi                                         |
-| ------------------- | --------------------- | ---------------------------------------------- |
-| **Framework API**   | FastAPI               | Endpoint REST API                              |
-| **LLM**             | Google Gemini         | Semua pemrosesan AI (emosi, sentimen, respons) |
-| **Orkestrasi LLM**  | LangChain             | Chains, memori, prompt templates               |
-| **Database Utama**  | PostgreSQL            | Penyimpanan data user, session, chat history   |
-| **ORM**             | SQLAlchemy            | Object-Relational Mapping untuk PostgreSQL     |
-| **Database Vektor** | ChromaDB              | Menyimpan embedding untuk RAG                  |
-| **Embedding**       | Sentence Transformers | Mengubah teks ke vektor (hanya untuk RAG)      |
-| **Caching**         | Redis (opsional)      | Cache sesi & respons                           |
-| **Validasi**        | Pydantic              | Validasi request/response                      |
-| **Migrasi DB**      | Alembic               | Database migration management                  |
-| **Pengujian**       | Pytest                | Unit & integration test                        |
-| **Kontainerisasi**  | Docker                | Deployment                                     |
+| Komponen           | Teknologi          | Fungsi                                                |
+| ------------------ | ------------------ | ----------------------------------------------------- |
+| **Framework API**  | FastAPI            | REST API dengan async support                         |
+| **LLM**            | Google Gemini      | Deteksi emosi (Call #1) + Narasi reflektif (Call #2)  |
+| **Database**       | PostgreSQL         | Sessions, messages, reflections, emotion logs         |
+| **ORM**            | SQLAlchemy (async) | Object-Relational Mapping                             |
+| **Validasi**       | Pydantic v2        | Request/response validation                           |
+| **Migrasi DB**     | Alembic            | Database migration management                         |
+| **Knowledge Base** | JSON files         | 5 pertanyaan per emosi, coping tips, wellness zones   |
+| **Pengujian**      | Pytest             | Unit & integration test                                     |
+| **Kontainerisasi** | Docker             | Deployment                                                  |
+
+### ❌ Komponen Dihapus (Simplified)
+
+| Komponen              | Alasan Dihapus                                        |
+| --------------------- | ----------------------------------------------------- |
+| LangChain             | Over-engineering untuk 2 Gemini calls per sesi        |
+| ChromaDB / FAISS      | Knowledge base cukup kecil, inject langsung ke prompt |
+| Sentence-Transformers | Tidak perlu embedding, JSON langsung dibaca           |
+| Redis                 | Session state cukup dari PostgreSQL                   |
 
 ---
 
@@ -469,48 +580,41 @@ alembic==1.13.1                 # Database migration tool
 greenlet==3.0.3                 # Required untuk SQLAlchemy async
 ```
 
-### LLM & AI
+### LLM (Google Gemini Only)
 
 ```txt
-google-generativeai==0.3.2      # API Google Gemini
-langchain==0.1.5                # Framework LLM
-langchain-google-genai==0.0.6   # Integrasi LangChain + Gemini
-langchain-community==0.0.16     # Integrasi komunitas
+google-generativeai==0.3.2      # API Google Gemini (hanya ini!)
 ```
 
-### RAG & Penyimpanan Vektor
+> **Catatan:** Tidak menggunakan LangChain. Gemini API dipanggil langsung untuk:
+>
+> - **Call #1:** Deteksi emosi (Fase 1)
+> - **Call #2:** Generate narasi reflektif MHCM (Fase 3)
 
-```txt
-chromadb==0.4.22                # Database vektor
-faiss-cpu==1.7.4                # Alternatif penyimpanan vektor
-sentence-transformers==2.3.1    # Embedding (hanya untuk RAG vectorization)
-tiktoken==0.5.2                 # Penghitungan token
-```
+### ❌ Dependensi Dihapus
 
-> **Catatan:** Semua analisis emosi (Wheel of Emotion), sentimen, dan urgensi diproses langsung oleh **Google Gemini API**. Tidak ada model ML lokal yang digunakan untuk deteksi emosi.
+| Paket                    | Alasan Dihapus                                 |
+| ------------------------ | ---------------------------------------------- |
+| `langchain`              | Over-engineering untuk 2 Gemini calls per sesi |
+| `langchain-google-genai` | Cukup pakai `google-generativeai` langsung     |
+| `chromadb`               | Knowledge base kecil, inject JSON ke prompt    |
+| `faiss-cpu`              | Tidak perlu vector search                      |
+| `sentence-transformers`  | Tidak perlu embedding                          |
+| `redis`                  | Session state cukup dari PostgreSQL            |
 
 ### Pemrosesan Data
 
 ```txt
-numpy==1.26.3                   # Operasi numerik
-pandas==2.1.4                   # Manipulasi data
-aiofiles==23.2.1                # Operasi file async
+aiofiles==23.2.1                # Operasi file async (load JSON KB)
 ```
 
 ### Utilitas
 
 ```txt
 httpx==0.26.0                   # HTTP client
-tenacity==8.2.3                 # Logika retry
+tenacity==8.2.3                 # Logika retry untuk Gemini API
 structlog==24.1.0               # Logging terstruktur
 python-json-logger==2.0.7       # Logging JSON
-```
-
-### Caching & Sesi
-
-```txt
-redis==5.0.1                    # Client Redis (opsional)
-cachetools==5.3.2               # Caching in-memory
 ```
 
 ### Keamanan
@@ -547,7 +651,6 @@ pre-commit==3.6.0               # Pre-commit hooks
 - Python 3.10+
 - PostgreSQL 14+ (database utama)
 - Akun Google Cloud dengan akses Gemini API
-- Redis (opsional, untuk caching)
 
 ### Langkah-Langkah Setup
 
@@ -580,16 +683,13 @@ psql -U postgres -c "CREATE DATABASE edumind_db;"
 # 7. Jalankan migrasi database
 alembic upgrade head
 
-# 8. Inisialisasi vector store
-python scripts/setup_vectorstore.py
+# 8. Seed knowledge base (JSON files)
+python scripts/seed_knowledge_base.py
 
-# 9. Muat knowledge base
-python scripts/load_knowledge_base.py
-
-# 10. Jalankan aplikasi
+# 9. Jalankan aplikasi
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
-# 11. Jalankan pengujian
+# 10. Jalankan pengujian
 pytest tests/ -v
 ```
 
@@ -599,7 +699,7 @@ pytest tests/ -v
 # Build image
 docker build -t edumind-ai-service .
 
-# Jalankan dengan docker-compose (termasuk PostgreSQL & Redis)
+# Jalankan dengan docker-compose (termasuk PostgreSQL)
 docker-compose up -d
 ```
 
@@ -616,13 +716,10 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql+asyncpg://postgres:password@db:5432/edumind_db
-      - REDIS_HOST=redis
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     depends_on:
       db:
         condition: service_healthy
-      redis:
-        condition: service_started
     volumes:
       - ./data:/app/data
     networks:
@@ -647,19 +744,10 @@ services:
     networks:
       - edumind-network
 
-  redis:
-    image: redis:7-alpine
-    container_name: edumind-redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - edumind-network
+# ❌ DIHAPUS: Redis service (tidak diperlukan)
 
 volumes:
   postgres_data:
-  redis_data:
 
 networks:
   edumind-network:
@@ -690,47 +778,112 @@ DB_USER=postgres
 DB_PASSWORD=your_secure_password
 DATABASE_URL=postgresql+asyncpg://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
 
-# Penyimpanan Vektor
-VECTOR_STORE_TYPE=chromadb
-VECTOR_STORE_PATH=./data/vectorstore
-
-# Embedding
-EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-
-# Redis (Opsional)
-REDIS_HOST=localhost
-REDIS_PORT=6379
-REDIS_DB=0
+# Knowledge Base Path
+KNOWLEDGE_BASE_PATH=./data/knowledge_base
 
 # Keamanan
 SECRET_KEY=masukkan_secret_key_anda
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
+# ❌ DIHAPUS: Vector Store, Embedding Model, Redis
+
 # Pembatasan Rate
 RATE_LIMIT_REQUESTS=100
 RATE_LIMIT_PERIOD=60
+
+# Timeout Configuration
+GEMINI_TIMEOUT_SECONDS=30
+GEMINI_RETRY_ATTEMPTS=3
+SESSION_TIMEOUT_MINUTES=30
+
+# CORS Configuration
+CORS_ORIGINS=["http://localhost:3000", "https://edumind.sekolah.id"]
+CORS_ALLOW_CREDENTIALS=true
+
+# Language/i18n
+DEFAULT_LANGUAGE=id
+SUPPORTED_LANGUAGES=["id", "en"]
+
+# Monitoring
+ENABLE_METRICS=true
+METRICS_PORT=9090
+LOG_LEVEL=INFO
+LOG_FORMAT=json
 ```
+
+### 🌐 Language Support (i18n)
+
+**EduMindAI** mendukung **Bahasa Indonesia** sebagai bahasa utama, dengan dukungan **English** sebagai fallback.
+
+```
+┌────────────────────────────────────────────────────────────────────┐
+│                   LANGUAGE DETECTION FLOW                          │
+├────────────────────────────────────────────────────────────────────┤
+│                                                                    │
+│  1. User Input → Gemini auto-detect bahasa                         │
+│  2. Response mengikuti bahasa input user                           │
+│  3. Knowledge Base tersedia dalam ID & EN                          │
+│  4. Fallback ke Bahasa Indonesia jika tidak terdeteksi             │
+│                                                                    │
+│  Header: Accept-Language: id-ID atau en-US                         │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+| Komponen | Bahasa Indonesia | English |
+|----------|------------------|----------|
+| **Emotion Labels** | ✅ Sedih, Marah, Cemas | ✅ Sad, Angry, Anxious |
+| **Reflection Questions** | ✅ 5 pertanyaan per emosi | ✅ 5 questions per emotion |
+| **Coping Tips** | ✅ Tips grounding, journaling | ✅ Grounding, journaling tips |
+| **Narrative MHCM** | ✅ Generated by Gemini | ✅ Generated by Gemini |
+| **UI Messages** | ✅ Safe framing ID | ✅ Safe framing EN |
+
+**Knowledge Base Bilingual:**
+
+```json
+// reflection_questions.json
+{
+  "sedih": {
+    "id": [
+      "Kapan terakhir kamu merasa seperti ini?",
+      "Apa yang biasanya membantumu saat merasa sedih?"
+    ],
+    "en": [
+      "When was the last time you felt like this?",
+      "What usually helps you when you feel sad?"
+    ]
+  }
+}
+```
+
+### 🔢 API Versioning
+
+```
+✅ Current: /api/v1/conversation/start
+✅ Future:  /api/v2/conversation/start (when breaking changes)
+
+Header: X-API-Version: 1.0.0
+```
+
+| Version | Status | Breaking Changes |
+|---------|--------|------------------|
+| `v1` | ✅ Active | - |
+| `v2` | 🔜 Planned | Multi-session support |
 
 ---
 
-## 🔌 API Endpoints
+## 🔌 API Endpoints (MVP)
 
-### Endpoint Chat
+### Endpoint Conversation (4-Fase Multi-Turn)
 
-| Method   | Endpoint                         | Deskripsi                        |
-| -------- | -------------------------------- | -------------------------------- |
-| `POST`   | `/api/chat`                      | Kirim pesan dan dapatkan respons |
-| `GET`    | `/api/chat/history/{session_id}` | Ambil riwayat chat               |
-| `DELETE` | `/api/chat/history/{session_id}` | Hapus riwayat chat               |
-
-### Endpoint Emosi (Wheel of Emotion via Gemini)
-
-| Method | Endpoint                     | Deskripsi                                            |
-| ------ | ---------------------------- | ---------------------------------------------------- |
-| `POST` | `/api/emotion/analyze`       | Analisis emosi multi-level dari teks via Gemini      |
-| `GET`  | `/api/emotion/wheel`         | Ambil struktur Wheel of Emotion                      |
-| `GET`  | `/api/emotion/types/{level}` | Ambil tipe emosi per level (primer/sekunder/tersier) |
-| `POST` | `/api/emotion/followup`      | Generate pertanyaan lanjutan berdasarkan emosi       |
+| Method   | Endpoint                               | Fase   | Deskripsi                                     |
+| -------- | -------------------------------------- | ------ | --------------------------------------------- |
+| `POST`   | `/api/conversation/start`              | Fase 1 | User bercerita → Gemini deteksi emosi         |
+| `POST`   | `/api/conversation/reflect`            | Fase 2 | Kirim jawaban refleksi (1 dari 5 pertanyaan)  |
+| `GET`    | `/api/conversation/narrative`          | Fase 3 | Get narasi MHCM setelah 5 jawaban             |
+| `POST`   | `/api/conversation/tips`               | Fase 4 | Get tips coping ringan + closing message      |
+| `GET`    | `/api/conversation/{session_id}/state` | -      | Get current session state (fase, emosi, zona) |
+| `DELETE` | `/api/conversation/{session_id}`       | -      | Hapus session                                 |
 
 ### Endpoint Health
 
@@ -739,69 +892,130 @@ RATE_LIMIT_PERIOD=60
 | `GET`  | `/api/health`       | Cek kesehatan sistem |
 | `GET`  | `/api/health/ready` | Cek kesiapan sistem  |
 
-### Contoh Request
+### Contoh Flow — 4 Fase Lengkap
+
+#### Fase 1: BERCERITA (🔷 Gemini Call #1)
 
 ```bash
-curl -X POST "http://localhost:8000/api/chat" \
+# Request
+curl -X POST "http://localhost:8000/api/conversation/start" \
   -H "Content-Type: application/json" \
   -d '{
-    "session_id": "user-123",
-    "message": "Saya merasa sangat stress dengan tugas kuliah yang menumpuk"
+    "user_id": "siswa-123",
+    "message": "Aku merasa tidak bisa fokus belajar, rasanya semua menumpuk..."
   }'
 ```
 
-### Contoh Response
+```json
+// Response
+{
+  "session_id": "sess-abc-123",
+  "phase": "BERCERITA",
+  "emotion_detected": {
+    "primary": "sadness",
+    "secondary": "fear",
+    "zone": "BERADAPTASI"
+  },
+  "bot_message": "Aku di sini untuk bantu refleksi, bukan mendiagnosis. Terima kasih sudah berbagi. Sepertinya ada perasaan berat yang kamu rasakan. Boleh aku tanya beberapa hal?",
+  "next_action": "REFLECTION_Q1"
+}
+```
+
+#### Fase 2: REFLEKSI RINGAN (⚡ No Gemini — 5 Pertanyaan dari JSON)
+
+```bash
+# Request Q1
+curl -X POST "http://localhost:8000/api/conversation/reflect" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "session_id": "sess-abc-123",
+    "question_index": 1,
+    "answer": "Sudah sekitar 2 minggu terakhir"
+  }'
+```
 
 ```json
+// Response
 {
-  "session_id": "user-123",
-  "message": "Hai, aku mengerti perasaanmu. Stress karena tugas menumpuk itu wajar dirasakan...",
-  "emotion": {
-    "primary": {
-      "type": "sadness",
-      "confidence": 0.75
+  "session_id": "sess-abc-123",
+  "phase": "REFLEKSI_RINGAN",
+  "current_question": 1,
+  "total_questions": 5,
+  "next_question": "Apa yang biasanya kamu lakukan saat merasa seperti ini?",
+  "next_action": "REFLECTION_Q2"
+}
+```
+
+#### Fase 3: NARASI REFLEKTIF (🔷 Gemini Call #2)
+
+```bash
+# Request — setelah 5 jawaban selesai
+curl -X GET "http://localhost:8000/api/conversation/narrative?session_id=sess-abc-123"
+```
+
+```json
+// Response
+{
+  "session_id": "sess-abc-123",
+  "phase": "NARASI_REFLEKTIF",
+  "narrative": "Dalam beberapa waktu terakhir, perasaan yang muncul cukup beragam dan terasa intens, terutama setelah kejadian yang menuntut banyak energi. Ada kesan bahwa tubuh dan pikiranmu sedang bekerja keras untuk beradaptasi.",
+  "wellness_zone": {
+    "zone": "BERADAPTASI",
+    "emoji": "🟡",
+    "description": "Ada tekanan tapi masih bisa coping"
+  },
+  "next_action": "TIPS_CLOSING"
+}
+```
+
+#### Fase 4: TIPS & CLOSING (⚡ No Gemini)
+
+```bash
+# Request — get tips dan closing message
+curl -X POST "http://localhost:8000/api/conversation/tips" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "session_id": "sess-abc-123"
+  }'
+```
+
+```json
+// Response
+{
+  "session_id": "sess-abc-123",
+  "phase": "SELESAI",
+  "tips": [
+    {
+      "name": "Grounding 5-4-3-2-1",
+      "description": "5 hal yang kamu lihat, 4 yang kamu dengar..."
     },
-    "secondary": {
-      "type": "remorse",
-      "components": ["sadness", "disgust"],
-      "confidence": 0.68
+    {
+      "name": "Jeda Sejenak",
+      "description": "Istirahat 5 menit, tarik napas dalam..."
     },
-    "tertiary": {
-      "type": "pensiveness",
-      "intensity": "mild",
-      "confidence": 0.82
+    {
+      "name": "Journaling",
+      "description": "Tulis 3 hal yang kamu syukuri hari ini..."
     }
-  },
-  "sentiment": {
-    "label": "negative",
-    "score": -0.6
-  },
-  "urgency": "medium",
-  "suggestions": [
-    "Buat daftar prioritas tugas berdasarkan deadline",
-    "Coba teknik Pomodoro (25 menit fokus, 5 menit istirahat)",
-    "Istirahat 10 menit setiap jam untuk menjaga produktivitas"
   ],
-  "followup_question": "Mau coba teknik time management yang mana dulu?"
+  "closing_message": "Terima kasih sudah berbagi. Kamu selalu bisa kembali kapan saja."
 }
 ```
 
 ---
 
-## 📝 Detail Module
+## 📝 Detail Module (MVP)
 
-### 1. Modul Emosi (`modules/emotion/`)
+### 1. Modul Emotion (`modules/emotion/`)
 
-**Fungsi:** Mendeteksi dan menganalisis emosi menggunakan Plutchik's Wheel of Emotion via Google Gemini API.
+**Fungsi:** Deteksi emosi menggunakan Plutchik's Wheel via Gemini API (Fase 1).
 
-| File                    | Deskripsi                                       |
-| ----------------------- | ----------------------------------------------- |
-| `wheel_of_emotion.py`   | Implementasi Plutchik's Wheel dengan 3 level    |
-| `detector.py`           | Logika deteksi emosi multi-level via Gemini API |
-| `analyzer.py`           | Analisis sentimen via Gemini API                |
-| `urgency_checker.py`    | Deteksi tingkat urgensi via Gemini API          |
-| `followup_generator.py` | Generate pertanyaan lanjutan via Gemini         |
-| `emotion_types.py`      | Enum emosi untuk setiap level                   |
+| File                  | Deskripsi                                        |
+| --------------------- | ------------------------------------------------ |
+| `wheel_of_emotion.py` | Plutchik's Wheel (primer, sekunder, tersier)     |
+| `detector.py`         | Deteksi emosi via Gemini API (🔷 Call #1)        |
+| `zone_mapper.py`      | Mapping emosi ke Zona Kesejahteraan (4 zona)     |
+| `trend_analyzer.py`   | Analisis trend emosi periodik (mingguan/bulanan) |
 
 #### Plutchik's Wheel of Emotion - Detail
 
@@ -831,572 +1045,138 @@ curl -X POST "http://localhost:8000/api/chat" \
 | Aggressiveness | Anger + Anticipation |
 | Optimism       | Anticipation + Joy   |
 
-### 2. Modul Validasi (`modules/validation/`)
+### 2. Modul Reflection (`modules/reflection/`)
 
-| File                 | Deskripsi                                   |
-| -------------------- | ------------------------------------------- |
-| `input_validator.py` | Validasi panjang, format, dan bahasa input  |
-| `content_filter.py`  | Filter konten tidak pantas atau berbahaya   |
-| `safety_checker.py`  | Pemeriksaan keamanan (self-harm, kekerasan) |
+**Fungsi:** 5 pertanyaan reflektif dari JSON + generate narasi MHCM (Fase 2 & 3).
 
-### 3. Modul Respons (`modules/response/`)
+| File                     | Deskripsi                                       |
+| ------------------------ | ----------------------------------------------- |
+| `question_service.py`    | Ambil 5 pertanyaan dari JSON per emosi (Fase 2) |
+| `narrative_generator.py` | Generate narasi MHCM via Gemini (🔷 Call #2)    |
 
-| File                      | Deskripsi                                     |
-| ------------------------- | --------------------------------------------- |
-| `generator.py`            | Membuat respons berdasarkan konteks dan emosi |
-| `formatter.py`            | Memformat respons ke struktur JSON            |
-| `suggestion_extractor.py` | Mengekstrak saran dari respons LLM            |
+### 3. Modul Safety (`modules/safety/`)
 
-### 4. Inti LLM (`core/llm/`)
+**Fungsi:** Safety & Boundary Layer — penolakan halus, safe framing.
 
-| File               | Deskripsi                                    |
-| ------------------ | -------------------------------------------- |
-| `gemini_client.py` | Wrapper untuk Google Gemini API dengan retry |
-| `llm_factory.py`   | Pola factory untuk ekstensibilitas           |
-| `prompts.py`       | Template prompt untuk berbagai use case      |
+| File                  | Deskripsi                                     |
+| --------------------- | --------------------------------------------- |
+| `boundary_checker.py` | Cek batasan (no diagnosis, no therapy advice) |
+| `safe_framing.py`     | Response templates dengan safe framing        |
 
-### 5. Inti RAG (`core/rag/`)
+### 4. Modul Tips (`modules/tips/`)
 
-| File                 | Deskripsi                                      |
-| -------------------- | ---------------------------------------------- |
-| `retriever.py`       | Mengambil dokumen relevan dari vector store    |
-| `vector_store.py`    | Operasi CRUD untuk ChromaDB/FAISS              |
-| `embeddings.py`      | Membuat embedding dengan sentence-transformers |
-| `document_loader.py` | Memuat dokumen knowledge base                  |
+**Fungsi:** Coping tips ringan untuk Fase 4.
 
-### 6. Inti Chains (`core/chains/`)
+| File              | Deskripsi                            |
+| ----------------- | ------------------------------------ |
+| `tips_service.py` | Load & serve tips dari JSON per emosi |
 
-| File                    | Deskripsi                            |
-| ----------------------- | ------------------------------------ |
-| `conversation_chain.py` | Chain percakapan utama dengan memori |
-| `emotion_chain.py`      | Chain khusus untuk analisis emosi    |
-| `followup_chain.py`     | Chain untuk pertanyaan lanjutan      |
+### 5. Core LLM (`core/llm/`)
 
----
+**Fungsi:** Wrapper Gemini API — hanya 2 calls per session.
 
-## 📊 Alur Chat Detail + Endpoint
+| File               | Deskripsi                                         |
+| ------------------ | ------------------------------------------------- |
+| `gemini_client.py` | Wrapper Gemini API dengan retry & error handling  |
+| `prompts.py`       | Prompt templates (emotion detect + narrative gen) |
 
-### Overview Alur API
+### 6. Core Conversation (`core/conversation/`)
 
-```
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           API FLOW OVERVIEW                                      │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│   CLIENT                          SERVER                         EXTERNAL       │
-│     │                               │                               │            │
-│     │  POST /api/chat               │                               │            │
-│     │──────────────────────────────▶│                               │            │
-│     │                               │                               │            │
-│     │                               │  1. Validate Input            │            │
-│     │                               │  2. Analyze Emotion ─────────▶│ Gemini    │
-│     │                               │◀─────────────────────────────│ API       │
-│     │                               │  3. Generate Followup ───────▶│            │
-│     │                               │◀─────────────────────────────│            │
-│     │                               │  4. RAG Retrieve ────────────▶│ ChromaDB  │
-│     │                               │◀─────────────────────────────│            │
-│     │                               │  5. Build Prompt              │            │
-│     │                               │  6. Generate Response ───────▶│ Gemini    │
-│     │                               │◀─────────────────────────────│ API       │
-│     │                               │  7. Format & Save ───────────▶│ PostgreSQL│
-│     │                               │                               │            │
-│     │  HTTP 200 + ChatResponse      │                               │            │
-│     │◀──────────────────────────────│                               │            │
-│                                                                                  │
-└─────────────────────────────────────────────────────────────────────────────────┘
-```
+**Fungsi:** 4-Fase State Machine untuk multi-turn conversation.
+
+| File                 | Deskripsi                                              |
+| -------------------- | ------------------------------------------------------ |
+| `phase_manager.py`   | State machine (BERCERITA→REFLEKSI→NARASI→LANJUTAN)     |
+| `phase_handlers.py`  | Handler logic per fase                                 |
+| `session_context.py` | Session context (emosi, jawaban refleksi, zona, state) |
+
+### 7. Core Knowledge (`core/knowledge/`)
+
+**Fungsi:** Load JSON knowledge base tanpa embedding/RAG.
+
+| File                   | Deskripsi                                   |
+| ---------------------- | ------------------------------------------- |
+| `loader.py`            | Load JSON files dari `data/knowledge_base/` |
+| `question_selector.py` | Pilih 5 pertanyaan refleksi per emosi       |
 
 ---
 
-### Endpoint Utama: `POST /api/chat`
+## 📊 Alur Chat Detail — Multi-Turn 4 Fase
 
-#### Request
+### State Machine Overview (MVP)
 
-```http
-POST /api/chat HTTP/1.1
-Host: localhost:8000
-Content-Type: application/json
-Authorization: Bearer <jwt_token>
-X-Request-ID: 550e8400-e29b-41d4-a716-446655440000
-
-{
-  "session_id": "user-123",
-  "message": "Saya merasa sangat stress dengan tugas kuliah yang menumpuk"
-}
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                     SESSION STATE MACHINE — 4 FASE (MVP)                         │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                  │
+│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐     │
+│   │  BERCERITA  │───▶│  REFLEKSI   │───▶│   NARASI    │───▶│   TIPS &    │     │
+│   │   (Fase 1)  │    │  (Fase 2)   │    │  (Fase 3)   │    │  CLOSING    │     │
+│   │  🔷 Gemini  │    │  ⚡ No LLM  │    │  🔷 Gemini  │    │  ⚡ No LLM  │     │
+│   └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘     │
+│          │                  │                  │                  │             │
+│          ▼                  ▼                  ▼                  ▼             │
+│   User bercerita      5 pertanyaan      Generate          Tips coping        │
+│   → Deteksi emosi      dari JSON →      narasi MHCM      + closing           │
+│   → Safe framing      User jawab       + zona wellness   message              │
+│                                                                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### Response (Success)
+### Session Context (Tersimpan di PostgreSQL)
 
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-X-Request-ID: 550e8400-e29b-41d4-a716-446655440000
-X-Processing-Time: 1250ms
+```python
+class SessionContext:
+    session_id: str
+    user_id: str
+    current_phase: PhaseEnum  # BERCERITA, REFLEKSI, NARASI, TIPS_CLOSING, SELESAI
 
-{
-  "success": true,
-  "data": {
-    "session_id": "user-123",
-    "message": "Hai, aku mengerti perasaanmu...",
-    "emotion": {...},
-    "sentiment": {...},
-    "urgency": "medium",
-    "suggestions": [...],
-    "followup_question": "..."
-  },
-  "metadata": {
-    "request_id": "550e8400-e29b-41d4-a716-446655440000",
-    "timestamp": "2026-02-02T10:30:00Z",
-    "processing_time_ms": 1250
-  }
-}
+    # Fase 1 results
+    initial_story: str
+    detected_emotion: EmotionResult
+    wellness_zone_initial: WellnessZone
+
+    # Fase 2 progress
+    reflection_questions: List[str]     # 5 pertanyaan dari JSON
+    reflection_answers: List[str]       # 5 jawaban user
+    current_question_index: int         # 0-4
+
+    # Fase 3 results
+    mhcm_narrative: str                 # Narasi reflektif dari Gemini
+    wellness_zone_final: WellnessZone   # Zona setelah refleksi
+
+    # Fase 4 results
+    tips_shown: List[str]               # Tips yang ditampilkan
+
+    # Metadata
+    created_at: datetime
+    updated_at: datetime
+    gemini_call_count: int              # Max: 2 per session
 ```
+
+### Phase Transitions
+
+| Dari         | Ke           | Trigger                         | Gemini Call? |
+| ------------ | ------------ | ------------------------------- | ------------ |
+| START        | BERCERITA    | `POST /conversation/start`      | 🔷 Call #1   |
+| BERCERITA    | REFLEKSI     | Emotion detected                | ⚡ No        |
+| REFLEKSI     | REFLEKSI     | `POST /conversation/reflect` x5 | ⚡ No        |
+| REFLEKSI     | NARASI       | 5 jawaban lengkap               | 🔷 Call #2   |
+| NARASI       | TIPS_CLOSING | Narrative generated             | ⚡ No        |
+| TIPS_CLOSING | SELESAI      | `POST /conversation/tips`       | ⚡ No        |
 
 ---
 
-### Alur Detail per Langkah
+## 🏆 API Design Best Practices (MVP)
+
+### 1. Multi-Turn Conversation Flow
 
 ```
-Input: "Saya merasa sangat stress dengan tugas kuliah yang menumpuk"
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ LANGKAH 1: VALIDASI INPUT                                                        │
-│ 📍 Service: ValidationService.validate()                                         │
-│ 📍 Endpoint: - (internal only)                                                   │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│ Proses:                                                                          │
-│ • Cek panjang input (min: 3, max: 2000 karakter)                                 │
-│ • Deteksi bahasa (Indonesia/Inggris)                                             │
-│ • Filter konten berbahaya                                                        │
-│ • Sanitasi input (XSS, SQL injection prevention)                                 │
-│                                                                                  │
-│ ❌ Gagal → Return HTTP 400 Bad Request                                           │
-│ ✅ Sukses → Lanjut ke Langkah 2                                                  │
-│                                                                                  │
-│ Error Response (jika gagal):                                                     │
-│ {                                                                                │
-│   "success": false,                                                              │
-│   "error": {                                                                     │
-│     "code": "VALIDATION_ERROR",                                                  │
-│     "message": "Input message terlalu pendek",                                   │
-│     "details": { "min_length": 3, "actual_length": 1 }                          │
-│   }                                                                              │
-│ }                                                                                │
-└─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ LANGKAH 2: DETEKSI EMOSI (WHEEL OF EMOTION via GEMINI)                           │
-│ 📍 Service: EmotionService.analyze()                                             │
-│ 📍 Standalone Endpoint: POST /api/emotion/analyze                                │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│ ┌─────────────────────────────────────────────────────────────────────────────┐ │
-│ │ API: POST /api/emotion/analyze                                              │ │
-│ ├─────────────────────────────────────────────────────────────────────────────┤ │
-│ │ Request:                                                                    │ │
-│ │ {                                                                           │ │
-│ │   "text": "Saya merasa sangat stress dengan tugas kuliah yang menumpuk",   │ │
-│ │   "session_id": "user-123",                                                 │ │
-│ │   "include_followup": true                                                  │ │
-│ │ }                                                                           │ │
-│ ├─────────────────────────────────────────────────────────────────────────────┤ │
-│ │ Response:                                                                   │ │
-│ │ {                                                                           │ │
-│ │   "success": true,                                                          │ │
-│ │   "data": {                                                                 │ │
-│ │     "primary": { "type": "sadness", "confidence": 0.75 },                  │ │
-│ │     "secondary": { "type": "remorse", "confidence": 0.68,                  │ │
-│ │                    "components": ["sadness", "disgust"] },                 │ │
-│ │     "tertiary": { "type": "pensiveness", "intensity": "mild",              │ │
-│ │                   "confidence": 0.82 },                                    │ │
-│ │     "sentiment": { "label": "negative", "score": -0.6 },                   │ │
-│ │     "urgency": "medium"                                                     │ │
-│ │   }                                                                         │ │
-│ │ }                                                                           │ │
-│ └─────────────────────────────────────────────────────────────────────────────┘ │
-│                                                                                  │
-│ Proses via Gemini API:                                                           │
-│ • EMOSI PRIMER:    Sadness (kepercayaan: 0.75)                                  │
-│ • EMOSI SEKUNDER:  Remorse = Sadness + Disgust (kepercayaan: 0.68)              │
-│ • EMOSI TERSIER:   Pensiveness - intensitas: mild (kepercayaan: 0.82)           │
-│ • Skor sentimen: -0.6 (negatif)                                                  │
-│ • Tingkat urgensi: SEDANG                                                        │
-└─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ LANGKAH 3: GENERATE PERTANYAAN LANJUTAN                                          │
-│ 📍 Service: FollowupService.generate()                                           │
-│ 📍 Standalone Endpoint: POST /api/emotion/followup                               │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│ ┌─────────────────────────────────────────────────────────────────────────────┐ │
-│ │ API: POST /api/emotion/followup                                             │ │
-│ ├─────────────────────────────────────────────────────────────────────────────┤ │
-│ │ Request:                                                                    │ │
-│ │ {                                                                           │ │
-│ │   "emotion": {                                                              │ │
-│ │     "primary": "sadness",                                                   │ │
-│ │     "secondary": "remorse",                                                 │ │
-│ │     "tertiary": "pensiveness"                                               │ │
-│ │   },                                                                        │ │
-│ │   "original_message": "Saya merasa sangat stress...",                       │ │
-│ │   "max_questions": 3                                                        │ │
-│ │ }                                                                           │ │
-│ ├─────────────────────────────────────────────────────────────────────────────┤ │
-│ │ Response:                                                                   │ │
-│ │ {                                                                           │ │
-│ │   "success": true,                                                          │ │
-│ │   "data": {                                                                 │ │
-│ │     "questions": [                                                          │ │
-│ │       "Sudah berapa lama kamu merasa stress seperti ini?",                 │ │
-│ │       "Apakah ada deadline tertentu yang membuatmu khawatir?",             │ │
-│ │       "Bagaimana pola tidurmu akhir-akhir ini?"                            │ │
-│ │     ],                                                                      │ │
-│ │     "selected_question": "Sudah berapa lama kamu merasa stress..."         │ │
-│ │   }                                                                         │ │
-│ │ }                                                                           │ │
-│ └─────────────────────────────────────────────────────────────────────────────┘ │
-│                                                                                  │
-│ Generate pertanyaan klarifikasi berdasarkan emosi via Gemini                     │
-└─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ LANGKAH 4: RAG - AMBIL KONTEKS RELEVAN                                           │
-│ 📍 Service: RAGService.retrieve()                                                │
-│ 📍 Endpoint: - (internal only)                                                   │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│ Internal Process:                                                                │
-│ ┌─────────────────────────────────────────────────────────────────────────────┐ │
-│ │ 1. Generate Embedding (sentence-transformers)                               │ │
-│ │    query_vector = embeddings.encode("stress tugas kuliah")                  │ │
-│ │                                                                             │ │
-│ │ 2. Query ChromaDB/FAISS                                                     │ │
-│ │    results = vector_store.similarity_search(query_vector, top_k=3)          │ │
-│ │                                                                             │ │
-│ │ 3. Retrieved Documents:                                                     │ │
-│ │    - "Teknik time management untuk mahasiswa..." (score: 0.89)              │ │
-│ │    - "Cara mengatasi stress akademik..." (score: 0.85)                      │ │
-│ │    - "Teknik relaksasi 5-4-3-2-1..." (score: 0.78)                          │ │
-│ └─────────────────────────────────────────────────────────────────────────────┘ │
-│                                                                                  │
-│ Output: List[Document] untuk context injection                                   │
-└─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ LANGKAH 5: SUSUN PROMPT                                                          │
-│ 📍 Service: PromptService.build()                                                │
-│ 📍 Endpoint: - (internal only)                                                   │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│ Prompt Structure:                                                                │
-│ ┌─────────────────────────────────────────────────────────────────────────────┐ │
-│ │ SYSTEM PROMPT:                                                              │ │
-│ │ "Kamu adalah EduMind, asisten AI yang empatik dan supportif untuk          │ │
-│ │  mahasiswa. Berikan respons yang hangat, validasi perasaan user..."         │ │
-│ │                                                                             │ │
-│ │ EMOTION CONTEXT:                                                            │ │
-│ │ "User sedang mengalami emosi: PRIMARY=sadness, SECONDARY=remorse,          │ │
-│ │  TERTIARY=pensiveness. Urgency level: MEDIUM."                              │ │
-│ │                                                                             │ │
-│ │ RAG CONTEXT:                                                                │ │
-│ │ "Berikut informasi relevan dari knowledge base:                            │ │
-│ │  1. Teknik time management untuk mahasiswa...                              │ │
-│ │  2. Cara mengatasi stress akademik..."                                      │ │
-│ │                                                                             │ │
-│ │ CHAT HISTORY:                                                               │ │
-│ │ [Previous messages from session if any]                                     │ │
-│ │                                                                             │ │
-│ │ USER MESSAGE:                                                               │ │
-│ │ "Saya merasa sangat stress dengan tugas kuliah yang menumpuk"              │ │
-│ └─────────────────────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ LANGKAH 6: PEMROSESAN LLM (GEMINI API)                                           │
-│ 📍 Service: GeminiClient.generate()                                              │
-│ 📍 Endpoint: - (internal only, calls Gemini API)                                 │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│ Gemini API Call:                                                                 │
-│ ┌─────────────────────────────────────────────────────────────────────────────┐ │
-│ │ Configuration:                                                              │ │
-│ │ • Model: gemini-pro                                                         │ │
-│ │ • Temperature: 0.7 (kreativitas seimbang)                                   │ │
-│ │ • Max output tokens: 1024                                                   │ │
-│ │ • Top-p: 0.9                                                                │ │
-│ │ • Safety settings: BLOCK_MEDIUM_AND_ABOVE                                   │ │
-│ │                                                                             │ │
-│ │ Request to Gemini:                                                          │ │
-│ │ gemini.generate_content(                                                    │ │
-│ │   contents=[system_prompt + context + user_message],                        │ │
-│ │   generation_config=GenerationConfig(...)                                   │ │
-│ │ )                                                                           │ │
-│ │                                                                             │ │
-│ │ Raw Response:                                                               │ │
-│ │ "Hai, aku mengerti perasaanmu. Stress karena tugas menumpuk itu wajar     │ │
-│ │  dirasakan. Beberapa hal yang bisa kamu coba:                              │ │
-│ │  1. Buat daftar prioritas berdasarkan deadline                             │ │
-│ │  2. Gunakan teknik Pomodoro (25 menit fokus, 5 menit istirahat)           │ │
-│ │  ..."                                                                       │ │
-│ └─────────────────────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ LANGKAH 7: PASCA-PEMROSESAN & SAVE TO DATABASE                                   │
-│ 📍 Service: ResponseService.format()                                             │
-│ 📍 Database: PostgreSQL via SQLAlchemy                                           │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│ Proses:                                                                          │
-│ ┌─────────────────────────────────────────────────────────────────────────────┐ │
-│ │ 1. Content Safety Filter                                                    │ │
-│ │    - Moderasi konten respons                                                │ │
-│ │    - Remove sensitive information                                           │ │
-│ │                                                                             │ │
-│ │ 2. Extract Suggestions                                                      │ │
-│ │    suggestions = extractor.extract_action_items(response)                   │ │
-│ │    → ["Buat daftar prioritas...", "Gunakan teknik Pomodoro..."]            │ │
-│ │                                                                             │ │
-│ │ 3. Format Response                                                          │ │
-│ │    formatted = formatter.to_chat_response(response, emotion, suggestions)   │ │
-│ │                                                                             │ │
-│ │ 4. Save to PostgreSQL                                                       │ │
-│ │    ┌───────────────────────────────────────────────────────────────────┐   │ │
-│ │    │ INSERT INTO messages (session_id, role, content, ...)             │   │ │
-│ │    │ INSERT INTO emotion_logs (message_id, primary_emotion, ...)       │   │ │
-│ │    └───────────────────────────────────────────────────────────────────┘   │ │
-│ │                                                                             │ │
-│ │ 5. Update Session Memory                                                    │ │
-│ │    memory.add_message(user_message, assistant_response)                     │ │
-│ └─────────────────────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                         FINAL API RESPONSE                                       │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│ HTTP/1.1 200 OK                                                                  │
-│ Content-Type: application/json                                                   │
-│ X-Request-ID: 550e8400-e29b-41d4-a716-446655440000                              │
-│ X-Processing-Time: 1250ms                                                        │
-│                                                                                  │
-│ {                                                                                │
-│   "success": true,                                                               │
-│   "data": {                                                                      │
-│     "session_id": "user-123",                                                    │
-│     "message": "Hai, aku mengerti perasaanmu. Stress karena tugas...",          │
-│     "emotion": {                                                                 │
-│       "primary": { "type": "sadness", "confidence": 0.75 },                     │
-│       "secondary": { "type": "remorse", "components": ["sadness", "disgust"],   │
-│                      "confidence": 0.68 },                                       │
-│       "tertiary": { "type": "pensiveness", "intensity": "mild",                 │
-│                     "confidence": 0.82 }                                         │
-│     },                                                                           │
-│     "sentiment": { "label": "negative", "score": -0.6 },                        │
-│     "urgency": "medium",                                                         │
-│     "suggestions": [                                                             │
-│       "Buat daftar prioritas tugas berdasarkan deadline",                       │
-│       "Coba teknik Pomodoro (25 menit fokus, 5 menit istirahat)",               │
-│       "Istirahat 10 menit setiap jam untuk menjaga produktivitas"               │
-│     ],                                                                           │
-│     "followup_question": "Mau coba teknik time management yang mana dulu?"      │
-│   },                                                                             │
-│   "metadata": {                                                                  │
-│     "request_id": "550e8400-e29b-41d4-a716-446655440000",                       │
-│     "timestamp": "2026-02-02T10:30:00Z",                                        │
-│     "processing_time_ms": 1250,                                                  │
-│     "model_version": "gemini-pro"                                               │
-│   }                                                                              │
-│ }                                                                                │
-│                                                                                  │
-└─────────────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-### Endpoint Mapping per Langkah
-
-| Langkah | Service           | Endpoint                | Method   | Deskripsi                    |
-| ------- | ----------------- | ----------------------- | -------- | ---------------------------- |
-| 1       | ValidationService | - (internal)            | -        | Validasi & sanitasi input    |
-| 2       | EmotionService    | `/api/emotion/analyze`  | POST     | Deteksi emosi 3 level        |
-| 3       | FollowupService   | `/api/emotion/followup` | POST     | Generate pertanyaan lanjutan |
-| 4       | RAGService        | - (internal)            | -        | Retrieve dari vector store   |
-| 5       | PromptService     | - (internal)            | -        | Build prompt dengan context  |
-| 6       | GeminiClient      | - (internal)            | -        | Call Gemini API              |
-| 7       | ResponseService   | - (internal)            | -        | Format & save to PostgreSQL  |
-| **ALL** | **ChatService**   | **`/api/chat`**         | **POST** | **Orchestrator utama**       |
-
----
-
-### Standalone API Endpoints (Dapat Dipanggil Terpisah)
-
-#### 1. Emotion Analysis API
-
-```http
-POST /api/emotion/analyze HTTP/1.1
-Content-Type: application/json
-
-{
-  "text": "Saya merasa sangat stress dengan tugas kuliah",
-  "include_followup": false
-}
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "primary": { "type": "sadness", "confidence": 0.75 },
-    "secondary": { "type": "remorse", "confidence": 0.68 },
-    "tertiary": { "type": "pensiveness", "confidence": 0.82 },
-    "sentiment": { "label": "negative", "score": -0.6 },
-    "urgency": "medium"
-  }
-}
-```
-
-#### 2. Followup Questions API
-
-```http
-POST /api/emotion/followup HTTP/1.1
-Content-Type: application/json
-
-{
-  "emotion": {
-    "primary": "sadness",
-    "secondary": "remorse"
-  },
-  "original_message": "Saya merasa stress...",
-  "max_questions": 3
-}
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "questions": [
-      "Sudah berapa lama kamu merasa seperti ini?",
-      "Apa yang biasanya membantu menenangkanmu?"
-    ]
-  }
-}
-```
-
-#### 3. Wheel of Emotion Structure API
-
-```http
-GET /api/emotion/wheel HTTP/1.1
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "primary_emotions": ["joy", "trust", "fear", "surprise", "sadness", "disgust", "anger", "anticipation"],
-    "secondary_emotions": [...],
-    "tertiary_emotions": [...]
-  }
-}
-```
-
-#### 4. Chat History API
-
-```http
-GET /api/chat/history/user-123?page=1&limit=20 HTTP/1.1
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "session_id": "user-123",
-    "messages": [
-      { "role": "user", "content": "...", "timestamp": "..." },
-      { "role": "assistant", "content": "...", "timestamp": "..." }
-    ]
-  },
-  "pagination": {
-    "current_page": 1,
-    "total_pages": 5,
-    "total_items": 100
-  }
-}
-```
-
----
-
-### Error Responses
-
-| HTTP Code | Error Code             | Kondisi                 |
-| --------- | ---------------------- | ----------------------- |
-| 400       | `VALIDATION_ERROR`     | Input tidak valid       |
-| 401       | `UNAUTHORIZED`         | Token tidak ada/expired |
-| 403       | `FORBIDDEN`            | Tidak punya akses       |
-| 404       | `SESSION_NOT_FOUND`    | Session tidak ditemukan |
-| 422       | `UNPROCESSABLE_ENTITY` | Format data salah       |
-| 429       | `RATE_LIMIT_EXCEEDED`  | Terlalu banyak request  |
-| 500       | `INTERNAL_ERROR`       | Error server            |
-| 503       | `SERVICE_UNAVAILABLE`  | Gemini API down         |
-
-**Error Response Format:**
-
-```json
-{
-  "success": false,
-  "data": null,
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Input message terlalu pendek",
-    "details": {
-      "field": "message",
-      "min_length": 3,
-      "actual_length": 1
-    }
-  },
-  "metadata": {
-    "request_id": "...",
-    "timestamp": "..."
-  }
-}
-```
-
----
-
-## 🏆 API Design Best Practices
-
-### 1. RESTful Conventions
-
-```
-✅ Noun-based endpoints (bukan verb)
-   /api/chat (bukan /api/sendMessage)
-   /api/emotion/analyze (bukan /api/analyzeEmotion)
-
-✅ HTTP Methods yang tepat
-   GET    → Ambil data (idempotent)
-   POST   → Buat/proses data baru
-   DELETE → Hapus data
-
-✅ Pluralization konsisten
-   /api/emotion/types/{level}
+✅ Stateful session management via PostgreSQL
+✅ Phase-based endpoints (/start, /reflect, /narrative, /tips)
+✅ Max 2 Gemini calls per session (cost optimization)
+✅ Knowledge base dari JSON (tanpa RAG/embedding)
 ```
 
 ### 2. Response Structure Standar
@@ -1404,106 +1184,31 @@ GET /api/chat/history/user-123?page=1&limit=20 HTTP/1.1
 ```json
 {
   "success": true,
-  "data": { ... },
-  "error": null,
+  "data": {
+    "session_id": "sess-abc-123",
+    "phase": "REFLEKSI_RINGAN",
+    "current_question": 2,
+    ...
+  },
   "metadata": {
     "request_id": "uuid-v4",
-    "timestamp": "2026-02-02T10:30:00Z",
-    "processing_time_ms": 450
+    "timestamp": "2026-02-08T10:30:00Z",
+    "gemini_calls_remaining": 1
   }
 }
 ```
 
-### 3. Error Handling Terstruktur
+### 3. Error Handling
 
-```json
-{
-  "success": false,
-  "data": null,
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Input message terlalu pendek",
-    "details": {
-      "field": "message",
-      "min_length": 3,
-      "actual_length": 1
-    }
-  }
-}
-```
+| HTTP Code | Error Code              | Kondisi                     |
+| --------- | ----------------------- | --------------------------- |
+| 400       | `VALIDATION_ERROR`      | Input tidak valid           |
+| 400       | `PHASE_MISMATCH`        | Wrong phase for operation   |
+| 404       | `SESSION_NOT_FOUND`     | Session tidak ditemukan     |
+| 429       | `GEMINI_LIMIT_EXCEEDED` | Sudah 2 calls dalam session |
+| 500       | `INTERNAL_ERROR`        | Error server                |
 
-### 4. HTTP Status Codes
-
-| Code | Deskripsi           | Kapan Digunakan          |
-| ---- | ------------------- | ------------------------ |
-| 200  | OK                  | Request berhasil         |
-| 201  | Created             | Resource baru dibuat     |
-| 400  | Bad Request         | Input tidak valid        |
-| 401  | Unauthorized        | Token tidak ada/invalid  |
-| 403  | Forbidden           | Tidak punya akses        |
-| 404  | Not Found           | Resource tidak ditemukan |
-| 422  | Unprocessable       | Validasi gagal           |
-| 429  | Too Many Requests   | Rate limit exceeded      |
-| 500  | Internal Error      | Error server             |
-| 503  | Service Unavailable | Gemini API down          |
-
-### 5. Pagination
-
-```json
-{
-  "success": true,
-  "data": [...],
-  "pagination": {
-    "current_page": 1,
-    "per_page": 20,
-    "total_items": 150,
-    "total_pages": 8,
-    "has_next": true,
-    "has_prev": false
-  }
-}
-```
-
-### 6. Rate Limiting Headers
-
-```
-X-RateLimit-Limit: 100
-X-RateLimit-Remaining: 95
-X-RateLimit-Reset: 1706868000
-Retry-After: 60  (jika 429)
-```
-
-### 7. Security Headers
-
-```
-X-Content-Type-Options: nosniff
-X-Frame-Options: DENY
-X-XSS-Protection: 1; mode=block
-Strict-Transport-Security: max-age=31536000
-Content-Security-Policy: default-src 'self'
-```
-
-### 8. Request/Response Schemas (Pydantic)
-
-```python
-# Request Schema
-class ChatRequest(BaseModel):
-    session_id: str = Field(..., min_length=1, max_length=100)
-    message: str = Field(..., min_length=3, max_length=2000)
-
-# Response Schema
-class ChatResponse(BaseModel):
-    session_id: str
-    message: str
-    emotion: EmotionResult
-    sentiment: SentimentResult
-    urgency: UrgencyLevel
-    suggestions: List[str]
-    followup_question: Optional[str]
-    metadata: ResponseMetadata
-```
-
-### 9. API Documentation
+### 4. API Documentation
 
 ```
 Swagger UI: http://localhost:8000/docs
@@ -1511,55 +1216,416 @@ ReDoc: http://localhost:8000/redoc
 OpenAPI JSON: http://localhost:8000/openapi.json
 ```
 
-### 10. Idempotency
+---
 
+### 5. Alur Detail per Fase
+
+#### FASE 1: BERCERITA (🔷 Gemini Call #1)
+
+```http
+POST /api/conversation/start HTTP/1.1
+Content-Type: application/json
+
+{
+  "student_id": "siswa-001",
+  "message": "Aku merasa sedih karena dimarahi ortu"
+}
 ```
-Header: X-Idempotency-Key: <unique-uuid>
 
-Mencegah duplicate request jika network timeout/retry
+**Response:**
+
+```json
+{
+  "session_id": "sess-uuid-123",
+  "current_phase": "BERCERITA",
+  "emotion_detected": {
+    "primary": "sadness",
+    "primary_id": "Sedih",
+    "validated": true,
+    "safe_frame": "Aku di sini untuk bantu refleksi, bukan mendiagnosis."
+  },
+  "next_action": "PROCEED_TO_REFLECT",
+  "message": "Terima kasih sudah berbagi. Aku dengar kamu merasa 'Sedih'. Aku di sini untuk bantu refleksi, bukan mendiagnosis. Klik lanjut untuk refleksi ringan."
+}
+```
+
+#### FASE 2: REFLEKSI RINGAN (⚡ No Gemini Call)
+
+```http
+POST /api/conversation/reflect HTTP/1.1
+Content-Type: application/json
+
+{
+  "session_id": "sess-uuid-123"
+}
+```
+
+**Response (Satu pertanyaan per request, total 5 pertanyaan):**
+
+```json
+{
+  "session_id": "sess-uuid-123",
+  "current_phase": "REFLEKSI_RINGAN",
+  "question_number": 1,
+  "total_questions": 5,
+  "question": "Kapan terakhir kamu merasa seperti ini?",
+  "source": "reflection_questions.json",
+  "next_action": "ANSWER_OR_SKIP"
+}
+```
+
+**Submit Jawaban:**
+
+```http
+POST /api/conversation/reflect/answer HTTP/1.1
+Content-Type: application/json
+
+{
+  "session_id": "sess-uuid-123",
+  "question_number": 1,
+  "answer": "Kemarin malam saat dapat nilai jelek"
+}
+```
+
+#### FASE 3: NARASI REFLEKTIF (🔷 Gemini Call #2)
+
+```http
+POST /api/conversation/narrative HTTP/1.1
+Content-Type: application/json
+
+{
+  "session_id": "sess-uuid-123"
+}
+```
+
+**Response:**
+
+```json
+{
+  "session_id": "sess-uuid-123",
+  "current_phase": "NARASI_REFLEKTIF",
+  "narrative": {
+    "summary": "Dari yang kamu ceritakan, sepertinya kamu sedang dalam proses memahami perasaanmu tentang situasi dengan orang tua. Wajar jika kamu merasa sedih — itu menunjukkan bahwa hubungan ini penting buatmu.",
+    "wellness_zone": "BERADAPTASI",
+    "wellness_label": "🟡 Zona Beradaptasi",
+    "mhcm_compliant": true
+  },
+  "coping_tips": [
+    "Cobalah journaling 5 menit sebelum tidur",
+    "Berbagi cerita dengan teman yang dipercaya"
+  ],
+  "next_action": "PROCEED_TO_CHOICE"
+}
+```
+
+#### FASE 4: TIPS & CLOSING (⚡ No Gemini Call)
+
+```http
+POST /api/conversation/tips HTTP/1.1
+Content-Type: application/json
+
+{
+  "session_id": "sess-uuid-123"
+}
+```
+
+**Response:**
+
+```json
+{
+  "session_id": "sess-uuid-123",
+  "current_phase": "SELESAI",
+  "tips": [
+    {"name": "Grounding 5-4-3-2-1", "description": "5 hal yang kamu lihat, 4 yang kamu dengar..."},
+    {"name": "Jeda Sejenak", "description": "Istirahat 5 menit, tarik napas dalam..."},
+    {"name": "Journaling", "description": "Tulis 3 hal yang kamu syukuri hari ini..."}
+  ],
+  "closing_message": "Terima kasih sudah berbagi. Kamu selalu bisa kembali kapan saja."
+}
 ```
 
 ---
 
-## 🗄️ Database Schema (PostgreSQL + SQLAlchemy)
+### 6. Error Responses
 
-### Entity Relationship Diagram (ERD)
+| HTTP Code | Error Code                | Kondisi                       |
+| --------- | ------------------------- | ----------------------------- |
+| 400       | `VALIDATION_ERROR`        | Input tidak valid             |
+| 400       | `PHASE_MISMATCH`          | Wrong phase for this endpoint |
+| 404       | `SESSION_NOT_FOUND`       | Session tidak ditemukan       |
+| 429       | `GEMINI_LIMIT_EXCEEDED`   | Sudah 2 Gemini calls session  |
+| 500       | `INTERNAL_ERROR`          | Error server                  |
+| 503       | `GEMINI_UNAVAILABLE`      | Gemini API tidak tersedia     |
+
+**Error Response Format:**
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "PHASE_MISMATCH",
+    "message": "Cannot call /reflect before completing BERCERITA phase",
+    "current_phase": "BERCERITA",
+    "expected_phase": "REFLEKSI_RINGAN"
+  },
+  "session_id": "sess-uuid-123"
+}
+```
+
+---
+
+### 7. API Design Best Practices
+
+#### Phase-Aware Endpoints
+
+```
+✅ Endpoints per fase (bukan single endpoint)
+   /api/conversation/start     → Fase 1
+   /api/conversation/reflect   → Fase 2
+   /api/conversation/narrative → Fase 3
+   /api/conversation/choice    → Fase 4
+
+✅ Session-based state management
+   Setiap request membawa session_id
+   Server tracks current_phase per session
+
+✅ Gemini call optimization
+   Hanya 2 calls per session (Fase 1 & 3)
+   Fase 2 & 4 menggunakan JSON knowledge base
+```
+
+#### Response Structure Standar
+
+```json
+{
+  "success": true,
+  "session_id": "sess-uuid-123",
+  "current_phase": "BERCERITA",
+  "data": { ... },
+  "next_action": "PROCEED_TO_REFLECT",
+  "metadata": {
+    "timestamp": "2026-02-02T10:30:00Z",
+    "gemini_calls_used": 1,
+    "gemini_calls_remaining": 1
+  }
+}
+```
+
+#### Security Headers
+
+```
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'
+X-Request-ID: uuid-v4 (auto-generated per request)
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+```
+
+### 8. CORS Configuration
+
+```python
+# main.py
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+    expose_headers=["X-Request-ID", "X-Processing-Time"]
+)
+```
+
+### 9. Request ID Tracking
+
+```python
+# middleware/request_id.py
+import uuid
+from starlette.middleware.base import BaseHTTPMiddleware
+
+class RequestIDMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
+        response = await call_next(request)
+        response.headers["X-Request-ID"] = request_id
+        return response
+```
+
+### 10. Timeout & Retry Configuration
+
+```python
+# core/gemini.py
+import httpx
+from tenacity import retry, stop_after_attempt, wait_exponential
+
+class GeminiClient:
+    def __init__(self):
+        self.timeout = httpx.Timeout(30.0)  # 30 seconds
+        self.max_retries = 3
+    
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(min=1, max=10))
+    async def generate(self, prompt: str) -> str:
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            response = await client.post(...)
+        return response.json()
+```
+
+### 11. Graceful Shutdown
+
+```python
+# main.py
+import signal
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    logger.info("Starting EduMindAI...")
+    await database.connect()
+    yield
+    # Shutdown
+    logger.info("Shutting down gracefully...")
+    await database.disconnect()
+
+app = FastAPI(lifespan=lifespan)
+```
+
+---
+
+## 📊 Monitoring & Observability
+
+### Metrics (Prometheus)
+
+```python
+# middleware/metrics.py
+from prometheus_client import Counter, Histogram
+
+REQUEST_COUNT = Counter(
+    "edumind_requests_total",
+    "Total HTTP requests",
+    ["method", "endpoint", "status"]
+)
+
+GEMINI_LATENCY = Histogram(
+    "edumind_gemini_latency_seconds",
+    "Gemini API call duration",
+    ["phase"]
+)
+
+SESSION_WELLNESS_ZONE = Counter(
+    "edumind_wellness_zone_total",
+    "Sessions by wellness zone",
+    ["zone"]
+)
+```
+
+### Metrics Dashboard (MVP)
+
+| Metric | Deskripsi | Alert Threshold |
+|--------|-----------|------------------|
+| `edumind_gemini_latency_seconds` | Waktu respons Gemini | > 5 detik |
+| `edumind_session_completion_rate` | % session selesai 4 fase | < 70% |
+| `edumind_wellness_zone_total{zone="PERLU_PERHATIAN"}` | Jumlah zona 🔴 | > 10% dari total |
+| `edumind_tips_served_total` | Total tips yang diberikan | monitoring |
+
+### Structured Logging (JSON)
+
+```json
+{
+  "timestamp": "2026-02-08T10:30:00Z",
+  "level": "INFO",
+  "request_id": "550e8400-e29b-41d4-a716-446655440000",
+  "service": "conversation_service",
+  "event": "phase_transition",
+  "session_id": "sess-abc-123",
+  "user_id": "siswa-001",
+  "data": {
+    "from_phase": "BERCERITA",
+    "to_phase": "REFLEKSI_RINGAN",
+    "detected_emotion": "sadness",
+    "gemini_calls_used": 1,
+    "duration_ms": 1250
+  }
+}
+```
+
+### Health Check Endpoints
+
+```json
+// GET /api/health
+{
+  "status": "healthy",
+  "version": "1.0.0",
+  "uptime_seconds": 86400,
+  "dependencies": {
+    "database": "ok",
+    "gemini_api": "ok"
+  }
+}
+
+// GET /api/health/ready
+{
+  "ready": true,
+  "database_connected": true,
+  "gemini_quota_remaining": 95
+}
+```
+
+---
+
+## 🗄️ Database Schema (PostgreSQL + SQLAlchemy) — MVP
+
+### Entity Relationship Diagram (ERD) — 4 Fase Model
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                              DATABASE SCHEMA                                     │
+│                     DATABASE SCHEMA — 4 FASE MODEL (MVP)                         │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                  │
-│  ┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐        │
-│  │     USERS       │       │    SESSIONS     │       │    MESSAGES     │        │
-│  ├─────────────────┤       ├─────────────────┤       ├─────────────────┤        │
-│  │ id (PK)         │──┐    │ id (PK)         │──┐    │ id (PK)         │        │
-│  │ external_id     │  │    │ user_id (FK)    │  │    │ session_id (FK) │        │
-│  │ email           │  └───►│ started_at      │  └───►│ role            │        │
-│  │ name            │       │ ended_at        │       │ content         │        │
-│  │ created_at      │       │ is_active       │       │ created_at      │        │
-│  │ updated_at      │       │ metadata        │       │ token_count     │        │
-│  └─────────────────┘       └─────────────────┘       └─────────────────┘        │
-│                                                             │                    │
-│                                                             │                    │
-│  ┌─────────────────┐       ┌─────────────────┐              │                    │
-│  │   EMOTION_LOGS  │       │    FEEDBACKS    │◄─────────────┘                    │
-│  ├─────────────────┤       ├─────────────────┤                                   │
-│  │ id (PK)         │       │ id (PK)         │                                   │
-│  │ message_id (FK) │       │ message_id (FK) │                                   │
-│  │ primary_emotion │       │ rating          │                                   │
-│  │ secondary_emot  │       │ comment         │                                   │
-│  │ tertiary_emot   │       │ created_at      │                                   │
-│  │ confidence      │       └─────────────────┘                                   │
-│  │ urgency_level   │                                                             │
-│  │ sentiment_score │                                                             │
-│  │ created_at      │                                                             │
-│  └─────────────────┘                                                             │
+│  ┌─────────────────┐       ┌─────────────────────┐       ┌─────────────────┐    │
+│  │     USERS       │       │      SESSIONS       │       │    MESSAGES     │    │
+│  ├─────────────────┤       ├─────────────────────┤       ├─────────────────┤    │
+│  │ id (PK)         │──┐    │ id (PK)             │──┐    │ id (PK)         │    │
+│  │ student_id      │  │    │ user_id (FK)        │  │    │ session_id (FK) │    │
+│  │ name            │  └───►│ current_phase       │  └───►│ role            │    │
+│  │ class           │       │ detected_emotion    │       │ content         │    │
+│  │ created_at      │       │ wellness_zone       │       │ created_at      │    │
+│  │ updated_at      │       │ gemini_calls_used   │       └─────────────────┘    │
+│  └─────────────────┘       │ started_at          │              │               │
+│                            │ ended_at            │              │               │
+│                            │ is_active           │              ▼               │
+│                            └─────────────────────┘    ┌─────────────────┐       │
+│                                    │                  │   REFLECTIONS   │       │
+│                                    │                  ├─────────────────┤       │
+│                                    │                  │ id (PK)         │       │
+│                                    │                  │ session_id (FK) │       │
+│                                    │                  │ question_number │       │
+│                                    ├─────────────────►│ question_text   │       │
+│                                    │                  │ answer_text     │       │
+│                                    │                  │ created_at      │       │
+│                                    │                  └─────────────────┘       │
+│                                    │                                            │
+│                                    ▼                                            │
+│                             ┌─────────────────┐                                 │
+│                             │   NARRATIVES    │                                 │
+│                             ├─────────────────┤                                 │
+│                             │ id (PK)         │                                 │
+│                             │ session_id (FK) │                                 │
+│                             │ summary_text    │                                 │
+│                             │ wellness_zone   │                                 │
+│                             │ coping_tips     │ (JSON)                          │
+│                             │ mhcm_compliant  │                                 │
+│                             │ created_at      │                                 │
+│                             └─────────────────┘                                 │
 │                                                                                  │
 └─────────────────────────────────────────────────────────────────────────────────┘
+
+PHASE VALUES: BERCERITA | REFLEKSI_RINGAN | NARASI_REFLEKTIF | TIPS_CLOSING | SELESAI
+WELLNESS ZONES: SEIMBANG | BERADAPTASI | BUTUH_DUKUNGAN | PERLU_PERHATIAN
 ```
 
-### Model SQLAlchemy
+### Model SQLAlchemy (Updated for 4-Phase MVP)
 
 #### database/base.py
 
@@ -1624,10 +1690,10 @@ class User(Base):
     sessions = relationship("Session", back_populates="user", cascade="all, delete-orphan")
 ```
 
-#### database/models/session.py
+#### database/models/session.py (Updated for 4-Phase MVP)
 
 ```python
-from sqlalchemy import Column, String, DateTime, Boolean, ForeignKey, JSON, func
+from sqlalchemy import Column, String, DateTime, Boolean, Integer, ForeignKey, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
@@ -1638,14 +1704,71 @@ class Session(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    
+    # 4-Phase State Management (MVP)
+    current_phase = Column(String(30), default="BERCERITA")  # BERCERITA, REFLEKSI_RINGAN, NARASI_REFLEKTIF, TIPS_CLOSING, SELESAI
+    detected_emotion = Column(String(50), nullable=True)     # Primary emotion from Fase 1
+    wellness_zone = Column(String(30), nullable=True)        # From Fase 3 narrative
+    gemini_calls_used = Column(Integer, default=0)           # Max 2 per session
+    
     started_at = Column(DateTime(timezone=True), server_default=func.now())
     ended_at = Column(DateTime(timezone=True), nullable=True)
     is_active = Column(Boolean, default=True)
-    metadata = Column(JSON, default={})
 
     # Relationships
     user = relationship("User", back_populates="sessions")
     messages = relationship("Message", back_populates="session", cascade="all, delete-orphan")
+    reflections = relationship("Reflection", back_populates="session", cascade="all, delete-orphan")
+    narrative = relationship("Narrative", back_populates="session", uselist=False)
+```
+
+#### database/models/reflection.py (NEW — Fase 2)
+
+```python
+from sqlalchemy import Column, String, Text, DateTime, Integer, ForeignKey, func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
+import uuid
+from database.base import Base
+
+class Reflection(Base):
+    """Stores 5 reflection Q&A from Fase 2 (REFLEKSI RINGAN)"""
+    __tablename__ = "reflections"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    session_id = Column(UUID(as_uuid=True), ForeignKey("sessions.id"), nullable=False)
+    question_number = Column(Integer, nullable=False)  # 1-5
+    question_text = Column(Text, nullable=False)
+    answer_text = Column(Text, nullable=True)  # Nullable if skipped
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relationships
+    session = relationship("Session", back_populates="reflections")
+```
+
+#### database/models/narrative.py (NEW — Fase 3)
+
+```python
+from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, func
+from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.orm import relationship
+import uuid
+from database.base import Base
+
+class Narrative(Base):
+    """Stores MHCM-compliant narrative from Fase 3 (NARASI REFLEKTIF)"""
+    __tablename__ = "narratives"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    session_id = Column(UUID(as_uuid=True), ForeignKey("sessions.id"), unique=True, nullable=False)
+    summary_text = Column(Text, nullable=False)  # MHCM narrative
+    wellness_zone = Column(String(30), nullable=False)  # SEIMBANG, BERADAPTASI, etc.
+    coping_tips = Column(JSONB, default=[])  # List of tips from JSON
+    mhcm_compliant = Column(Boolean, default=True)  # Validation flag
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relationships
+    session = relationship("Session", back_populates="narrative")
 ```
 
 #### database/models/message.py
@@ -1669,60 +1792,6 @@ class Message(Base):
 
     # Relationships
     session = relationship("Session", back_populates="messages")
-    emotion_log = relationship("EmotionLog", back_populates="message", uselist=False)
-    feedback = relationship("Feedback", back_populates="message", uselist=False)
-```
-
-#### database/models/emotion_log.py
-
-```python
-from sqlalchemy import Column, String, Float, DateTime, ForeignKey, func
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
-import uuid
-from database.base import Base
-
-class EmotionLog(Base):
-    __tablename__ = "emotion_logs"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    message_id = Column(UUID(as_uuid=True), ForeignKey("messages.id"), nullable=False)
-
-    # Plutchik's Wheel of Emotion (3 levels)
-    primary_emotion = Column(String(50))
-    secondary_emotion = Column(String(50))
-    tertiary_emotion = Column(String(50))
-
-    confidence = Column(Float)
-    urgency_level = Column(String(20))
-    sentiment_score = Column(Float)
-
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-
-    # Relationships
-    message = relationship("Message", back_populates="emotion_log")
-```
-
-#### database/models/feedback.py
-
-```python
-from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey, func
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
-import uuid
-from database.base import Base
-
-class Feedback(Base):
-    __tablename__ = "feedbacks"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    message_id = Column(UUID(as_uuid=True), ForeignKey("messages.id"), nullable=False)
-    rating = Column(Integer)  # 1-5 stars
-    comment = Column(Text, nullable=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-
-    # Relationships
-    message = relationship("Message", back_populates="feedback")
 ```
 
 ### Repository Pattern
@@ -1855,171 +1924,288 @@ def downgrade():
 
 ---
 
-## 📋 Struktur Knowledge Base
+## 📋 Struktur Knowledge Base — JSON Files
 
-### wheel_of_emotion.json
+### reflection_questions.json (Fase 2)
 
 ```json
 {
-  "name": "Plutchik's Wheel of Emotion",
-  "primary_emotions": [
-    {
-      "name": "joy",
-      "name_id": "kegembiraan",
-      "color": "#FFD700",
-      "intensity_high": "ecstasy",
-      "intensity_low": "serenity",
-      "opposite": "sadness",
-      "followup_questions": [
+  "description": "5 pertanyaan refleksi per emosi untuk Fase 2 REFLEKSI RINGAN",
+  "emotions": {
+    "sedih": {
+      "emotion_id": "sadness",
+      "emotion_label": "Sedih",
+      "questions": [
+        "Kapan terakhir kamu merasa seperti ini?",
+        "Apa yang biasanya membantumu saat merasa sedih?",
+        "Siapa orang yang biasanya mendukungmu?",
+        "Hal kecil apa yang bisa membuatmu sedikit lebih baik hari ini?",
+        "Bagaimana perasaanmu mempengaruhi aktivitas harianmu?"
+      ]
+    },
+    "marah": {
+      "emotion_id": "anger",
+      "emotion_label": "Marah",
+      "questions": [
+        "Apa yang memicu perasaan marah ini?",
+        "Bagaimana kamu biasanya mengekspresikan kemarahan?",
+        "Apakah ada pola yang kamu sadari dengan perasaan ini?",
+        "Apa yang kamu butuhkan saat ini untuk merasa lebih tenang?",
+        "Siapa yang bisa kamu ajak bicara tentang ini?"
+      ]
+    },
+    "cemas": {
+      "emotion_id": "fear",
+      "emotion_label": "Cemas",
+      "questions": [
+        "Apa yang paling membuatmu khawatir saat ini?",
+        "Bagaimana kecemasan ini mempengaruhi tidurmu?",
+        "Apa strategi yang pernah membantumu mengatasi kecemasan?",
+        "Hal apa yang bisa kamu kontrol dalam situasi ini?",
+        "Bagaimana perasaanmu setelah berbagi cerita ini?"
+      ]
+    },
+    "senang": {
+      "emotion_id": "joy",
+      "emotion_label": "Senang",
+      "questions": [
         "Apa yang membuatmu merasa senang hari ini?",
-        "Bagaimana perasaan ini mempengaruhi aktivitasmu?"
+        "Bagaimana kamu bisa mempertahankan perasaan positif ini?",
+        "Siapa yang ingin kamu ajak berbagi kebahagiaan ini?",
+        "Apa yang kamu pelajari dari pengalaman positif ini?",
+        "Bagaimana perasaan ini mempengaruhi hubunganmu dengan orang lain?"
       ]
     },
-    {
-      "name": "sadness",
-      "name_id": "kesedihan",
-      "color": "#4169E1",
-      "intensity_high": "grief",
-      "intensity_low": "pensiveness",
-      "opposite": "joy",
-      "followup_questions": [
-        "Sudah berapa lama kamu merasa seperti ini?",
-        "Apakah ada hal tertentu yang memicu perasaan ini?"
+    "bingung": {
+      "emotion_id": "surprise",
+      "emotion_label": "Bingung",
+      "questions": [
+        "Apa yang membuatmu merasa bingung?",
+        "Informasi apa yang kamu butuhkan untuk lebih jelas?",
+        "Siapa yang bisa membantumu memahami situasi ini?",
+        "Langkah kecil apa yang bisa kamu ambil sekarang?",
+        "Bagaimana perasaanmu tentang ketidakpastian ini?"
+      ]
+    },
+    "kecewa": {
+      "emotion_id": "disgust",
+      "emotion_label": "Kecewa",
+      "questions": [
+        "Apa yang membuatmu merasa kecewa?",
+        "Harapan apa yang tidak terpenuhi?",
+        "Bagaimana kamu biasanya mengatasi kekecewaan?",
+        "Apa yang bisa kamu lakukan berbeda ke depannya?",
+        "Siapa yang bisa membantumu melewati ini?"
       ]
     }
-  ],
-  "secondary_emotions": [
+  }
+}
+```
+
+### wellness_zones.json (Fase 3 — MVP)
+
+```json
+{
+  "description": "Zona kesejahteraan untuk kategorisasi non-klinis (MVP)",
+  "zones": [
     {
-      "name": "love",
-      "name_id": "cinta",
-      "components": ["joy", "trust"]
+      "id": "SEIMBANG",
+      "label": "🟢 Zona Seimbang",
+      "description": "Kondisi emosional stabil, mampu mengelola perasaan dengan baik",
+      "indicators": ["Mampu mengenali emosi", "Punya strategi coping", "Dukungan sosial baik"],
+      "coping_priority": "maintenance"
     },
     {
-      "name": "remorse",
-      "name_id": "penyesalan",
-      "components": ["sadness", "disgust"]
-    }
-  ],
-  "tertiary_emotions": [
-    {
-      "name": "serenity",
-      "name_id": "ketenangan",
-      "parent": "joy",
-      "intensity": "mild"
+      "id": "BERADAPTASI",
+      "label": "🟡 Zona Beradaptasi",
+      "description": "Sedang dalam proses penyesuaian, perlu dukungan ringan",
+      "indicators": ["Emosi fluktuatif", "Mencari strategi baru", "Butuh validasi"],
+      "coping_priority": "exploration"
     },
     {
-      "name": "pensiveness",
-      "name_id": "kemurungan",
-      "parent": "sadness",
-      "intensity": "mild"
+      "id": "BUTUH_DUKUNGAN",
+      "label": "🟠 Zona Butuh Dukungan",
+      "description": "Perlu dukungan lebih intensif dari orang terdekat",
+      "indicators": ["Kesulitan mengelola emosi", "Dampak pada aktivitas harian", "Butuh support"],
+      "coping_priority": "intervention"
+    },
+    {
+      "id": "PERLU_PERHATIAN",
+      "label": "🔴 Zona Perlu Perhatian",
+      "description": "Disarankan untuk berbicara dengan orang terdekat atau profesional",
+      "indicators": ["Distress signifikan", "Perlu perhatian ekstra", "Butuh dukungan intensif"],
+      "coping_priority": "urgent"
     }
   ]
 }
 ```
 
-### mental_health_tips.json
+### coping_tips.json (Fase 4)
 
 ```json
 {
-  "category": "kesehatan_mental",
-  "tips": [
-    {
-      "id": "mh_001",
-      "title": "Teknik Pernapasan 4-7-8",
-      "content": "Tarik napas selama 4 detik, tahan 7 detik, hembuskan 8 detik...",
-      "target_emotions": {
-        "primary": ["fear", "anger"],
-        "secondary": ["anxiety", "aggressiveness"],
-        "tertiary": ["apprehension", "annoyance"]
-      },
-      "tags": ["pernapasan", "relaksasi", "pertolongan-cepat"]
-    }
-  ]
+  "description": "Tips coping per emosi untuk narrative response",
+  "tips_by_emotion": {
+    "sadness": [
+      "Cobalah journaling 5 menit sebelum tidur untuk menuangkan perasaan",
+      "Berbagi cerita dengan teman atau keluarga yang dipercaya",
+      "Melakukan aktivitas fisik ringan seperti jalan kaki 10 menit",
+      "Mendengarkan musik yang menenangkan",
+      "Menulis 3 hal yang kamu syukuri hari ini"
+    ],
+    "anger": [
+      "Tarik napas dalam 4-7-8 (tarik 4 detik, tahan 7 detik, hembuskan 8 detik)",
+      "Berikan jeda 10 detik sebelum merespons situasi",
+      "Tulis perasaanmu di kertas lalu robek dan buang",
+      "Lakukan aktivitas fisik untuk melepaskan energi",
+      "Coba teknik grounding 5-4-3-2-1"
+    ],
+    "fear": [
+      "Teknik grounding: identifikasi 5 hal yang bisa dilihat, 4 yang disentuh, 3 yang didengar",
+      "Fokus pada hal yang bisa kamu kontrol saat ini",
+      "Bicara dengan orang dewasa yang dipercaya tentang kekhawatiranmu",
+      "Tulis skenario terburuk dan terrealistis",
+      "Praktikkan pernapasan kotak (4-4-4-4)"
+    ],
+    "joy": [
+      "Catat momen bahagia ini di jurnal",
+      "Bagikan kebahagiaan dengan orang terdekat",
+      "Buat rencana untuk mengulang pengalaman positif",
+      "Ekspresikan rasa syukur kepada orang yang berkontribusi",
+      "Simpan foto atau kenangan dari momen ini"
+    ]
+  }
 }
 ```
 
-### coping_strategies.json
+### feeling_wheel.json (Literasi Emosi)
 
 ```json
 {
-  "category": "strategi_coping",
-  "strategies": [
-    {
-      "id": "cs_001",
-      "title": "Teknik Grounding 5-4-3-2-1",
-      "content": "Identifikasi 5 hal yang bisa dilihat, 4 yang disentuh...",
-      "target_emotions": {
-        "primary": ["fear", "surprise"],
-        "secondary": ["awe", "submission"],
-        "tertiary": ["apprehension", "distraction"]
-      },
-      "difficulty": "mudah"
-    }
-  ]
+  "description": "Plutchik's Feeling Wheel untuk literasi emosi - mapping ke Bahasa Indonesia",
+  "wheel": {
+    "primary_emotions": [
+      {"en": "joy", "id": "Senang", "color": "#FFD700"},
+      {"en": "trust", "id": "Percaya", "color": "#98FB98"},
+      {"en": "fear", "id": "Cemas", "color": "#228B22"},
+      {"en": "surprise", "id": "Bingung", "color": "#00CED1"},
+      {"en": "sadness", "id": "Sedih", "color": "#4169E1"},
+      {"en": "disgust", "id": "Kecewa", "color": "#9932CC"},
+      {"en": "anger", "id": "Marah", "color": "#DC143C"},
+      {"en": "anticipation", "id": "Harap", "color": "#FF8C00"}
+    ]
+  },
+  "safe_framing_phrase": "Aku di sini untuk bantu refleksi, bukan mendiagnosis."
 }
 ```
 
 ---
 
-## ✅ Checklist Implementasi
+## ✅ Checklist Implementasi — MVP (4 Fase Model)
 
 ### Core Setup
 
-- [ ] Setup struktur project
-- [ ] Konfigurasi environment dan dependencies
-- [ ] Setup FastAPI dan router
+- [ ] Setup struktur project (folder structure sesuai dokumentasi)
+- [ ] Konfigurasi environment dan dependencies (requirements.txt)
+- [ ] Setup FastAPI dengan routers modular
+- [ ] Konfigurasi logging dan error handling
 
 ### Database (PostgreSQL + SQLAlchemy)
 
 - [ ] Setup PostgreSQL database
-- [ ] Konfigurasi SQLAlchemy connection
-- [ ] Buat model User
-- [ ] Buat model Session (chat session)
-- [ ] Buat model Message (chat history)
-- [ ] Buat model EmotionLog (log deteksi emosi)
-- [ ] Buat model Feedback
+- [ ] Konfigurasi SQLAlchemy async connection
+- [ ] Buat model User (student_id, name, class)
+- [ ] Buat model Session (dengan current_phase, detected_emotion, wellness_zone, gemini_calls_used)
+- [ ] Buat model Message
+- [ ] Buat model Reflection (5 Q&A per session)
+- [ ] Buat model Narrative (MHCM summary, wellness zone, coping tips)
 - [ ] Setup Alembic untuk migrasi
 - [ ] Buat initial migration
-- [ ] Implementasi repository pattern (CRUD)
+- [ ] Implementasi repository pattern
 
-### Modul Emosi (Wheel of Emotion via Gemini)
+### Fase 1: BERCERITA (Gemini Call #1)
 
-- [ ] Implementasi Plutchik's Wheel of Emotion
-- [ ] Deteksi emosi primer (8 emosi dasar) via Gemini
-- [ ] Deteksi emosi sekunder (kombinasi) via Gemini
-- [ ] Deteksi emosi tersier (intensitas/nuansa) via Gemini
-- [ ] Mapping emosi ke respons yang sesuai
-- [ ] Generator pertanyaan lanjutan berdasarkan emosi
+- [ ] Implementasi PhaseManager service
+- [ ] Implementasi EmotionDetectionService via Gemini
+- [ ] Mapping Plutchik's Wheel ke Bahasa Indonesia
+- [ ] Validasi emosi dengan safe framing phrase
+- [ ] Endpoint `POST /api/conversation/start`
+- [ ] Unit test emotion detection
 
-### Core AI
+### Fase 2: REFLEKSI RINGAN (No Gemini)
 
-- [ ] Implementasi modul LLM (Gemini client)
-- [ ] Implementasi pipeline RAG
-- [ ] Implementasi modul validasi
-- [ ] Setup vector store (ChromaDB)
+- [ ] Implementasi ReflectionService
+- [ ] Load questions dari reflection_questions.json
+- [ ] Serve 5 pertanyaan sequentially per emosi
+- [ ] Handle skip/answer untuk tiap pertanyaan
+- [ ] Endpoint `POST /api/conversation/reflect`
+- [ ] Endpoint `POST /api/conversation/reflect/answer`
+- [ ] Unit test reflection flow
 
-### Knowledge Base
+### Fase 3: NARASI REFLEKTIF (Gemini Call #2)
 
-- [ ] Buat wheel_of_emotion.json (dengan followup questions)
-- [ ] Buat mental_health_tips.json (per emosi)
-- [ ] Buat coping_strategies.json (per emosi)
-- [ ] Load dokumen ke vector DB
+- [ ] Implementasi NarrativeService via Gemini
+- [ ] Build prompt dengan reflection answers sebagai context
+- [ ] Generate MHCM-compliant narrative (no clinical labels)
+- [ ] Assign wellness zone dari narrative
+- [ ] Attach coping tips dari coping_tips.json
+- [ ] Endpoint `POST /api/conversation/narrative`
+- [ ] MHCM compliance validation
+- [ ] Unit test narrative generation
 
-### API & Testing
+### Fase 4: TIPS & CLOSING (No Gemini)
 
-- [ ] Setup endpoint `/api/chat`
-- [ ] Setup endpoint `/api/emotion` (Wheel of Emotion)
-- [ ] Setup endpoint `/api/emotion/followup`
-- [ ] Tulis unit test
-- [ ] Tulis integration test
+- [ ] Implementasi TipsService
+- [ ] Load tips dari coping_tips.json per emosi
+- [ ] Generate closing message
+- [ ] Endpoint `POST /api/conversation/tips`
+- [ ] Unit test tips flow
+
+### Safety Layer
+
+- [ ] Implementasi SafetyService
+- [ ] Boundary checking (no diagnosis, no therapy)
+- [ ] Safe framing messages
+- [ ] Rate limiting (max 2 Gemini calls per session)
+- [ ] Input sanitization
+
+### Knowledge Base (JSON Files)
+
+- [ ] Buat reflection_questions.json (5 pertanyaan per emosi)
+- [ ] Buat wellness_zones.json (4 zona dengan indikator)
+- [ ] Buat coping_tips.json (tips per emosi)
+- [ ] Buat feeling_wheel.json (Plutchik mapping ID)
+- [ ] Unit test JSON loading
+
+### Testing
+
+- [ ] Unit test per module
+- [ ] Integration test 4-phase flow (end-to-end)
+- [ ] Test Gemini call limit enforcement
+- [ ] Test wellness zone assignment
+- [ ] Test natural response quality
 
 ### Deployment
 
 - [ ] Konfigurasi Docker & docker-compose
 - [ ] Setup PostgreSQL container
-- [ ] Setup Redis container
-- [ ] Dokumentasi API
-- [ ] Pipeline CI/CD
+- [ ] Environment variables (.env.example)
+- [ ] API documentation (Swagger/ReDoc)
+- [ ] Health check endpoint
+
+### Industry Standards
+
+- [ ] Implementasi i18n/Language Support (ID/EN)
+- [ ] Setup Accept-Language header handling
+- [ ] Buat bilingual knowledge base (ID/EN)
+- [ ] Implementasi API versioning (/api/v1/, /api/v2/)
+- [ ] Setup CORS middleware
+- [ ] Implementasi Request ID tracking (X-Request-ID)
+- [ ] Konfigurasi Timeout & Retry (tenacity)
+- [ ] Implementasi Graceful Shutdown (lifespan)
+- [ ] Setup Prometheus metrics (/metrics)
+- [ ] Konfigurasi Structured Logging (JSON format)
+- [ ] Enhanced Health Check endpoints (/health, /health/ready, /health/live)
 
 ---
 

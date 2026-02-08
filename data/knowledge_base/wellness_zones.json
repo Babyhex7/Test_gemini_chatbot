@@ -1,0 +1,137 @@
+{
+  "version": "1.0",
+  "description": "Definisi 4 zona kesejahteraan non-klinis untuk EduMindAI",
+  "zones": {
+    "seimbang": {
+      "id": "seimbang",
+      "emoji": "🟢",
+      "label": {
+        "id": "Seimbang",
+        "en": "Balanced"
+      },
+      "description": {
+        "id": "Emosi stabil, mampu mengelola perasaan dengan baik",
+        "en": "Stable emotions, able to manage feelings well"
+      },
+      "indicators": [
+        "Emosi stabil dan proporsional dengan situasi",
+        "Mampu mengelola perasaan dengan baik",
+        "Memiliki energi untuk aktivitas sehari-hari",
+        "Hubungan sosial berjalan lancar",
+        "Tidur dan makan teratur"
+      ],
+      "chatbot_action": {
+        "type": "validation_tips",
+        "description": "Validasi perasaan positif + tips ringan untuk mempertahankan keseimbangan",
+        "response_tone": "supportive, celebratory"
+      }
+    },
+    "beradaptasi": {
+      "id": "beradaptasi",
+      "emoji": "🟡",
+      "label": {
+        "id": "Beradaptasi",
+        "en": "Adapting"
+      },
+      "description": {
+        "id": "Ada tekanan tapi masih bisa coping dengan baik",
+        "en": "Under pressure but still coping well"
+      },
+      "indicators": [
+        "Ada tekanan atau stres yang terasa",
+        "Masih bisa menjalankan aktivitas sehari-hari",
+        "Kadang merasa lelah atau overwhelmed",
+        "Masih punya strategi coping yang bekerja",
+        "Emosi intens tapi bisa dikelola"
+      ],
+      "chatbot_action": {
+        "type": "reflection_coping",
+        "description": "Refleksi mendalam + coping strategies yang lebih spesifik",
+        "response_tone": "empathetic, encouraging"
+      }
+    },
+    "butuh_dukungan": {
+      "id": "butuh_dukungan",
+      "emoji": "🟠",
+      "label": {
+        "id": "Butuh Dukungan",
+        "en": "Needs Support"
+      },
+      "description": {
+        "id": "Emosi intens berulang, sulit coping sendiri",
+        "en": "Intense recurring emotions, difficulty coping alone"
+      },
+      "indicators": [
+        "Emosi intens yang berulang",
+        "Kesulitan menjalankan aktivitas sehari-hari",
+        "Strategi coping tidak lagi efektif",
+        "Merasa kewalahan lebih sering",
+        "Mulai menarik diri dari lingkungan"
+      ],
+      "chatbot_action": {
+        "type": "coping_support_suggestion",
+        "description": "Tips coping intensif + saran halus untuk mencari dukungan",
+        "response_tone": "caring, gentle guidance"
+      }
+    },
+    "perlu_perhatian": {
+      "id": "perlu_perhatian",
+      "emoji": "🔴",
+      "label": {
+        "id": "Perlu Perhatian",
+        "en": "Needs Attention"
+      },
+      "description": {
+        "id": "Indikasi emosi intens/berulang yang membutuhkan perhatian lebih",
+        "en": "Signs of intense/recurring emotions needing more attention"
+      },
+      "indicators": [
+        "Emosi sangat intens dan sulit dikendalikan",
+        "Perasaan negatif hampir setiap hari",
+        "Kesulitan signifikan dalam keseharian",
+        "Pikiran yang mengganggu berulang",
+        "Merasa sangat terisolasi"
+      ],
+      "chatbot_action": {
+        "type": "grounding_professional_referral",
+        "description": "Tips grounding intensif + saran kuat untuk bicara dengan orang terdekat/profesional",
+        "response_tone": "warm, supportive, clear guidance"
+      }
+    }
+  },
+  "zone_mapping_rules": {
+    "description": "Aturan untuk mapping emosi ke zona berdasarkan intensitas dan pola",
+    "factors": [
+      {
+        "name": "intensity",
+        "description": "Tingkat intensitas emosi (ringan, sedang, berat)",
+        "weight": 0.3
+      },
+      {
+        "name": "duration",
+        "description": "Durasi emosi (sesaat, beberapa hari, berminggu-minggu)",
+        "weight": 0.25
+      },
+      {
+        "name": "frequency",
+        "description": "Seberapa sering emosi muncul",
+        "weight": 0.25
+      },
+      {
+        "name": "impact",
+        "description": "Dampak pada aktivitas sehari-hari",
+        "weight": 0.2
+      }
+    ]
+  },
+  "safe_messaging": {
+    "disclaimer": "EduMindAI adalah teman refleksi, bukan alat diagnosis. Untuk bantuan profesional, hubungi psikolog atau konselor.",
+    "crisis_resources": {
+      "indonesia": {
+        "name": "Into The Light Indonesia",
+        "hotline": "119 ext 8",
+        "website": "https://www.intothelightid.org"
+      }
+    }
+  }
+}

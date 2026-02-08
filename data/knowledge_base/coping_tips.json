@@ -1,0 +1,275 @@
+{
+  "version": "1.0",
+  "description": "Tips coping ringan berdasarkan zona kesejahteraan dan emosi",
+  "tips_by_zone": {
+    "seimbang": {
+      "description": "Tips untuk mempertahankan keseimbangan emosional",
+      "tips": [
+        {
+          "id": "gratitude_journal",
+          "name": "Jurnal Syukur",
+          "description": "Tulis 3 hal yang kamu syukuri hari ini. Ini membantu mempertahankan perspektif positif.",
+          "duration": "5 menit",
+          "category": "journaling"
+        },
+        {
+          "id": "mindful_moment",
+          "name": "Momen Mindful",
+          "description": "Luangkan 2 menit untuk merasakan napas masuk dan keluar. Nikmati ketenangan ini.",
+          "duration": "2 menit",
+          "category": "breathing"
+        },
+        {
+          "id": "connection_check",
+          "name": "Cek Koneksi",
+          "description": "Hubungi seseorang yang kamu sayangi hari ini, sekadar untuk menyapa.",
+          "duration": "5-10 menit",
+          "category": "social"
+        }
+      ]
+    },
+    "beradaptasi": {
+      "description": "Tips untuk membantu proses adaptasi terhadap tekanan",
+      "tips": [
+        {
+          "id": "box_breathing",
+          "name": "Napas Kotak (4-4-4-4)",
+          "description": "Tarik napas 4 detik, tahan 4 detik, buang 4 detik, tahan 4 detik. Ulangi 4 kali.",
+          "duration": "2-3 menit",
+          "category": "breathing"
+        },
+        {
+          "id": "body_scan",
+          "name": "Pindai Tubuh",
+          "description": "Dari ujung kepala hingga kaki, rasakan bagian mana yang tegang. Relakskan perlahan.",
+          "duration": "5 menit",
+          "category": "relaxation"
+        },
+        {
+          "id": "emotion_naming",
+          "name": "Sebutkan Emosimu",
+          "description": "Katakan dalam hati: 'Aku sedang merasakan...' Menamai emosi membantu mengelolanya.",
+          "duration": "1 menit",
+          "category": "awareness"
+        },
+        {
+          "id": "priority_list",
+          "name": "Daftar Prioritas",
+          "description": "Tulis 3 hal terpenting yang perlu dilakukan. Fokus satu per satu.",
+          "duration": "5 menit",
+          "category": "planning"
+        }
+      ]
+    },
+    "butuh_dukungan": {
+      "description": "Tips grounding dan saran mencari dukungan",
+      "tips": [
+        {
+          "id": "grounding_54321",
+          "name": "Grounding 5-4-3-2-1",
+          "description": "Sebutkan 5 hal yang kamu lihat, 4 yang kamu dengar, 3 yang kamu rasakan (sentuhan), 2 yang kamu cium, 1 yang kamu rasakan (rasa).",
+          "duration": "3-5 menit",
+          "category": "grounding"
+        },
+        {
+          "id": "cold_water",
+          "name": "Air Dingin",
+          "description": "Cuci muka dengan air dingin atau pegang es batu. Ini membantu menenangkan sistem saraf.",
+          "duration": "1-2 menit",
+          "category": "physical"
+        },
+        {
+          "id": "safe_place_visualization",
+          "name": "Tempat Aman",
+          "description": "Bayangkan tempat yang membuatmu merasa aman dan nyaman. Rasakan detailnya.",
+          "duration": "3-5 menit",
+          "category": "visualization"
+        },
+        {
+          "id": "reach_out",
+          "name": "Jangkau Seseorang",
+          "description": "Pertimbangkan untuk berbicara dengan orang yang kamu percaya - teman, keluarga, atau guru BK.",
+          "duration": "-",
+          "category": "social_support"
+        }
+      ]
+    },
+    "perlu_perhatian": {
+      "description": "Tips grounding intensif dan dorongan kuat untuk mencari bantuan profesional",
+      "tips": [
+        {
+          "id": "grounding_54321_intensive",
+          "name": "Grounding 5-4-3-2-1 (Intensif)",
+          "description": "Fokus penuh pada 5 hal yang kamu lihat, 4 yang kamu dengar, 3 yang kamu sentuh, 2 yang kamu cium, 1 yang kamu rasakan. Ulangi jika perlu.",
+          "duration": "5-10 menit",
+          "category": "grounding"
+        },
+        {
+          "id": "butterfly_hug",
+          "name": "Pelukan Kupu-kupu",
+          "description": "Silangkan tangan di dada, tepuk bergantian kiri-kanan dengan lembut sambil bernapas dalam.",
+          "duration": "2-3 menit",
+          "category": "self-soothing"
+        },
+        {
+          "id": "talk_to_trusted",
+          "name": "Bicara dengan Orang Terdekat",
+          "description": "Kamu tidak harus menanggung ini sendiri. Bicaralah dengan orang tua, guru BK, atau orang dewasa yang kamu percaya.",
+          "duration": "-",
+          "category": "professional_support"
+        },
+        {
+          "id": "professional_help",
+          "name": "Bantuan Profesional",
+          "description": "Untuk perasaan yang intens dan berulang, konsultasi dengan psikolog atau konselor bisa sangat membantu.",
+          "duration": "-",
+          "category": "professional_support"
+        }
+      ]
+    }
+  },
+  "tips_by_emotion": {
+    "fearful": {
+      "general": [
+        {
+          "id": "grounding_54321",
+          "name": "Grounding 5-4-3-2-1",
+          "description": "Sebutkan 5 hal yang kamu lihat, 4 yang kamu dengar, 3 yang kamu rasakan (sentuhan), 2 yang kamu cium, 1 yang kamu rasakan (rasa).",
+          "duration": "3-5 menit"
+        },
+        {
+          "id": "safety_anchor",
+          "name": "Jangkar Keamanan",
+          "description": "Pegang benda yang membuatmu merasa aman (misal: batu kecil, gelang). Rasakan teksturnya.",
+          "duration": "2 menit"
+        },
+        {
+          "id": "box_breathing",
+          "name": "Napas Kotak",
+          "description": "Tarik napas 4 detik, tahan 4 detik, buang 4 detik, tahan 4 detik.",
+          "duration": "2-3 menit"
+        }
+      ]
+    },
+    "angry": {
+      "general": [
+        {
+          "id": "cooling_breath",
+          "name": "Napas Pendingin",
+          "description": "Tarik napas dalam melalui hidung, buang perlahan melalui mulut seperti meniup lilin.",
+          "duration": "2 menit"
+        },
+        {
+          "id": "physical_release",
+          "name": "Pelepasan Fisik",
+          "description": "Remas bantal, jalan cepat, atau lakukan jumping jack untuk melepas energi marah.",
+          "duration": "5 menit"
+        },
+        {
+          "id": "pause_count",
+          "name": "Jeda & Hitung",
+          "description": "Sebelum bereaksi, hitung mundur dari 10 sambil bernapas dalam.",
+          "duration": "30 detik"
+        }
+      ]
+    },
+    "sad": {
+      "general": [
+        {
+          "id": "self_compassion",
+          "name": "Welas Asih Diri",
+          "description": "Letakkan tangan di dada, katakan: 'Wajar jika aku merasa sedih. Aku merawat diriku.'",
+          "duration": "2 menit"
+        },
+        {
+          "id": "gentle_movement",
+          "name": "Gerakan Lembut",
+          "description": "Lakukan peregangan ringan atau jalan santai. Gerakan membantu melepas kesedihan.",
+          "duration": "5-10 menit"
+        },
+        {
+          "id": "emotional_journaling",
+          "name": "Jurnal Emosi",
+          "description": "Tulis apa yang kamu rasakan tanpa sensor. Menulis membantu memproses emosi.",
+          "duration": "10 menit"
+        }
+      ]
+    },
+    "happy": {
+      "general": [
+        {
+          "id": "savor_moment",
+          "name": "Nikmati Momen",
+          "description": "Berhenti sejenak dan rasakan kebahagiaan ini. Ingat detail momen ini.",
+          "duration": "2 menit"
+        },
+        {
+          "id": "share_joy",
+          "name": "Bagikan Kebahagiaan",
+          "description": "Ceritakan hal baik yang terjadi kepada seseorang. Berbagi kebahagiaan memperkuatnya.",
+          "duration": "5 menit"
+        },
+        {
+          "id": "gratitude_expansion",
+          "name": "Ekspansi Syukur",
+          "description": "Pikirkan 3 hal lain yang juga membuatmu bersyukur saat ini.",
+          "duration": "3 menit"
+        }
+      ]
+    },
+    "surprised": {
+      "general": [
+        {
+          "id": "pause_process",
+          "name": "Jeda & Proses",
+          "description": "Ambil napas dalam. Beri dirimu waktu untuk memproses apa yang terjadi.",
+          "duration": "2 menit"
+        },
+        {
+          "id": "reality_check",
+          "name": "Cek Realita",
+          "description": "Tanyakan: Apa yang sebenarnya terjadi? Apa faktanya?",
+          "duration": "3 menit"
+        }
+      ]
+    },
+    "disgusted": {
+      "general": [
+        {
+          "id": "boundary_setting",
+          "name": "Tegakkan Batas",
+          "description": "Menjauh dari sumber ketidaknyamanan jika memungkinkan. Batasi paparan.",
+          "duration": "-"
+        },
+        {
+          "id": "cleansing_breath",
+          "name": "Napas Pembersih",
+          "description": "Bayangkan menghirup udara bersih dan membuang ketidaknyamanan.",
+          "duration": "2 menit"
+        }
+      ]
+    },
+    "bad": {
+      "general": [
+        {
+          "id": "basic_needs_check",
+          "name": "Cek Kebutuhan Dasar",
+          "description": "Sudahkah kamu makan, minum, dan tidur cukup? Penuhi kebutuhan dasar dulu.",
+          "duration": "-"
+        },
+        {
+          "id": "mini_break",
+          "name": "Istirahat Mini",
+          "description": "Ambil jeda 5 menit dari aktivitas. Berdiri, peregangan, minum air.",
+          "duration": "5 menit"
+        },
+        {
+          "id": "one_small_thing",
+          "name": "Satu Langkah Kecil",
+          "description": "Pilih satu hal kecil yang bisa kamu selesaikan sekarang. Keberhasilan kecil membangun momentum.",
+          "duration": "5-10 menit"
+        }
+      ]
+    }
+  }
+}
