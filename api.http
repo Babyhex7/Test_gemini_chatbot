@@ -1,0 +1,168 @@
+###############################################
+# MHCM Chatbot API - REST Client Test File
+###############################################
+# Install extension: REST Client (humao.rest-client)
+# Cara pakai: Klik "Send Request" di atas setiap request
+###############################################
+
+### Variables
+@baseUrl = http://localhost:5000
+@token = YOUR_TOKEN_HERE
+
+###############################################
+# PUBLIC ENDPOINTS (Tidak perlu token)
+###############################################
+
+### 1. Root API - Info endpoint yang tersedia
+GET {{baseUrl}}/api
+Content-Type: application/json
+
+### 2. Health Check - Cek server status
+GET {{baseUrl}}/api/health
+Content-Type: application/json
+
+###############################################
+# AUTHENTICATION ENDPOINTS
+###############################################
+
+### 3. Register - Daftar user baru
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "nama": "Test User",
+  "email": "test@example.com",
+  "password": "password123",
+  "tanggal_lahir": "2000-01-15"
+}
+
+### 4. Login - Dapatkan token
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+###############################################
+# PROTECTED ENDPOINTS (Perlu token dari login)
+###############################################
+# Cara pakai:
+# 1. Jalankan request "Login" di atas
+# 2. Copy token dari response
+# 3. Paste ke @token di atas
+# 4. Atau pakai cara otomatis di bawah
+
+### 5. Get Profile - Ambil data user yang login
+GET {{baseUrl}}/api/auth/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### 6. Update Profile - Update data user
+PUT {{baseUrl}}/api/auth/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nama": "Test User Updated",
+  "tanggal_lahir": "2000-01-20"
+}
+
+### 7. Change Password - Ganti password
+PUT {{baseUrl}}/api/auth/password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "oldPassword": "password123",
+  "newPassword": "newpassword456"
+}
+
+###############################################
+# TEST SCENARIOS - Flow lengkap
+###############################################
+
+### Scenario 1: Register + Login + Get Profile
+# Step 1: Register user baru
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "nama": "Bagas Test",
+  "email": "bagas@test.com",
+  "password": "bagas123",
+  "tanggal_lahir": "1998-05-10"
+}
+
+###
+# Step 2: Login dengan user yang baru didaftarkan
+# @name loginBagas
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "bagas@test.com",
+  "password": "bagas123"
+}
+
+###
+# Step 3: Ambil profile dengan token otomatis dari loginBagas
+@authToken = {{loginBagas.response.body.data.token}}
+
+GET {{baseUrl}}/api/auth/me
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###############################################
+# ERROR TEST - Test error handling
+###############################################
+
+### Error 1: Register dengan email duplikat (harus error 400)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "nama": "Duplicate User",
+  "email": "test@example.com",
+  "password": "password123",
+  "tanggal_lahir": "2000-01-15"
+}
+
+### Error 2: Login dengan password salah (harus error 401)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "wrongpassword"
+}
+
+### Error 3: Login dengan email tidak terdaftar (harus error 401)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "notexist@example.com",
+  "password": "password123"
+}
+
+### Error 4: Akses protected route tanpa token (harus error 401)
+GET {{baseUrl}}/api/auth/me
+Content-Type: application/json
+
+### Error 5: Akses dengan token invalid (harus error 401)
+GET {{baseUrl}}/api/auth/me
+Content-Type: application/json
+Authorization: Bearer invalid_token_here
+
+### Error 6: Change password dengan old password salah (harus error 400)
+PUT {{baseUrl}}/api/auth/password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "oldPassword": "wrongoldpassword",
+  "newPassword": "newpassword456"
+}
