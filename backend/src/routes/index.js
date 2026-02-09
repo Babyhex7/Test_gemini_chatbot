@@ -12,6 +12,9 @@ const router = express.Router();
 
 // Import route modules
 const authRoutes = require("./authRoutes");
+const sessionRoutes = require("./sessionRoutes");
+const emotionRoutes = require("./emotionRoutes");
+const chatRoutes = require("./chatRoutes");
 
 // =========================================
 // MOUNT ROUTES
@@ -34,6 +37,28 @@ router.get("/", (req, res) => {
         me: "GET /api/auth/me (protected)",
         updateProfile: "PUT /api/auth/me (protected)",
         changePassword: "PUT /api/auth/password (protected)",
+      },
+      sessions: {
+        create: "POST /api/sessions/new (protected)",
+        detail: "GET /api/sessions/:sessionId (protected)",
+        history: "GET /api/sessions/history (protected)",
+        historyAI: "GET /api/sessions/history/ai (protected)",
+        abandon: "PUT /api/sessions/:sessionId/abandon (protected)",
+      },
+      emotions: {
+        primaries: "GET /api/emotions/primaries",
+        questions:
+          "GET /api/emotions/questions?path=Primary.Secondary.Tertiary",
+        validate:
+          "GET /api/emotions/validate?primary=...&secondary=...&tertiary=...",
+        metadata: "GET /api/emotions/:primary",
+        journey: "GET /api/emotions/journey (protected)",
+      },
+      chat: {
+        start: "POST /api/chat/start (protected)",
+        submitStory: "POST /api/chat/submit-story (protected)",
+        submitAnswers: "POST /api/chat/submit-answers (protected)",
+        messages: "GET /api/chat/:sessionId/messages (protected)",
       },
     },
   });
@@ -59,38 +84,22 @@ router.get("/health", (req, res) => {
   });
 });
 
-// =========================================
-// PLACEHOLDER ROUTES (akan diimplementasi nanti)
-// =========================================
-
 /**
  * Session routes - /api/sessions/*
- * Handle session CRUD
+ * Handle session CRUD dan history
  */
-// router.use('/sessions', sessionRoutes);
-
-/**
- * Chat routes - /api/chat/*
- * Handle chat flow engine
- */
-// router.use('/chat', chatRoutes);
+router.use("/sessions", sessionRoutes);
 
 /**
  * Emotion routes - /api/emotions/*
- * Handle emotion wheel dan logs
+ * Handle emotion wheel, pertanyaan refleksi, dan journey
  */
-// router.use('/emotions', emotionRoutes);
+router.use("/emotions", emotionRoutes);
 
 /**
- * Questions routes - /api/questions/*
- * Handle reflection questions
+ * Chat routes - /api/chat/*
+ * Handle chat flow engine (start → story → answers → narrative)
  */
-// router.use('/questions', questionRoutes);
-
-/**
- * History routes - /api/history/*
- * Handle session history untuk memory inject
- */
-// router.use('/history', historyRoutes);
+router.use("/chat", chatRoutes);
 
 module.exports = router;

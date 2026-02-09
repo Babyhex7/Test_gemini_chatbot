@@ -1,0 +1,179 @@
+###############################################
+# MHCM Chatbot API - Phase 1.4-1.7 Test
+###############################################
+# Test Session, Emotion, AI Mock, dan Chat Flow
+# Pastikan server jalan: cd backend && npm run dev
+###############################################
+
+### Variables
+@baseUrl = http://localhost:5000
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoidGVzdEBleGFtcGxlMi5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIFVwZGF0ZWQiLCJpYXQiOjE3NzA2MzUwMDUsImV4cCI6MTc3MTIzOTgwNSwiaXNzIjoibWhjbS1jaGF0Ym90In0.UUlt6xOFVpWdDEm_OIoDSUUU-E63M96Fo-kxbVhI8ZE
+
+###############################################
+# STEP 0: Login dulu untuk dapat token
+###############################################
+
+### Login (copy token dari response ke @token di atas)
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example2.com",
+  "password": "password123"
+}
+
+###
+@authToken = {{login.response.body.data.token}}
+
+###############################################
+# SESSION ENDPOINTS
+###############################################
+
+### Buat session baru
+# @name createSession
+POST {{baseUrl}}/api/sessions/new
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### Lihat detail session (ganti :sessionId)
+GET {{baseUrl}}/api/sessions/1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### History session user (default 10)
+GET {{baseUrl}}/api/sessions/history?limit=5
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### History format AI (untuk context inject)
+GET {{baseUrl}}/api/sessions/history/ai?limit=3
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### Abandon session
+PUT {{baseUrl}}/api/sessions/1/abandon
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###############################################
+# EMOTION ENDPOINTS
+###############################################
+
+### Daftar primary emotions dari EmotionWheel
+GET {{baseUrl}}/api/emotions/primaries
+Content-Type: application/json
+
+### Pertanyaan refleksi by emotion path
+GET {{baseUrl}}/api/emotions/questions?path=Sad.Lonely.Isolated
+Content-Type: application/json
+
+### Validasi kombinasi emosi
+GET {{baseUrl}}/api/emotions/validate?primary=Sad&secondary=Lonely&tertiary=Isolated
+Content-Type: application/json
+
+### Metadata emosi by primary (secondary + tertiary)
+GET {{baseUrl}}/api/emotions/Sad
+Content-Type: application/json
+
+### Journey emosi user (protected)
+GET {{baseUrl}}/api/emotions/journey?limit=10
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###############################################
+# CHAT FLOW - Full Flow Test (Mock AI)
+###############################################
+
+### === STEP 1: Start Chat (buat session + safe framing) ===
+# @name startChat
+POST {{baseUrl}}/api/chat/start
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+@chatSessionId = {{startChat.response.body.data.sessionId}}
+
+### === STEP 2: Submit Story (kirim cerita → AI detect emosi → return pertanyaan) ===
+# @name submitStory
+POST {{baseUrl}}/api/chat/submit-story
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "sessionId": {{chatSessionId}},
+  "storyText": "Akhir-akhir ini aku merasa sangat kesepian. Teman-teman di kampus sepertinya sudah punya kelompok sendiri-sendiri, dan aku selalu merasa ditinggalkan. Setiap pulang ke kos, aku cuma sendiri di kamar dan rasanya hampa banget. Kadang aku bertanya-tanya apakah ada yang benar-benar peduli sama aku."
+}
+
+### === STEP 3: Submit Answers (jawab pertanyaan → scoring → narrative) ===
+# Ganti questionId sesuai response dari submitStory
+# @name submitAnswers
+POST {{baseUrl}}/api/chat/submit-answers
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "sessionId": {{chatSessionId}},
+  "answers": [
+    { "questionId": 1, "userAnswer": "C" },
+    { "questionId": 2, "userAnswer": "C" },
+    { "questionId": 3, "userAnswer": "B" },
+    { "questionId": 4, "userAnswer": "C" },
+    { "questionId": 5, "userAnswer": "C" }
+  ]
+}
+
+### === STEP 4: Lihat chat messages session ===
+GET {{baseUrl}}/api/chat/{{chatSessionId}}/messages
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### === STEP 5: Cek detail session setelah selesai ===
+GET {{baseUrl}}/api/sessions/{{chatSessionId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###############################################
+# API ROOT - Cek semua endpoint
+###############################################
+
+### Root API info (daftar semua endpoint)
+GET {{baseUrl}}/api
+Content-Type: application/json
+
+### Health Check
+GET {{baseUrl}}/api/health
+Content-Type: application/json
+
+###############################################
+# ERROR TESTS
+###############################################
+
+### Submit story tanpa login (harus 401)
+POST {{baseUrl}}/api/chat/submit-story
+Content-Type: application/json
+
+{
+  "sessionId": 1,
+  "storyText": "Test tanpa login"
+}
+
+### Submit story cerita terlalu pendek (harus 400)
+POST {{baseUrl}}/api/chat/submit-story
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "sessionId": {{chatSessionId}},
+  "storyText": "pendek"
+}
+
+### Submit story session orang lain (harus 404)
+POST {{baseUrl}}/api/chat/submit-story
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "sessionId": 99999,
+  "storyText": "Test session yang bukan milik saya, ini cerita panjang untuk testing"
+}
