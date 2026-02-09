@@ -1,0 +1,2081 @@
+[
+  {
+    "id_label": "FW-HAP-001",
+    "label_name": "Happy",
+    "emo_type": "primary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "",
+    "level2_id": "",
+    "level2_en": "",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Afek positif yang memperkuat keterhubungan, eksplorasi, dan pemeliharaan perilaku adaptif dengan valence positif dan variasi arousal.",
+    "definition_en": "A positive affect that strengthens connection, exploration, and maintenance of adaptive behavior with positive valence and varied arousal levels.",
+    "examples_id": [
+      "Aku merasa bahagia menjalani hari ini dengan penuh energi.",
+      "Ada rasa puas dan tenang dalam hati saat ini.",
+      "Aku merasakan kedamaian yang mendalam dalam jiwa.",
+      "Semuanya terasa lebih berwarna dan bermakna hari ini.",
+      "Aku bahagia bisa berbagi kegembiraan dengan orang sekitar.",
+      "Perasaan lega dan nyaman menguasai pikiran saya.",
+      "Ada kegembiraan yang mengalir dalam setiap langkah.",
+      "Aku merasa beruntung dan syukur untuk hidup saya.",
+      "Kebahagiaan ini terasa natural dan genuine.",
+      "Saat ini, hati saya penuh dengan kegembiraan."
+    ],
+    "examples_en": [
+      "I feel happy going through today with full energy.",
+      "There is a sense of satisfaction and peace in my heart right now.",
+      "I experience deep inner tranquility.",
+      "Everything feels more colorful and meaningful today.",
+      "I'm happy to share joy with those around me.",
+      "A feeling of relief and comfort fills my mind.",
+      "There is joy flowing in every step I take.",
+      "I feel fortunate and grateful for my life.",
+      "This happiness feels natural and genuine.",
+      "Right now, my heart is full of joy."
+    ],
+    "keywords_id": ["kegembiraan", "bahagia", "senang", "puas", "positif"],
+    "keywords_en": ["happiness", "joy", "pleasant", "satisfied", "positive"],
+    "source": [
+      {
+        "type": "book",
+        "author": "Willcox, G.",
+        "year": 2003,
+        "title": "The Feeling Wheel: A Tool For Expanding Awareness of Emotions and Increasing Spontaneity and Intimacy",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-002",
+    "label_name": "Playful",
+    "emo_type": "secondary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Playful",
+    "level2_id": "Senang Bermain",
+    "level2_en": "Playfulness",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Kesenangan yang ringan dan ekspresif dengan dorongan untuk bermain, bercanda, dan berinteraksi dengan cara yang spontan.",
+    "definition_en": "A light and expressive joy with an urge to play, joke, and interact in a spontaneous way.",
+    "examples_id": [
+      "Aku merasa ingin bermain dan bercanda dengan orang-orang.",
+      "Ada kegembiraan ringan yang membuat aku tertawa dengan mudah.",
+      "Mood saya sangat ceria dan penuh keceriaan.",
+      "Aku ingin mengeksplorasi hal-hal baru dengan cara yang menyenangkan.",
+      "Energi positif membuat aku jadi lebih aktif dan ekspresif.",
+      "Aku menginginkan suasana yang fun dan tidak serius.",
+      "Ada dorongan untuk spontanitas dan kesenangan sederhana.",
+      "Perasaan ringan membuat semua terasa lebih mudah dan menyenangkan.",
+      "Aku tertawa dari hati atas hal-hal kecil di sekitar saya.",
+      "Ada semangat bermain dalam setiap interaksi."
+    ],
+    "examples_en": [
+      "I feel like playing and joking around with people.",
+      "There is a light joy that makes me laugh easily.",
+      "My mood is very cheerful and full of delight.",
+      "I want to explore new things in a fun way.",
+      "Positive energy makes me more active and expressive.",
+      "I desire a fun and lighthearted atmosphere.",
+      "There's a pull toward spontaneity and simple pleasures.",
+      "This lightness makes everything feel easy and enjoyable.",
+      "I laugh from the heart at small things around me.",
+      "There's a spirit of play in every interaction."
+    ],
+    "keywords_id": ["bermain", "ceria", "bercanda", "spontan", "ringan"],
+    "keywords_en": ["play", "cheerful", "joke", "spontaneous", "light"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Fredrickson, B. L.",
+        "year": 2001,
+        "title": "The role of positive emotions in positive psychology: The broaden-and-build theory of positive emotions",
+        "journal": "American Psychologist",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-003",
+    "label_name": "Aroused",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Playful",
+    "level2_id": "Senang Bermain",
+    "level2_en": "Playfulness",
+    "level3": "Aroused",
+    "level3_id": "Teraktivasi",
+    "level3_en": "Aroused",
+    "definition_id": "Kesenangan yang teraktivasi dengan energi tinggi, memberikan dorongan untuk bergerak, mengeksplorasi, dan terlibat aktif dalam aktivitas.",
+    "definition_en": "Activated joy with high energy, driving the urge to move, explore, and actively engage in activities.",
+    "examples_id": [
+      "Energiku sangat tinggi dan ingin melakukan banyak hal.",
+      "Ada vitalitas yang membuat setiap gerakan terasa dinamis.",
+      "Aku merasa teraktivasi dan siap menghadapi tantangan apapun.",
+      "Badan terasa ringan dan pikiran sangat jernih.",
+      "Semangat membara untuk mencoba hal-hal baru dan menarik.",
+      "Aku bergerak dengan kecepatan dan kegembiraan yang luar biasa.",
+      "Ada drive yang kuat untuk terlibat dan berpartisipasi aktif.",
+      "Aku merasa hidup dengan setiap napas dan setiap gerakan.",
+      "Energi positif ini membuat saya ingin lebih dan lebih.",
+      "Ada hasrat yang kuat untuk mengeksplorasi kemungkinan baru."
+    ],
+    "examples_en": [
+      "My energy is very high and I want to do many things.",
+      "There's a vitality that makes every movement feel dynamic.",
+      "I feel activated and ready to face any challenge.",
+      "My body feels light and my mind very clear.",
+      "A burning spirit to try new and exciting things.",
+      "I move with extraordinary speed and joy.",
+      "There's a strong drive to engage and actively participate.",
+      "I feel alive with every breath and every movement.",
+      "This positive energy makes me want more and more.",
+      "There's a strong desire to explore new possibilities."
+    ],
+    "keywords_id": ["energik", "aktif", "dinamis", "hidup", "teraktivasi"],
+    "keywords_en": ["energetic", "active", "dynamic", "alive", "activated"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Watson, D., & Tellegen, A.",
+        "year": 1985,
+        "title": "Toward a consensual structure of mood",
+        "journal": "Psychological Bulletin",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-004",
+    "label_name": "Cheeky",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Playful",
+    "level2_id": "Senang Bermain",
+    "level2_en": "Playfulness",
+    "level3": "Cheeky",
+    "level3_id": "Nakal Menggemaskan",
+    "level3_en": "Cheeky",
+    "definition_id": "Kesenangan yang nakal dan menggemaskan dengan keberanian untuk menggoda dengan ringan dan humor yang menyenangkan.",
+    "definition_en": "Mischievous and cheeky joy with the boldness to tease lightly and engage in playful humor.",
+    "examples_id": [
+      "Ada keinginan untuk menggoda teman dengan cara yang menggemaskan.",
+      "Aku merasa percaya diri untuk berbuat sedikit nakal.",
+      "Ada humor yang sedikit berani dalam setiap kata-kataku.",
+      "Aku ingin bermain-main dengan batas-batas dengan cara yang aman.",
+      "Ada keberanian untuk mengatakan hal-hal yang sedikit provokatif.",
+      "Senyuman nakal ini muncul dari ketenangan dalam jiwa.",
+      "Aku merasa bold namun tetap dalam konteks yang penuh kasih sayang.",
+      "Ada kesenangan dalam menggoda dengan cara yang bijak.",
+      "Humor saya lebih tajam dan penuh keluguan hari ini.",
+      "Aku berani bermain dengan ekspektasi dengan cara yang menghibur."
+    ],
+    "examples_en": [
+      "I feel like teasing friends in an adorable way.",
+      "I'm confident to be a little bit mischievous.",
+      "There's bold humor in every word I speak.",
+      "I want to play with boundaries in a safe way.",
+      "There's courage to say slightly provocative things.",
+      "This cheeky smile comes from inner peace.",
+      "I feel bold yet remain in a loving context.",
+      "There's joy in teasing in a wise way.",
+      "My humor is sharper and full of playfulness today.",
+      "I dare to play with expectations in an entertaining way."
+    ],
+    "keywords_id": ["nakal", "berani", "humor", "menggoda", "menggemaskan"],
+    "keywords_en": ["mischievous", "bold", "humor", "tease", "cheeky"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "DeCasper, A. J., & Fifer, W. P.",
+        "year": 1980,
+        "title": "Of human bonding: Newborns prefer their mothers' voices",
+        "journal": "Science",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-005",
+    "label_name": "Content",
+    "emo_type": "secondary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Content",
+    "level2_id": "Puas",
+    "level2_en": "Contentment",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Kepuasan dan ketenangan positif; rasa cukup dengan apa yang dimiliki dan tetap membuka diri untuk pertumbuhan.",
+    "definition_en": "Satisfaction and positive tranquility; a sense of sufficiency with what one has while remaining open to growth.",
+    "examples_id": [
+      "Aku merasa puas dengan apa yang telah aku capai.",
+      "Ada ketenangan yang nyaman dalam setiap aspek hidup saya.",
+      "Aku merasa cukup dan bersyukur untuk saat ini.",
+      "Tidak ada desakan untuk berubah, hanya apresiasi untuk sekarang.",
+      "Perasaan puas ini seperti selimut hangat di menjelang malam.",
+      "Aku merasa settled dan tidak perlu mengejar lebih.",
+      "Ada gratitude yang mendalam untuk keadaan saya saat ini.",
+      "Kepuasan ini memberikan kedamaian jiwa yang sesungguhnya.",
+      "Aku merasa at ease dengan pilihan-pilihan yang telah saya buat.",
+      "Ada sense of okayness terhadap hidup saat ini."
+    ],
+    "examples_en": [
+      "I feel satisfied with what I have achieved.",
+      "There is a comfortable peace in every aspect of my life.",
+      "I feel sufficient and grateful for this moment.",
+      "There's no urge to change, only appreciation for now.",
+      "This satisfaction feels like a warm blanket on a cool evening.",
+      "I feel settled and don't need to chase more.",
+      "There's a deep gratitude for my current situation.",
+      "This contentment brings genuine peace of mind.",
+      "I feel at ease with the choices I have made.",
+      "There's a sense of okayness toward my life right now."
+    ],
+    "keywords_id": ["puas", "tenang", "cukup", "bersyukur", "settled"],
+    "keywords_en": [
+      "satisfied",
+      "peaceful",
+      "sufficient",
+      "grateful",
+      "settled"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Lyubomirsky, S.",
+        "year": 2008,
+        "title": "The How of Happiness: The Scientific Foundations of Positive Psychology",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-006",
+    "label_name": "Free",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Content",
+    "level2_id": "Puas",
+    "level2_en": "Contentment",
+    "level3": "Free",
+    "level3_id": "Lega",
+    "level3_en": "Free",
+    "definition_id": "Perasaan lega dan bebas dari beban; tidak terbebani oleh kewajiban atau ekspektasi yang memberatkan.",
+    "definition_en": "A feeling of relief and freedom from burden; unencumbered by obligations or heavy expectations.",
+    "examples_id": [
+      "Aku merasa bebas dari tekanan yang sebelumnya menghimpit.",
+      "Ada rasa lega yang menyapu seluruh tubuh saya.",
+      "Aku bisa bernafas dengan mudah tanpa beban apapun.",
+      "Kebebasan ini memberikan ruang untuk pikiran yang jernih.",
+      "Aku tidak lagi terikat pada ekspektasi orang lain.",
+      "Ada spaciousness dalam jiwa yang membebaskan.",
+      "Aku merasa ringan separti bayangan di angin.",
+      "Tidak ada lagi rantai yang mengikat gerakanku.",
+      "Kebebasan ini adalah hadiah terbaik untuk jiwa saya.",
+      "Aku bisa menjadi diri sendiri tanpa takut akan penilaian."
+    ],
+    "examples_en": [
+      "I feel free from the pressure that weighed me down before.",
+      "There's a wave of relief washing over my entire body.",
+      "I can breathe easily without any burden.",
+      "This freedom gives space for clear thinking.",
+      "I'm no longer bound by others' expectations.",
+      "There's a spaciousness in my spirit that liberates.",
+      "I feel light as a shadow on the wind.",
+      "There are no more chains binding my movements.",
+      "This freedom is the greatest gift for my soul.",
+      "I can be myself without fear of judgment."
+    ],
+    "keywords_id": ["lega", "bebas", "ringan", "unburdened", "spacious"],
+    "keywords_en": ["relief", "free", "light", "unburdened", "spacious"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Brown, B.",
+        "year": 2010,
+        "title": "The Gifts of Imperfection",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-007",
+    "label_name": "Joyful",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Content",
+    "level2_id": "Puas",
+    "level2_en": "Contentment",
+    "level3": "Joyful",
+    "level3_id": "Penuh Kegembiraan",
+    "level3_en": "Joyful",
+    "definition_id": "Kegembiraan yang hangat dan mengalir; rasa bahagia mendalam yang terasa natural dan autentik dari dalam.",
+    "definition_en": "A warm and flowing joy; a deep sense of happiness that feels natural and authentic from within.",
+    "examples_id": [
+      "Ada kegembiraan yang memancar dari dalam hati saya.",
+      "Senyum ini muncul dengan natural tanpa perlu dipaksakan.",
+      "Aku merasakan kehangatan dalam setiap momen.",
+      "Kegembiraan ini meluas ke setiap sel tubuh saya.",
+      "Ada delight dalam hal-hal sederhana di sekitar saya.",
+      "Aku merasa truly alive dan engaged dengan hidup.",
+      "Kehangatan ini membuat semua terasa lebih hidup.",
+      "Ada joy yang pure dan unbounded dalam diriku.",
+      "Aku merasa connected dengan keindahan hidup.",
+      "Kegembiraan ini adalah ekspresi jati diriku yang sebenarnya."
+    ],
+    "examples_en": [
+      "There's joy radiating from within my heart.",
+      "This smile emerges naturally without force.",
+      "I feel warmth in every moment.",
+      "This joy extends to every cell in my body.",
+      "There's delight in the simple things around me.",
+      "I feel truly alive and engaged with life.",
+      "This warmth makes everything feel more vibrant.",
+      "There's pure and unbounded joy within me.",
+      "I feel connected to the beauty of life.",
+      "This joy is an expression of my true self."
+    ],
+    "keywords_id": ["kegembiraan", "gembira", "hangat", "delight", "uplift"],
+    "keywords_en": ["joy", "cheerful", "warm", "delight", "uplift"],
+    "source": [
+      {
+        "type": "book",
+        "author": "Dalai Lama & Desmond Tutu",
+        "year": 2016,
+        "title": "The Book of Joy: Lasting Happiness in a Changing World",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-008",
+    "label_name": "Interested",
+    "emo_type": "secondary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Interested",
+    "level2_id": "Tertarik",
+    "level2_en": "Interest",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Ketertarikan dan keinginan untuk belajar; dorongan untuk mengeksplorasi, menyelidiki, dan memahami hal-hal baru dengan penuh rasa ingin tahu.",
+    "definition_en": "Interest and desire to learn; a drive to explore, investigate, and understand new things with genuine curiosity.",
+    "examples_id": [
+      "Aku sangat tertarik untuk mengetahui lebih lanjutan tentang topik ini.",
+      "Ada keinginan yang kuat untuk belajar dan berkembang.",
+      "Setiap pertanyaan baru memicu excitement di dalam saya.",
+      "Aku merasa engaged dan absorbed dalam pembelajaran.",
+      "Ada keingintahuan yang mendorong eksplorasi diri saya.",
+      "Aku ingin memahami dunia dengan perspektif yang lebih luas.",
+      "Ada passion dalam setiap usaha untuk belajar hal baru.",
+      "Aku merasa hidup ketika sedang menggali pengetahuan baru.",
+      "Ketertarikan ini memberi energi dan motivasi kepada saya.",
+      "Ada sense of discovery dalam setiap pembelajaran."
+    ],
+    "examples_en": [
+      "I'm very interested in learning more about this topic.",
+      "There's a strong desire to learn and grow.",
+      "Every new question triggers excitement within me.",
+      "I feel engaged and absorbed in learning.",
+      "There's curiosity that drives my self-exploration.",
+      "I want to understand the world from a broader perspective.",
+      "There's passion in every effort to learn something new.",
+      "I feel alive when discovering new knowledge.",
+      "This interest gives me energy and motivation.",
+      "There's a sense of discovery in every learning."
+    ],
+    "keywords_id": [
+      "tertarik",
+      "ingin tahu",
+      "eksplorasi",
+      "belajar",
+      "engaged"
+    ],
+    "keywords_en": ["interested", "curious", "explore", "learn", "engaged"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Izard, C. E.",
+        "year": 1977,
+        "title": "Human Emotions",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-009",
+    "label_name": "Curious",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Interested",
+    "level2_id": "Tertarik",
+    "level2_en": "Interest",
+    "level3": "Curious",
+    "level3_id": "Ingin Tahu",
+    "level3_en": "Curious",
+    "definition_id": "Keinginan untuk memahami dan menyelidiki; dorongan yang lembut namun konsisten untuk menjelajahi misteri dan menemukan jawaban.",
+    "definition_en": "A desire to understand and investigate; a gentle yet consistent drive to explore mysteries and find answers.",
+    "examples_id": [
+      "Aku pengin tahu apa yang ada di balik cerita ini.",
+      "Ada dorongan natural untuk menggali lebih dalam.",
+      "Pertanyaan-pertanyaan mengalir natural dari dalam diri saya.",
+      "Aku ingin memahami 'mengapa' di balik setiap fenomena.",
+      "Ada keingintahuan yang tidak pernah terpuaskan tetapi penuh kasih sayang.",
+      "Aku merasa attracted pada mystery dan complexity.",
+      "Keinginan ini membuat hidup terasa seperti petualangan.",
+      "Aku ingin mengetahui detail dan nuansa dari segala hal.",
+      "Ada wonderment dalam setiap pertanyaan yang aku ajukan.",
+      "Keingintahuan ini adalah jendela saya ke dunia yang lebih luas."
+    ],
+    "examples_en": [
+      "I want to know what's behind this story.",
+      "There's a natural urge to dig deeper.",
+      "Questions flow naturally from within me.",
+      "I want to understand the 'why' behind every phenomenon.",
+      "There's insatiable yet compassionate curiosity.",
+      "I feel attracted to mystery and complexity.",
+      "This desire makes life feel like an adventure.",
+      "I want to know the details and nuances of everything.",
+      "There's wonderment in every question I ask.",
+      "This curiosity is my window to a wider world."
+    ],
+    "keywords_id": [
+      "ingin tahu",
+      "menyelidiki",
+      "wonder",
+      "inquiry",
+      "discover"
+    ],
+    "keywords_en": ["curious", "investigate", "wonder", "inquiry", "discover"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Kashdan, T. B., & Silvia, P. J.",
+        "year": 2009,
+        "title": "Curiosity and interest: The benefits of thriving on novelty and challenge",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-010",
+    "label_name": "Inquisitive",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Interested",
+    "level2_id": "Tertarik",
+    "level2_en": "Interest",
+    "level3": "Inquisitive",
+    "level3_id": "Penuh Pertanyaan",
+    "level3_en": "Inquisitive",
+    "definition_id": "Rasa ingin tahu yang aktif dan terarah; semangat untuk menyelidiki, menganalisis, dan mencari informasi dengan fokus dan determinasi.",
+    "definition_en": "Active and directed curiosity; a spirit to investigate, analyze, and seek information with focus and determination.",
+    "examples_id": [
+      "Aku mengajukan pertanyaan-pertanyaan yang tajam dan terukur.",
+      "Ada metodologi dalam eksplorasi saya yang inquisitive.",
+      "Aku probe lebih dalam untuk memahami mekanisme di balik hal.",
+      "Ada drive untuk analyze dan understand dengan sistematis.",
+      "Aku ingin mendapatkan jawaban yang detail dan komprehensif.",
+      "Pertanyaan saya bukan hanya rasa ingin tahu tapi investigasi serius.",
+      "Ada fokus dan determinasi dalam setiap inquiry yang saya lakukan.",
+      "Aku merasa seperti detective yang mencari kebenaran.",
+      "Ada passion untuk seek knowledge dengan cara yang organized.",
+      "Inquisitiveness ini membuat saya critical thinker yang baik."
+    ],
+    "examples_en": [
+      "I ask sharp and measured questions.",
+      "There's methodology in my inquisitive exploration.",
+      "I probe deeper to understand the mechanisms behind things.",
+      "There's a drive to analyze and understand systematically.",
+      "I want to get detailed and comprehensive answers.",
+      "My questions are not just curiosity but serious investigation.",
+      "There's focus and determination in every inquiry I make.",
+      "I feel like a detective searching for truth.",
+      "There's passion to seek knowledge in an organized way.",
+      "This inquisitiveness makes me a good critical thinker."
+    ],
+    "keywords_id": [
+      "bertanya",
+      "investigasi",
+      "analisis",
+      "probe",
+      "seek-info"
+    ],
+    "keywords_en": ["question", "investigate", "analyze", "probe", "seek-info"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Ambrose, D.",
+        "year": 1991,
+        "title": "An Analysis of Analogical Reasoning in Three- and Four-Year-Olds",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-011",
+    "label_name": "Proud",
+    "emo_type": "secondary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Proud",
+    "level2_id": "Bangga",
+    "level2_en": "Pride",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Kebanggaan karena pencapaian dan kompetensi; rasa puas dengan diri sendiri atas hasil kerja keras dan pertumbuhan personal.",
+    "definition_en": "Satisfaction due to achievement and competence; a positive regard for oneself based on hard work and personal growth.",
+    "examples_id": [
+      "Aku bangga dengan pencapaian yang telah saya raih.",
+      "Kompetensi yang saya miliki memberikan rasa kepercayaan diri.",
+      "Ada sense of mastery dalam hal-hal yang saya kuasai.",
+      "Aku merasa respect terhadap usaha-usaha saya sendiri.",
+      "Bangga ini datang dari inner strength yang sesungguhnya.",
+      "Aku mengapresiasi progress yang telah saya buat.",
+      "Ada self-respect yang solid dalam setiap langkah saya.",
+      "Aku merasa capable dan able untuk mencapai goals.",
+      "Bangga tidak berarti arogan, tapi appreciation atas growth.",
+      "Aku menghargai competence yang telah saya build."
+    ],
+    "examples_en": [
+      "I'm proud of the achievements I've accomplished.",
+      "The competence I have gives me confidence.",
+      "There's a sense of mastery in the things I excel at.",
+      "I feel respect for my own efforts.",
+      "This pride comes from genuine inner strength.",
+      "I appreciate the progress I've made.",
+      "There's solid self-respect in every step I take.",
+      "I feel capable and able to reach my goals.",
+      "Pride is not about arrogance, but appreciation of growth.",
+      "I value the competence I've built."
+    ],
+    "keywords_id": [
+      "bangga",
+      "kompeten",
+      "prestasi",
+      "percaya diri",
+      "self-respect"
+    ],
+    "keywords_en": [
+      "proud",
+      "competent",
+      "achievement",
+      "confident",
+      "self-respect"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Tracy, J. L., & Robins, R. W.",
+        "year": 2004,
+        "title": "Taking pride: The emotional response to praise",
+        "journal": "Journal of Personality and Social Psychology",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-012",
+    "label_name": "Successful",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Proud",
+    "level2_id": "Bangga",
+    "level2_en": "Pride",
+    "level3": "Successful",
+    "level3_id": "Berhasil",
+    "level3_en": "Successful",
+    "definition_id": "Merasa berhasil mencapai target yang telah ditetapkan; kepuasan dari menyelesaikan goal dan merasakan efficacy personal.",
+    "definition_en": "Feeling successful in reaching set goals; satisfaction from completing objectives and experiencing personal efficacy.",
+    "examples_id": [
+      "Aku telah mencapai milestone yang berarti bagi saya.",
+      "Ada sense of accomplishment yang mendalam dan nyata.",
+      "Goal yang aku set telah tercapai dengan baik.",
+      "Aku merasa win dalam usaha yang telah saya lakukan.",
+      "Progress ini membuktikan bahwa saya capable.",
+      "Ada validation dari hasil kerja keras saya.",
+      "Kesuksesan ini membuat saya ingin set target yang lebih tinggi.",
+      "Aku merasakan efficacy dan kemampuan nyata.",
+      "Ada tangible evidence dari pertumbuhan saya.",
+      "Sukses ini adalah buah dari persistence dan dedication."
+    ],
+    "examples_en": [
+      "I've reached a milestone that's meaningful to me.",
+      "There's a deep and real sense of accomplishment.",
+      "The goal I set has been achieved well.",
+      "I feel a win in the efforts I've made.",
+      "This progress proves that I'm capable.",
+      "There's validation from my hard work.",
+      "This success makes me want to set higher targets.",
+      "I feel real efficacy and ability.",
+      "There's tangible evidence of my growth.",
+      "This success is the fruit of my persistence and dedication."
+    ],
+    "keywords_id": [
+      "berhasil",
+      "target tercapai",
+      "win",
+      "progress",
+      "efficacy"
+    ],
+    "keywords_en": ["successful", "goal-met", "win", "progress", "efficacy"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Seligman, M. E., & Csikszentmihalyi, M.",
+        "year": 2000,
+        "title": "Positive psychology: An introduction",
+        "journal": "American Psychologist",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-013",
+    "label_name": "Confident",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Proud",
+    "level2_id": "Bangga",
+    "level2_en": "Pride",
+    "level3": "Confident",
+    "level3_id": "Percaya Diri",
+    "level3_en": "Confident",
+    "definition_id": "Yakin pada kemampuan diri sendiri; kepercayaan yang solid bahwa diri mampu menghadapi situasi dengan efektif.",
+    "definition_en": "Trust in one's own abilities; solid confidence that oneself can handle situations effectively.",
+    "examples_id": [
+      "Aku yakin dengan kemampuan yang saya miliki.",
+      "Ada assured feeling tentang masa depan saya.",
+      "Aku percaya diri menghadapi challenge apapun.",
+      "Confidence ini datang dari pengalaman dan self-knowledge.",
+      "Aku merasa capable dalam segala hal yang saya lakukan.",
+      "Ada steady belief dalam diri saya sendiri.",
+      "Aku bold dalam mengambil step yang diperlukan.",
+      "Confidence ini bukan arogan tapi grounded pada reality.",
+      "Aku tahu strengths dan weaknesses saya dengan jelas.",
+      "Ada unwavering belief dalam potential saya."
+    ],
+    "examples_en": [
+      "I'm confident in my abilities.",
+      "There's an assured feeling about my future.",
+      "I face any challenge with confidence.",
+      "This confidence comes from experience and self-knowledge.",
+      "I feel capable in everything I do.",
+      "There's a steady belief in myself.",
+      "I'm bold in taking necessary steps.",
+      "This confidence is not arrogant but grounded in reality.",
+      "I clearly know my strengths and weaknesses.",
+      "There's an unwavering belief in my potential."
+    ],
+    "keywords_id": ["percaya diri", "yakin", "capable", "steady", "bold"],
+    "keywords_en": ["confident", "assured", "capable", "steady", "bold"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Bandura, A.",
+        "year": 1997,
+        "title": "Self-efficacy: The exercise of control",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-014",
+    "label_name": "Accepted",
+    "emo_type": "secondary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Accepted",
+    "level2_id": "Diterima",
+    "level2_en": "Acceptance",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Kebahagiaan karena diterima dan diakui dalam relasi atau kelompok; rasa aman dan divalidasi dalam hubungan interpersonal.",
+    "definition_en": "Joy from being accepted and acknowledged in relationships or groups; a sense of safety and validation in social connections.",
+    "examples_id": [
+      "Aku merasa diterima untuk siapa diri saya yang sebenarnya.",
+      "Ada validasi yang hangat dari orang-orang terdekat saya.",
+      "Aku merasa aman dalam komunitas saya.",
+      "Ada sense of belonging yang mendalam dan nyata.",
+      "Orang-orang menerima saya dengan sepenuh hati.",
+      "Ada warmth dalam setiap interaksi sosial saya.",
+      "Aku tidak perlu berpura-pura untuk diterima.",
+      "Ada safety net dari support yang aku terima.",
+      "Penerimaan ini membuat saya merasa truly at home.",
+      "Aku valued dan appreciated dalam kelompok saya."
+    ],
+    "examples_en": [
+      "I feel accepted for who I truly am.",
+      "There's warm validation from those close to me.",
+      "I feel safe in my community.",
+      "There's a deep and real sense of belonging.",
+      "People accept me whole-heartedly.",
+      "There's warmth in every social interaction.",
+      "I don't need to pretend to be accepted.",
+      "There's a safety net from the support I receive.",
+      "This acceptance makes me feel truly at home.",
+      "I'm valued and appreciated in my group."
+    ],
+    "keywords_id": ["diterima", "belonged", "validasi", "aman", "hangat"],
+    "keywords_en": ["accepted", "belonging", "validation", "safe", "warm"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Baumeister, R. F., & Leary, M. R.",
+        "year": 1995,
+        "title": "The need to belong: desire for interpersonal attachments as a fundamental human motivation",
+        "journal": "Psychological Bulletin",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-015",
+    "label_name": "Respected",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Accepted",
+    "level2_id": "Diterima",
+    "level2_en": "Acceptance",
+    "level3": "Respected",
+    "level3_id": "Dihargai",
+    "level3_en": "Respected",
+    "definition_id": "Merasa dihargai martabat dan kontribusi pribadi dalam relasi; pengakuan terhadap nilai dan integritas diri.",
+    "definition_en": "Feeling valued for one's dignity and personal contribution; acknowledgment of one's worth and integrity.",
+    "examples_id": [
+      "Orang-orang menghargai kontribusi saya.",
+      "Ada recognition terhadap nilai yang saya bawa.",
+      "Martabat saya dihormati dan diakui.",
+      "Aku merasa respected untuk capability dan character saya.",
+      "Trust yang diberikan orang kepada saya membuat saya valued.",
+      "Ada esteem yang solid dalam bagaimana orang treat saya.",
+      "Aku respected bukan hanya karena apa yang saya lakukan tapi siapa saya.",
+      "Ada dignity dalam setiap interaksi dengan orang lain.",
+      "Orang-orang mengakui worth yang saya miliki.",
+      "Respect ini membuat saya merasa truly significant."
+    ],
+    "examples_en": [
+      "People value my contributions.",
+      "There's recognition of the worth I bring.",
+      "My dignity is honored and acknowledged.",
+      "I feel respected for my capability and character.",
+      "The trust people give me makes me feel valued.",
+      "There's solid esteem in how people treat me.",
+      "I'm respected not just for what I do but who I am.",
+      "There's dignity in every interaction with others.",
+      "People acknowledge the worth I possess.",
+      "This respect makes me feel truly significant."
+    ],
+    "keywords_id": ["dihargai", "diakui", "martabat", "esteem", "trust"],
+    "keywords_en": ["respected", "valued", "dignity", "esteem", "trust"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Rosenberg, M.",
+        "year": 1965,
+        "title": "Society and the adolescent self-image",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-016",
+    "label_name": "Valued",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Accepted",
+    "level2_id": "Diterima",
+    "level2_en": "Acceptance",
+    "level3": "Valued",
+    "level3_id": "Berharga",
+    "level3_en": "Valued",
+    "definition_id": "Merasa penting dan berharga bagi orang lain; kesadaran bahwa kehadiran dan kontribusi saya berarti bagi pihak lain.",
+    "definition_en": "Feeling important and precious to others; awareness that my presence and contribution matter to them.",
+    "examples_id": [
+      "Aku merasa penting bagi orang-orang yang aku sayangi.",
+      "Ada appreciation yang nyata untuk kehadiran saya.",
+      "Orang-orang membuat saya merasa cared-for dan valued.",
+      "Aku tahu bahwa saya matter dalam kehidupan mereka.",
+      "Ada significance dalam setiap peran yang saya mainkan.",
+      "Orang-orang menunjukkan bahwa saya berarti bagi mereka.",
+      "Aku merasa appreciated untuk kontribusi kecil atau besar saya.",
+      "Ada worth dalam bagaimana orang treat me dan acknowledge me.",
+      "Aku significant bukan hanya untuk diri sendiri tapi untuk orang lain.",
+      "Perasaan ini membuat hidup terasa lebih bermakna dan berharga."
+    ],
+    "examples_en": [
+      "I feel important to those I love.",
+      "There's genuine appreciation for my presence.",
+      "People make me feel cared for and valued.",
+      "I know that I matter in their lives.",
+      "There's significance in every role I play.",
+      "People show that I mean something to them.",
+      "I feel appreciated for my small or big contributions.",
+      "There's worth in how people treat and acknowledge me.",
+      "I'm significant not just for myself but for others.",
+      "This feeling makes life feel more meaningful and precious."
+    ],
+    "keywords_id": ["berharga", "penting", "apresiasi", "cared-for", "matter"],
+    "keywords_en": [
+      "valued",
+      "important",
+      "appreciated",
+      "cared-for",
+      "matter"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "James, W.",
+        "year": 1890,
+        "title": "The Principles of Psychology",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-017",
+    "label_name": "Powerful",
+    "emo_type": "secondary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Powerful",
+    "level2_id": "Berdaya",
+    "level2_en": "Empowerment",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Rasa mampu dan berdaya; peningkatan agency dan sense of control atas kehidupan dan pilihan yang kami buat.",
+    "definition_en": "A sense of being capable and empowered; increased agency and sense of control over one's life and choices.",
+    "examples_id": [
+      "Aku merasa mampu mengubah situasi yang saya hadapi.",
+      "Ada agency yang kuat dalam setiap keputusan saya.",
+      "Aku tahu saya memiliki power untuk membentuk hidup saya.",
+      "Strength yang ada dalam diri saya membuat saya berdaya.",
+      "Aku memiliki influence atas circumstance saya.",
+      "Ada capability yang solid dalam menghadapi challenges.",
+      "Aku merasa in control dari situation yang saya hadapi.",
+      "Power ini datang dari internal conviction yang kuat.",
+      "Aku mampu membuat changes yang meaningful dalam hidup saya.",
+      "Perasaan berdaya ini membuat saya merasa truly alive."
+    ],
+    "examples_en": [
+      "I feel capable of changing the situations I face.",
+      "There's strong agency in every decision I make.",
+      "I know I have the power to shape my life.",
+      "The strength within me makes me empowered.",
+      "I have influence over my circumstances.",
+      "There's solid capability in facing challenges.",
+      "I feel in control of the situations I face.",
+      "This power comes from strong inner conviction.",
+      "I can make meaningful changes in my life.",
+      "This sense of empowerment makes me feel truly alive."
+    ],
+    "keywords_id": ["berdaya", "mampu", "kuat", "influence", "capability"],
+    "keywords_en": ["powerful", "capable", "strong", "influence", "capability"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Frankl, V. E.",
+        "year": 1946,
+        "title": "Man's Search for Meaning",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-018",
+    "label_name": "Courageous",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Powerful",
+    "level2_id": "Berdaya",
+    "level2_en": "Empowerment",
+    "level3": "Courageous",
+    "level3_id": "Berani",
+    "level3_en": "Courageous",
+    "definition_id": "Keberanian untuk bertindak meski ada risiko atau ketakutan; integritas dalam mengambil langkah yang diperlukan dengan penuh determinasi.",
+    "definition_en": "Courage to act despite risk or fear; integrity in taking necessary steps with full determination.",
+    "examples_id": [
+      "Aku berani mengambil langkah yang sulit tapi penting.",
+      "Ada bravery dalam menghadapi ketakutan saya.",
+      "Aku tidak let fear menghalangi apa yang perlu dilakukan.",
+      "Keberanian ini datang dari inner strength dan conviction.",
+      "Aku merasa courageous untuk speak truth meskipun tidak popular.",
+      "Ada integrity dalam setiap tindakan yang saya ambil.",
+      "Aku action-oriented meskipun ada uncertainty.",
+      "Keberanian ini membuat saya overcome obstacles.",
+      "Aku merasa resilient dalam menghadapi adversity.",
+      "Courage ini adalah ekspresi dari nilai-nilai yang saya pegang."
+    ],
+    "examples_en": [
+      "I'm brave enough to take difficult but important steps.",
+      "There's bravery in facing my fears.",
+      "I don't let fear stop what needs to be done.",
+      "This courage comes from inner strength and conviction.",
+      "I feel courageous to speak truth even if unpopular.",
+      "There's integrity in every action I take.",
+      "I'm action-oriented despite uncertainty.",
+      "This courage helps me overcome obstacles.",
+      "I feel resilient in facing adversity.",
+      "This courage is an expression of my core values."
+    ],
+    "keywords_id": [
+      "berani",
+      "keberanian",
+      "integrity",
+      "action",
+      "resilience"
+    ],
+    "keywords_en": [
+      "courageous",
+      "bravery",
+      "integrity",
+      "action",
+      "resilience"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Brown, B.",
+        "year": 2012,
+        "title": "Daring Greatly: How the Courage to Be Vulnerable Transforms the Way We Live, Love, Parent, and Lead",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-019",
+    "label_name": "Creative",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Powerful",
+    "level2_id": "Berdaya",
+    "level2_en": "Empowerment",
+    "level3": "Creative",
+    "level3_id": "Kreatif",
+    "level3_en": "Creative",
+    "definition_id": "Terbuka untuk menghasilkan ide dan solusi baru; semangat inovatif yang mengeksplorasi kemungkinan-kemungkinan belum terjamah.",
+    "definition_en": "Openness to generating new ideas and solutions; an innovative spirit exploring uncharted possibilities.",
+    "examples_id": [
+      "Aku merasa creative dan penuh inspiration untuk membuat sesuatu.",
+      "Ada flow dalam proses kreatif saya yang alami dan effortless.",
+      "Aku ingin explore kemungkinan-kemungkinan baru yang belum terjamah.",
+      "Imagination saya luas dan tidak terbatas oleh conventional thinking.",
+      "Aku merasa generative dalam bagaimana saya approach problems.",
+      "Ada playfulness dalam creative process saya.",
+      "Aku ingin innovate dan create something yang belum ada sebelumnya.",
+      "Kreativitas ini datang dari space yang open dan safe.",
+      "Aku merasa energized ketika engaged dalam creative work.",
+      "Originalitas adalah expression dari authentic self saya."
+    ],
+    "examples_en": [
+      "I feel creative and full of inspiration to make something.",
+      "There's a flow in my creative process that's natural and effortless.",
+      "I want to explore new possibilities never tried before.",
+      "My imagination is vast and unbounded by conventional thinking.",
+      "I feel generative in how I approach problems.",
+      "There's playfulness in my creative process.",
+      "I want to innovate and create something new.",
+      "This creativity comes from a safe and open space.",
+      "I feel energized when engaged in creative work.",
+      "Originality is an expression of my authentic self."
+    ],
+    "keywords_id": [
+      "kreatif",
+      "creative",
+      "inovasi",
+      "imagination",
+      "generative"
+    ],
+    "keywords_en": [
+      "creative",
+      "originality",
+      "innovation",
+      "imagination",
+      "generative"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Csikszentmihalyi, M.",
+        "year": 1990,
+        "title": "Flow: The Psychology of Optimal Experience",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-020",
+    "label_name": "Peaceful",
+    "emo_type": "secondary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Peaceful",
+    "level2_id": "Damai",
+    "level2_en": "Peacefulness",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Ketenangan dan keamanan; tubuh dan pikiran dalam state rileks dengan rasa harmoni internal yang mendalam.",
+    "definition_en": "Tranquility and safety; body and mind in a relaxed state with deep internal harmony.",
+    "examples_id": [
+      "Aku merasakan damai yang mendalam dalam jiwa saya.",
+      "Ada calm yang menyapu semua anxiety dan worry.",
+      "Aku settled dengan kehidupan saya saat ini.",
+      "Ketenangan ini datang dari acceptance atas apa yang adalah.",
+      "Tubuh saya relaxed dan pikiran saya clear.",
+      "Ada harmony antara inner world dan outer circumstance.",
+      "Aku merasa truly at peace dengan segala hal.",
+      "Peace ini membuat saya appreciate setiap moment.",
+      "Tidak ada restlessness, hanya deep okayness.",
+      "Harmoni ini adalah gift yang saya hargai setiap hari."
+    ],
+    "examples_en": [
+      "I feel a deep peace within my soul.",
+      "There's a calm that sweeps away all anxiety and worry.",
+      "I'm settled with my life right now.",
+      "This peace comes from accepting what is.",
+      "My body is relaxed and my mind is clear.",
+      "There's harmony between my inner world and outer circumstances.",
+      "I feel truly at peace with everything.",
+      "This peace makes me appreciate every moment.",
+      "There's no restlessness, just deep okayness.",
+      "This harmony is a gift I cherish every day."
+    ],
+    "keywords_id": ["damai", "tenang", "aman", "rileks", "harmoni"],
+    "keywords_en": ["peaceful", "calm", "safe", "relaxed", "harmony"],
+    "source": [
+      {
+        "type": "book",
+        "author": "Kabat-Zinn, J.",
+        "year": 1994,
+        "title": "Wherever You Go, There You Are: Mindfulness Meditation in Everyday Life",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-021",
+    "label_name": "Loving",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Peaceful",
+    "level2_id": "Damai",
+    "level2_en": "Peacefulness",
+    "level3": "Loving",
+    "level3_id": "Penuh Kasih Sayang",
+    "level3_en": "Loving",
+    "definition_id": "Afeksi hangat dan keinginan untuk memberi serta merawat; perasaan terkoneksi dengan keindahan dan kebaikan dalam kehidupan.",
+    "definition_en": "Warm affection and desire to give and care; a feeling of connection with the beauty and goodness in life.",
+    "examples_id": [
+      "Aku merasa loving dan penuh compassion terhadap orang sekitar.",
+      "Ada warmth dalam hati saya yang ingin share dengan others.",
+      "Aku ingin care dan nurture untuk orang-orang yang saya peduli.",
+      "Love ini datang dari place yang safe dan peaceful.",
+      "Aku merasa connected dengan humanity dalam cara yang gentle.",
+      "Ada tenderness dalam setiap interaction saya.",
+      "Aku ingin memberikan dan menerima love/kasih sayang.",
+      "Caring attitude ini adalah natural expression dari diri saya.",
+      "Ada bonding yang dalam dengan orang-orang terdekat.",
+      "Love ini membuat hidup terasa meaningful dan worthwhile."
+    ],
+    "examples_en": [
+      "I feel loving and full of compassion for those around me.",
+      "There's warmth in my heart that I want to share.",
+      "I want to care for and nurture those I cherish.",
+      "This love comes from a safe and peaceful place.",
+      "I feel connected to humanity in a gentle way.",
+      "There's tenderness in every interaction.",
+      "I want to give and receive love and affection.",
+      "This caring attitude is a natural expression of myself.",
+      "There's deep bonding with those close to me.",
+      "This love makes life feel meaningful and worthwhile."
+    ],
+    "keywords_id": ["cinta", "kasih sayang", "care", "warmth", "compassion"],
+    "keywords_en": ["love", "affection", "care", "warmth", "compassion"],
+    "source": [
+      {
+        "type": "book",
+        "author": "Hendricks, G.",
+        "year": 2009,
+        "title": "The Big Leap",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-022",
+    "label_name": "Thankful",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Peaceful",
+    "level2_id": "Damai",
+    "level2_en": "Peacefulness",
+    "level3": "Thankful",
+    "level3_id": "Bersyukur",
+    "level3_en": "Thankful",
+    "definition_id": "Syukur dan apresiasi; pengakuan terhadap kebaikan yang diterima dengan humility dan contentment yang genuine.",
+    "definition_en": "Gratitude and appreciation; acknowledgment of goodness received with genuine humility and contentment.",
+    "examples_id": [
+      "Aku bersyukur untuk setiap kebaikan yang telah saya terima.",
+      "Ada appreciation yang mendalam untuk blessings dalam hidup saya.",
+      "Aku grateful untuk people dan moments yang ada dalam kehidupan saya.",
+      "Gratitude ini membuat saya more aware dan present.",
+      "Ada warmth dalam hati saat recognize kebaikan orang lain.",
+      "Aku appreciate both big dan small things dalam kehidupan.",
+      "Thankfulness ini datang dari place yang humble dan contented.",
+      "Aku merasa blessed dan recognize privilege yang saya miliki.",
+      "Ada humility dalam mengakui semua yang diberikan kepada saya.",
+      "Syukur ini membuat hidup terasa lebih abundant dan rich."
+    ],
+    "examples_en": [
+      "I'm grateful for every kindness I've received.",
+      "There's deep appreciation for the blessings in my life.",
+      "I'm grateful for the people and moments in my life.",
+      "This gratitude makes me more aware and present.",
+      "There's warmth in my heart recognizing others' kindness.",
+      "I appreciate both big and small things in life.",
+      "This thankfulness comes from a humble and contented place.",
+      "I feel blessed and recognize the privileges I have.",
+      "There's humility in acknowledging all given to me.",
+      "This gratitude makes life feel more abundant and rich."
+    ],
+    "keywords_id": [
+      "bersyukur",
+      "gratitude",
+      "apresiasi",
+      "humility",
+      "contentment"
+    ],
+    "keywords_en": [
+      "thankful",
+      "gratitude",
+      "appreciation",
+      "humility",
+      "contentment"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Emmons, R. A., & McCullough, M. E.",
+        "year": 2003,
+        "title": "Counting blessings versus burdens: An experimental investigation of gratitude and subjective well-being in daily life",
+        "journal": "Journal of Personality and Social Psychology",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-023",
+    "label_name": "Trusting",
+    "emo_type": "secondary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Trusting",
+    "level2_id": "Percaya",
+    "level2_en": "Trust",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Kepercayaan dan keberanian membuka diri pada orang atau sistem; rasa aman dalam vulnerability dan koneksi yang autentik.",
+    "definition_en": "Trust and courage to open oneself to others or systems; a sense of safety in vulnerability and authentic connection.",
+    "examples_id": [
+      "Aku percaya dan berani membuka diri pada orang yang aku peduli.",
+      "Ada safety dalam relasi-relasi saya yang membuat saya bisa vulnerable.",
+      "Aku merasa bisa rely pada orang-orang terdekat saya.",
+      "Trust ini datang dari experience bahwa saya aman untuk berbagi.",
+      "Ada faith dalam goodness orang-orang dan sistem yang saya percaya.",
+      "Aku merasa connected melalui openness dan honesty.",
+      "Kepercayaan ini membuat saya merasa supported dan understood.",
+      "Aku tidak perlu guard myself dalam relationship yang trusted.",
+      "Ada stability dan reliance yang solid dalam connections saya.",
+      "Trust ini adalah foundation dari deepest relationship saya."
+    ],
+    "examples_en": [
+      "I trust and feel brave to open up to those I care about.",
+      "There's safety in my relationships that allows me to be vulnerable.",
+      "I feel I can rely on those close to me.",
+      "This trust comes from experiencing safety here.",
+      "There's faith in the goodness of people and systems I trust.",
+      "I feel connected through openness and honesty.",
+      "This trust makes me feel supported and understood.",
+      "I don't need to guard myself in trusted relationships.",
+      "There's solid stability and reliance in my connections.",
+      "This trust is the foundation of my deepest relationships."
+    ],
+    "keywords_id": ["percaya", "trust", "safety", "reliance", "faith"],
+    "keywords_en": ["trust", "believe", "safety", "reliance", "faith"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Rotter, J. B.",
+        "year": 1967,
+        "title": "A new scale for the measurement of interpersonal trust",
+        "journal": "Journal of Personality",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-024",
+    "label_name": "Sensitive",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Trusting",
+    "level2_id": "Percaya",
+    "level2_en": "Trust",
+    "level3": "Sensitive",
+    "level3_id": "Peka",
+    "level3_en": "Sensitive",
+    "definition_id": "Kepekaan emosional yang tinggi; kemampuan untuk menangkap nuansa emosi, kebutuhan, dan sinyal halus dari orang lain.",
+    "definition_en": "High emotional sensitivity; ability to pick up on emotional nuances, needs, and subtle signals from others.",
+    "examples_id": [
+      "Aku peka terhadap nuansa emosi orang-orang sekitar saya.",
+      "Ada attunement yang dalam dengan kebutuhan emotional orang lain.",
+      "Aku easily tangkap sinyal-sinyal halus dalam komunikasi.",
+      "Sensitivity ini membuat saya empathic dan understanding.",
+      "Aku tender dalam approach saya terhadap orang-orang.",
+      "Ada receptiveness yang tinggi terhadap emotional states lain.",
+      "Aku aware dengan subtle shifts dalam mood dan atmosfer.",
+      "Sensitivity ini adalah strength dalam empathy saya.",
+      "Aku merasa connected dengan inner world orang lain.",
+      "Awareness ini membuat saya better friend dan listener."
+    ],
+    "examples_en": [
+      "I'm sensitive to the emotional nuances of those around me.",
+      "There's deep attunement with others' emotional needs.",
+      "I easily pick up subtle signals in communication.",
+      "This sensitivity makes me empathic and understanding.",
+      "I'm tender in my approach to others.",
+      "There's high receptiveness to others' emotional states.",
+      "I'm aware of subtle shifts in mood and atmosphere.",
+      "This sensitivity is a strength in my empathy.",
+      "I feel connected with others' inner world.",
+      "This awareness makes me a better friend and listener."
+    ],
+    "keywords_id": ["peka", "attuned", "empati", "tender", "aware"],
+    "keywords_en": ["sensitive", "attuned", "empathic", "tender", "aware"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Campbell, R., & Olff, M.",
+        "year": 2007,
+        "title": "Assessing and treating childhood traumatic grief: A pilot study",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-025",
+    "label_name": "Intimate",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Trusting",
+    "level2_id": "Percaya",
+    "level2_en": "Trust",
+    "level3": "Intimate",
+    "level3_id": "Intim",
+    "level3_en": "Intimate",
+    "definition_id": "Kedekatan emosional yang dalam; rasa terhubung pada level yang paling vulnerable dan authentic dengan seseorang.",
+    "definition_en": "Deep emotional closeness; a feeling of connection at the most vulnerable and authentic level with someone.",
+    "examples_id": [
+      "Ada kedekatan yang dalam dan authentic dengan orang terdekat saya.",
+      "Aku merasa truly known dan understood di dalam relationship.",
+      "Intimacy ini dibangun over time melalui vulnerability dan honesty.",
+      "Ada bonding yang sangat dalam dan intimate dengan partner saya.",
+      "Aku merasa aman untuk disclose dan share innermost thoughts.",
+      "Closeness ini membuat saya merasa truly seen dan valued.",
+      "Aku merasa terhubung pada level yang paling dalam.",
+      "Ada warmth dan safety dalam intimate connection.",
+      "Disclosure ini adalah natural flow dari trust yang sudah ada.",
+      "Intimacy ini adalah salah satu hal paling meaningful dalam hidup saya."
+    ],
+    "examples_en": [
+      "There's a deep and authentic closeness with those closest to me.",
+      "I feel truly known and understood in this relationship.",
+      "This intimacy is built over time through vulnerability and honesty.",
+      "There's a very deep and intimate bonding with my partner.",
+      "I feel safe to disclose and share my innermost thoughts.",
+      "This closeness makes me feel truly seen and valued.",
+      "I feel connected on the deepest level.",
+      "There's warmth and safety in intimate connection.",
+      "This disclosure is a natural flow from existing trust.",
+      "This intimacy is one of the most meaningful things in my life."
+    ],
+    "keywords_id": ["intim", "kedekatan", "bonding", "closeness", "disclosure"],
+    "keywords_en": ["intimate", "closeness", "bonding", "warmth", "disclosure"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Descutner, C. J., & Thelen, M. H.",
+        "year": 1991,
+        "title": "Development and validation of a Brief Intimate Relations Questionnaire",
+        "journal": "Psychological Assessment",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-026",
+    "label_name": "Optimistic",
+    "emo_type": "secondary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Optimistic",
+    "level2_id": "Optimis",
+    "level2_en": "Optimism",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Harapan dan pandangan positif ke depan; keyakinan bahwa kemungkinan baik tersedia meskipun ada tantangan saat ini.",
+    "definition_en": "Hope and positive outlook toward the future; belief that good possibilities exist despite current challenges.",
+    "examples_id": [
+      "Aku optimis bahwa masa depan akan lebih baik.",
+      "Ada hope yang kuat bahwa semuanya akan work out.",
+      "Aku melihat kemungkinan positif dalam setiap situasi.",
+      "Optimisme ini datang dari resilience dan past successes.",
+      "Aku percaya bahwa challenge adalah opportunity untuk grow.",
+      "Ada vision positif tentang apa yang bisa saya achieve.",
+      "Aku merasa motivated dan energized oleh future possibilities.",
+      "Optimisme ini balanced dengan realistic understanding.",
+      "Aku percaya dalam potential saya untuk overcome obstacles.",
+      "Pandangan positif ini membuat saya more persistent dan determined."
+    ],
+    "examples_en": [
+      "I'm optimistic that the future will be better.",
+      "There's strong hope that everything will work out.",
+      "I see positive possibilities in every situation.",
+      "This optimism comes from resilience and past successes.",
+      "I believe challenges are opportunities to grow.",
+      "There's a positive vision of what I can achieve.",
+      "I feel motivated and energized by future possibilities.",
+      "This optimism is balanced with realistic understanding.",
+      "I believe in my potential to overcome obstacles.",
+      "This positive outlook makes me more persistent and determined."
+    ],
+    "keywords_id": ["optimis", "hope", "harapan", "positif", "future-oriented"],
+    "keywords_en": ["optimistic", "hope", "positive", "future", "confident"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Scheier, M. F., & Carver, C. S.",
+        "year": 2010,
+        "title": "Optimism",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-027",
+    "label_name": "Hopeful",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Optimistic",
+    "level2_id": "Optimis",
+    "level2_en": "Optimism",
+    "level3": "Hopeful",
+    "level3_id": "Penuh Harapan",
+    "level3_en": "Hopeful",
+    "definition_id": "Memiliki harapan realistis untuk membaik; motivasi untuk terus maju dengan percaya bahwa progress adalah mungkin.",
+    "definition_en": "Having realistic hope for improvement; motivation to move forward believing that progress is possible.",
+    "examples_id": [
+      "Aku hopeful bahwa situation ini akan improve.",
+      "Ada realistic expectations bahwa effort saya akan membawa hasil.",
+      "Aku motivated untuk terusbergerak maju meskipun slow progress.",
+      "Hopefulnesss ini membuat saya persevere melalui challenges.",
+      "Aku percaya bahwa patience dan effort akan bring change.",
+      "Ada belief yang kuat dalam possibility of better outcome.",
+      "Aku merasa directed toward goals yang achiev able.",
+      "Harapan ini datang dari patience dan understanding.",
+      "Aku tidak give up karena tahu progress is on the way.",
+      "Hopeness ini adalah gentle encouragement untuk diri sendiri."
+    ],
+    "examples_en": [
+      "I'm hopeful this situation will improve.",
+      "There's realistic expectation that my efforts will bring results.",
+      "I'm motivated to keep moving forward despite slow progress.",
+      "This hopefulness makes me persevere through challenges.",
+      "I believe patience and effort will bring change.",
+      "There's strong belief in the possibility of better outcomes.",
+      "I feel directed toward achievable goals.",
+      "This hope comes from patience and understanding.",
+      "I don't give up because I know progress is on the way.",
+      "This hopeness is a gentle encouragement to myself."
+    ],
+    "keywords_id": ["hopeful", "harapan", "belief", "progress", "perseverance"],
+    "keywords_en": [
+      "hopeful",
+      "possibility",
+      "motivation",
+      "uplift",
+      "patience"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Snyder, C. R.",
+        "year": 2002,
+        "title": "Hope theory: Rainbows in the mind",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-HAP-028",
+    "label_name": "Inspired",
+    "emo_type": "tertiary",
+    "level1": "Happy",
+    "level1_id": "Bahagia",
+    "level1_en": "Happiness",
+    "level2": "Optimistic",
+    "level2_id": "Optimis",
+    "level2_en": "Optimism",
+    "level3": "Inspired",
+    "level3_id": "Terinspirasi",
+    "level3_en": "Inspired",
+    "definition_id": "Terdorong oleh makna dan visi; energi yang datang dari koneksi dengan purpose yang lebih besar dan ingin bergerak maju.",
+    "definition_en": "Driven by meaning and vision; energy that comes from connection with a greater purpose and desire to move forward.",
+    "examples_id": [
+      "Aku inspired oleh vision yang bermakna untuk kehidupan saya.",
+      "Ada sense of purpose yang membuat saya want to act.",
+      "Aku terdorong oleh makna dan nilai-nilai yang saya pegang.",
+      "Inspirasi ini datang dari connection dengan sesuatu yang lebih besar.",
+      "Aku merasa energized untuk pursue goals yang align dengan values saya.",
+      "Ada uplift dan motivation dari seeing bigger picture.",
+      "Aku ingin contribute sesuatu yang meaningful untuk dunia.",
+      "Inspirasi ini membuat setiap effort terasa worthwhile.",
+      "Ada drive yang strong untuk express authentic vision saya.",
+      "Feeling ini membuat saya truly alive dan purposeful."
+    ],
+    "examples_en": [
+      "I'm inspired by a meaningful vision for my life.",
+      "There's a sense of purpose that makes me want to act.",
+      "I'm driven by meaning and values I hold dear.",
+      "This inspiration comes from connection with something greater.",
+      "I feel energized to pursue goals aligned with my values.",
+      "There's an uplift and motivation from seeing the bigger picture.",
+      "I want to contribute something meaningful to the world.",
+      "This inspiration makes every effort feel worthwhile.",
+      "There's a strong drive to express my authentic vision.",
+      "This feeling makes me truly alive and purposeful."
+    ],
+    "keywords_id": [
+      "terinspirasi",
+      "meaning",
+      "purpose",
+      "vision",
+      "energized"
+    ],
+    "keywords_en": ["inspired", "meaning", "purpose", "vision", "uplift"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Pury, C. L. S., & Kowalski, R. M.",
+        "year": 2007,
+        "title": "Human strengths, measured through inspiration",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-SUR-001",
+    "label_name": "Surprised",
+    "emo_type": "primary",
+    "level1": "Surprised",
+    "level1_id": "Terkejut",
+    "level1_en": "Surprise",
+    "level2": "",
+    "level2_id": "",
+    "level2_en": "",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Reaksi spontan terhadap stimulus yang unexpected atau novel; perubahan sudden dalam expectation yang triggering curiosity atau alertness.",
+    "definition_en": "A spontaneous reaction to unexpected or novel stimuli; a sudden shift in expectation that triggers curiosity or alertness.",
+    "examples_id": [
+      "Aku terkejut oleh sesuatu yang tidak aku expect.",
+      "Ada moment of sudden shift dalam situasi.",
+      "Aku merasa alert dan focused pada sesuatu yang baru.",
+      "Terkejut ini bisa positif atau netral tergantung konteks.",
+      "Ada momen freeze sebelum saya process apa yang terjadi.",
+      "Aku merasa curious dan ingin mengerti apa yang happen.",
+      "Reaction ini datang dari automatic response terhadap novelty.",
+      "Aku suddenly aware dan present dengan apa yang terjadi.",
+      "Terkejut ini membuat saya bayar attention lebih besar.",
+      "Ada moment dari disorientation sebelum orientation kembali."
+    ],
+    "examples_en": [
+      "I'm surprised by something I didn't expect.",
+      "There's a moment of sudden shift in the situation.",
+      "I feel alert and focused on something new.",
+      "This surprise can be positive or neutral depending on context.",
+      "There's a moment of freeze before I process what happened.",
+      "I feel curious and want to understand what happened.",
+      "This reaction comes from automatic response to novelty.",
+      "I become suddenly aware and present with what's happening.",
+      "This surprise makes me pay greater attention.",
+      "There's a moment of disorientation before reorientation."
+    ],
+    "keywords_id": ["terkejut", "unexpected", "novelty", "alert", "curious"],
+    "keywords_en": ["surprised", "unexpected", "novel", "alert", "curious"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Meyer, D. E., & Schvaneveldt, R. W.",
+        "year": 1971,
+        "title": "Facilitation in recognizing pairs of words: Evidence of a dependence between retrieval operations",
+        "journal": "Journal of Experimental Psychology",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-SUR-002",
+    "label_name": "Amazed",
+    "emo_type": "secondary",
+    "level1": "Surprised",
+    "level1_id": "Terkejut",
+    "level1_en": "Surprise",
+    "level2": "Amazed",
+    "level2_id": "Terpukau",
+    "level2_en": "Amazement",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Terkejut dengan intens dan penuh keajaiban; perasaan kagum terhadap sesuatu yang melebihi ekspektasi dengan cara yang positif.",
+    "definition_en": "Intensely surprised and filled with wonder; a feeling of awe toward something that exceeds expectations in a positive way.",
+    "examples_id": [
+      "Aku amazed oleh kemampuan dan talenta seseorang.",
+      "Ada rasa kagum yang mendalam terhadap sesuatu yang beautiful.",
+      "Aku terpukau oleh complexity dan elegance dari sesuatu.",
+      "Amazement ini membuat saya see things dalam perspective baru.",
+      "Aku merasa humble dan inspired oleh apa yang saya lihat.",
+      "Ada sense of wonder yang membuat saya ingin explore lebih.",
+      "Aku terkejut dengan sesuatu yang exceed my expectations.",
+      "Perasaan ini membuat saya appreciate beauty dan skill.",
+      "Amazement ini positive dan uplifting.",
+      "Aku merasa connected dengan sense of awe dan possibility."
+    ],
+    "examples_en": [
+      "I'm amazed by someone's ability and talent.",
+      "There's a deep sense of awe toward something beautiful.",
+      "I'm captivated by the complexity and elegance of something.",
+      "This amazement makes me see things in a new perspective.",
+      "I feel humble and inspired by what I witness.",
+      "There's a sense of wonder that makes me want to explore more.",
+      "I'm surprised by something that exceeds my expectations.",
+      "This feeling makes me appreciate beauty and skill.",
+      "This amazement is positive and uplifting.",
+      "I feel connected with a sense of awe and possibility."
+    ],
+    "keywords_id": ["terpukau", "kagum", "amazement", "wonder", "awe"],
+    "keywords_en": ["amazed", "awe", "wonder", "astonished", "captivated"],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Keltner, D., & Haidt, J.",
+        "year": 2003,
+        "title": "Approaching awe, a moral, spiritual, and aesthetic emotion",
+        "journal": "Cognition & Emotion",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-SUR-003",
+    "label_name": "Astonished",
+    "emo_type": "tertiary",
+    "level1": "Surprised",
+    "level1_id": "Terkejut",
+    "level1_en": "Surprise",
+    "level2": "Amazed",
+    "level2_id": "Terpukau",
+    "level2_en": "Amazement",
+    "level3": "Astonished",
+    "level3_id": "Sangat Terkejut",
+    "level3_en": "Astonished",
+    "definition_id": "Terkejut dengan tingkat yang sangat tinggi; perasaan shocked dan overwhelmed oleh sesuatu yang sama sekali di luar ekspektasi.",
+    "definition_en": "Shocked to a very high degree; a feeling of being overwhelmed by something completely beyond expectations.",
+    "examples_id": [
+      "Aku astonished oleh sesuatu yang completely unexpected.",
+      "Ada shocked feeling yang sangat kuat.",
+      "Aku left speechless oleh apa yang saya witness.",
+      "Astonishment ini membuat saya freeze untuk moment.",
+      "Aku overwhelmed oleh magnitude dari sesuatu.",
+      "Ada sense dari disbelief dan wonder simultaneously.",
+      "Aku shocked dalam cara yang positive dan amazing.",
+      "Perasaan ini membuat saya rethink apa yang possible.",
+      "Astonishment ini adalah strong form dari surprise.",
+      "Aku deeply impressed dan affected oleh apa yang terjadi."
+    ],
+    "examples_en": [
+      "I'm astonished by something completely unexpected.",
+      "There's a very strong feeling of shock.",
+      "I'm left speechless by what I witness.",
+      "This astonishment makes me freeze for a moment.",
+      "I'm overwhelmed by the magnitude of something.",
+      "There's a sense of disbelief and wonder simultaneously.",
+      "I'm shocked in a positive and amazing way.",
+      "This feeling makes me rethink what's possible.",
+      "This astonishment is a strong form of surprise.",
+      "I'm deeply impressed and affected by what happened."
+    ],
+    "keywords_id": [
+      "sangat terkejut",
+      "shock",
+      "astonished",
+      "overwhelmed",
+      "disbelief"
+    ],
+    "keywords_en": [
+      "astonished",
+      "shocked",
+      "amazed",
+      "overwhelmed",
+      "astounded"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Reisenzein, R.",
+        "year": 2000,
+        "title": "The subjective experience of surprise",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-SUR-004",
+    "label_name": "Confused",
+    "emo_type": "secondary",
+    "level1": "Surprised",
+    "level1_id": "Terkejut",
+    "level1_en": "Surprise",
+    "level2": "Confused",
+    "level2_id": "Bingung",
+    "level2_en": "Confusion",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Terkejut dengan uncertainty; pikiran tidak dapat immediately memproses informasi baru dan mencari clarity.",
+    "definition_en": "Surprised with uncertainty; mind cannot immediately process new information and seeks clarity.",
+    "examples_id": [
+      "Aku bingung terhadap apa yang baru saja terjadi.",
+      "Ada moment dari disorientation dan lack of clarity.",
+      "Aku tidak sure bagaimana interpret situasi ini.",
+      "Confusion ini membuat saya ingin ask questions untuk clarity.",
+      "Ada cognitive dissonance antara expectation dan reality.",
+      "Aku merasa uncertain dan need time untuk process.",
+      "Bingung ini adalah temporary state sebelum understanding.",
+      "Aku actively trying untuk make sense dari apa yang happen.",
+      "Ada sense dari mismatch antara expectation dan actual.",
+      "Aku merasa perlu more information untuk resolve confusion."
+    ],
+    "examples_en": [
+      "I'm confused about what just happened.",
+      "There's a moment of disorientation and lack of clarity.",
+      "I'm not sure how to interpret this situation.",
+      "This confusion makes me want to ask questions for clarity.",
+      "There's cognitive dissonance between expectation and reality.",
+      "I feel uncertain and need time to process.",
+      "This confusion is a temporary state before understanding.",
+      "I'm actively trying to make sense of what happened.",
+      "There's a sense of mismatch between expectation and actual.",
+      "I feel I need more information to resolve this confusion."
+    ],
+    "keywords_id": [
+      "bingung",
+      "uncertainty",
+      "confused",
+      "unclear",
+      "disoriented"
+    ],
+    "keywords_en": [
+      "confused",
+      "uncertain",
+      "unclear",
+      "disoriented",
+      "perplexed"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Piaget, J.",
+        "year": 1954,
+        "title": "The Construction of Reality in the Child",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-SUR-005",
+    "label_name": "Bewildered",
+    "emo_type": "tertiary",
+    "level1": "Surprised",
+    "level1_id": "Terkejut",
+    "level1_en": "Surprise",
+    "level2": "Confused",
+    "level2_id": "Bingung",
+    "level2_en": "Confusion",
+    "level3": "Bewildered",
+    "level3_id": "Sangat Bingung",
+    "level3_en": "Bewildered",
+    "definition_id": "Sangat bingung dan disoriented; pikiran overwhelmed oleh complexity atau contradiction yang sulit dipahami.",
+    "definition_en": "Very confused and disoriented; mind overwhelmed by complexity or contradiction that's hard to comprehend.",
+    "examples_id": [
+      "Aku bewildered oleh complexity dari situasi ini.",
+      "Ada sense dari being lost dalam detail dan information.",
+      "Aku overwhelmed oleh amount of conflicting information.",
+      "Bewilderment ini membuat saya feel paralyzed untuk moment.",
+      "Aku tidak tahu mana yang right atau wrong.",
+      "Ada confusion yang deep tentang apa yang reality.",
+      "Aku merasa disoriented dan need guidance.",
+      "Bewildered state ini adalah extreme form dari confusion.",
+      "Aku struggling untuk find clarity dalam chaos.",
+      "Aku merasa perlu help untuk navigate situation ini."
+    ],
+    "examples_en": [
+      "I'm bewildered by the complexity of this situation.",
+      "There's a sense of being lost in details and information.",
+      "I'm overwhelmed by the conflicting information.",
+      "This bewilderment makes me feel paralyzed for a moment.",
+      "I don't know what's right or wrong.",
+      "There's deep confusion about what is reality.",
+      "I feel disoriented and need guidance.",
+      "This bewildered state is an extreme form of confusion.",
+      "I'm struggling to find clarity in the chaos.",
+      "I feel I need help to navigate this situation."
+    ],
+    "keywords_id": [
+      "sangat bingung",
+      "bewildered",
+      "disoriented",
+      "overwhelmed",
+      "lost"
+    ],
+    "keywords_en": [
+      "bewildered",
+      "confused",
+      "disoriented",
+      "overwhelmed",
+      "perplexed"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Norman, D. A.",
+        "year": 1988,
+        "title": "The Psychology of Everyday Things",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-SUR-006",
+    "label_name": "Perplexed",
+    "emo_type": "tertiary",
+    "level1": "Surprised",
+    "level1_id": "Terkejut",
+    "level1_en": "Surprise",
+    "level2": "Confused",
+    "level2_id": "Bingung",
+    "level2_en": "Confusion",
+    "level3": "Perplexed",
+    "level3_id": "Bingung Berat",
+    "level3_en": "Perplexed",
+    "definition_id": "Bingung dengan puzzle-like quality; pikiran actively berusaha solve mystery atau contradiction yang ada.",
+    "definition_en": "Confused with a puzzle-like quality; mind actively trying to solve a mystery or contradiction.",
+    "examples_id": [
+      "Aku perplexed oleh contradiction dalam cerita ini.",
+      "Ada puzzle yang saya trying untuk solve.",
+      "Aku questioning bagaimana things fit together.",
+      "Perplexity ini membuat saya engaged dalam problem solving.",
+      "Aku trying untuk understand logic di balik situasi.",
+      "Ada mystery yang membuat saya ingin dig deeper.",
+      "Aku confused namun engaged dalam finding answer.",
+      "Perplex state ini lebih mental daripada emotional overwhelm.",
+      "Aku merasa challenged untuk understand pattern.",
+      "Ada intellectual engagement dalam resolving confusion."
+    ],
+    "examples_en": [
+      "I'm perplexed by the contradiction in this story.",
+      "There's a puzzle I'm trying to solve.",
+      "I'm questioning how things fit together.",
+      "This perplexity engages me in problem solving.",
+      "I'm trying to understand the logic behind the situation.",
+      "There's a mystery that makes me want to dig deeper.",
+      "I'm confused yet engaged in finding answers.",
+      "This perplexed state is more mental than emotional overwhelm.",
+      "I feel challenged to understand the pattern.",
+      "There's intellectual engagement in resolving this confusion."
+    ],
+    "keywords_id": [
+      "bingung berat",
+      "perplexed",
+      "puzzle",
+      "mystery",
+      "puzzled"
+    ],
+    "keywords_en": [
+      "perplexed",
+      "puzzled",
+      "mystery",
+      "intrigued",
+      "enigmatic"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Berlyne, D. E.",
+        "year": 1960,
+        "title": "Conflict, Arousal, and Curiosity",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-SUR-007",
+    "label_name": "Intrigued",
+    "emo_type": "secondary",
+    "level1": "Surprised",
+    "level1_id": "Terkejut",
+    "level1_en": "Surprise",
+    "level2": "Intrigued",
+    "level2_id": "Tertarik",
+    "level2_en": "Intrigue",
+    "level3": "",
+    "level3_id": "",
+    "level3_en": "",
+    "definition_id": "Tertarik dengan pesonaan; curiosity yang ditrigger oleh sesuatu yang mysterious atau unexpected dan ingin explore lebih.",
+    "definition_en": "Interested with allure; curiosity triggered by something mysterious or unexpected and wanting to explore more.",
+    "examples_id": [
+      "Aku intrigued oleh cerita yang belum selesai ini.",
+      "Ada fascination dengan mystery dan unknown.",
+      "Aku drawn toward sesuatu yang mysterious.",
+      "Intrigue ini membuat saya ingin know more.",
+      "Ada pull yang kuat untuk explore sesuatu yang unknown.",
+      "Aku merasa attracted toward possibility dan potential.",
+      "Tertarik ini adalah positive form dari kecurious an.",
+      "Ada engagement dan eagerness untuk discover.",
+      "Aku actively seeking untuk understand lebih lanjut.",
+      "Intrigue ini adalah kombinasi dari surprise dan curiosity."
+    ],
+    "examples_en": [
+      "I'm intrigued by this incomplete story.",
+      "There's fascination with mystery and the unknown.",
+      "I'm drawn toward something mysterious.",
+      "This intrigue makes me want to know more.",
+      "There's a strong pull to explore the unknown.",
+      "I feel attracted toward possibility and potential.",
+      "This interest is a positive form of curiosity.",
+      "There's engagement and eagerness to discover.",
+      "I'm actively seeking to understand more.",
+      "This intrigue is a combination of surprise and curiosity."
+    ],
+    "keywords_id": [
+      "tertarik",
+      "fascinasi",
+      "mysterious",
+      "curious",
+      "engaged"
+    ],
+    "keywords_en": [
+      "intrigued",
+      "fascinated",
+      "curious",
+      "mysteriously drawn",
+      "engaged"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Loewenstein, G.",
+        "year": 1994,
+        "title": "The psychology of curiosity: A review and reinterpretation",
+        "journal": "Psychological Bulletin",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-SUR-008",
+    "label_name": "Curious",
+    "emo_type": "tertiary",
+    "level1": "Surprised",
+    "level1_id": "Terkejut",
+    "level1_en": "Surprise",
+    "level2": "Intrigued",
+    "level2_id": "Tertarik",
+    "level2_en": "Intrigue",
+    "level3": "Curious",
+    "level3_id": "Ingin Tahu",
+    "level3_en": "Curious",
+    "definition_id": "Ingin tahu yang kuat; drive untuk investigate dan understand sesuatu yang mysterious atau unexpected secara deeper.",
+    "definition_en": "Strong desire to know; drive to investigate and understand something mysterious or unexpected more deeply.",
+    "examples_id": [
+      "Aku curious tentang apa yang behind cerita ini.",
+      "Ada strong urge untuk dig deeper dan understand.",
+      "Aku ingin tahu lebih banyak tentang subject ini.",
+      "Curiosity ini membuat saya ask banyak pertanyaan.",
+      "Aku actively exploring untuk find answer.",
+      "Ada genuine interest dalam learning lebih.",
+      "Aku merasa driven untuk understand mechanism di balik.",
+      "Curiosity ini adalah natural response terhadap novelty.",
+      "Aku merasa engaged dan interested dalam discovery.",
+      "Rasa ingin tahu ini membuat hidup lebih interesting."
+    ],
+    "examples_en": [
+      "I'm curious about what's behind this story.",
+      "There's a strong urge to dig deeper and understand.",
+      "I want to know more about this subject.",
+      "This curiosity makes me ask many questions.",
+      "I'm actively exploring to find answers.",
+      "There's genuine interest in learning more.",
+      "I feel driven to understand the mechanisms behind it.",
+      "This curiosity is a natural response to novelty.",
+      "I feel engaged and interested in discovery.",
+      "This desire to know makes life more interesting."
+    ],
+    "keywords_id": [
+      "ingin tahu",
+      "curiosity",
+      "explore",
+      "discover",
+      "investigate"
+    ],
+    "keywords_en": [
+      "curious",
+      "wondering",
+      "explore",
+      "discover",
+      "investigate"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Kashdan, T. B., & Silvia, P. J.",
+        "year": 2009,
+        "title": "Curiosity and interest: The benefits of thriving on novelty and challenge",
+        "language": "en"
+      }
+    ]
+  },
+  {
+    "id_label": "FW-SUR-009",
+    "label_name": "Fascinated",
+    "emo_type": "tertiary",
+    "level1": "Surprised",
+    "level1_id": "Terkejut",
+    "level1_en": "Surprise",
+    "level2": "Intrigued",
+    "level2_id": "Tertarik",
+    "level2_en": "Intrigue",
+    "level3": "Fascinated",
+    "level3_id": "Terpesona",
+    "level3_en": "Fascinated",
+    "definition_id": "Sangat tertarik dan terpukau; perhatian fully captured oleh sesuatu yang menarik dengan cara yang mendalam dan engaging.",
+    "definition_en": "Deeply interested and captivated; attention fully captured by something fascinating in a profound and engaging way.",
+    "examples_id": [
+      "Aku fascinated oleh intricacy dari sesuatu.",
+      "Ada captivation yang mendalam dan absorbing.",
+      "Aku completely engaged dalam apa yang saya lihat.",
+      "Fascinasi ini membuat saya lupa waktu.",
+      "Aku drawn in oleh beauty atau complexity.",
+      "Ada absorption penuh dalam experience.",
+      "Aku merasa deeply engaged dan present.",
+      "Fascination ini lebih intense daripada ordinary interest.",
+      "Aku merasa benar-benar terpesona oleh sesuatu.",
+      "Experience ini membuat saya feel alive dan engaged."
+    ],
+    "examples_en": [
+      "I'm fascinated by the intricacy of something.",
+      "There's a deep and absorbing captivation.",
+      "I'm completely engaged in what I see.",
+      "This fascination makes me forget time.",
+      "I'm drawn in by beauty or complexity.",
+      "There's full absorption in the experience.",
+      "I feel deeply engaged and present.",
+      "This fascination is more intense than ordinary interest.",
+      "I feel truly captivated by something.",
+      "This experience makes me feel alive and engaged."
+    ],
+    "keywords_id": [
+      "terpesona",
+      "fascinated",
+      "captivated",
+      "absorbed",
+      "enthralled"
+    ],
+    "keywords_en": [
+      "fascinated",
+      "captivated",
+      "mesmerized",
+      "enthralled",
+      "absorbed"
+    ],
+    "source": [
+      {
+        "type": "journal",
+        "author": "Renninger, K. A., & Hidi, S.",
+        "year": 2016,
+        "title": "The Power of Interest for Motivation and Engagement",
+        "language": "en"
+      }
+    ]
+  }
+]

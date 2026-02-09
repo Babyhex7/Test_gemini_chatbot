@@ -1,7 +1,7 @@
 # MHCM Chatbot — Architecture Brief Document
 
 > Mental Health Conversational Mirror — Emotion Checker via Storytelling
-> **Versi: 3.0 (Revisi)** | Tanggal: 8 Februari 2026
+> **Versi: 4.1 (Creative Narrative & DB Personalization)** | Tanggal: 9 Februari 2026
 
 ---
 
@@ -9,15 +9,17 @@
 
 Chatbot refleksi emosi berbasis storytelling. User bercerita tentang kejadian/perasaannya,
 lalu sistem mendeteksi emosi, memvalidasi lewat **pertanyaan refleksi (pilihan ganda ABCD)**
-yang spesifik untuk **kombinasi emosi lengkap**, dan menghasilkan narasi reflektif yang empatik — **bukan diagnosis klinis**.
+yang spesifik untuk **kombinasi emosi lengkap**, dan menghasilkan **narasi reflektif yang panjang, kreatif, dan personal** — **bukan diagnosis klinis**.
 
 **Prinsip Utama:**
 
 - Refleksi, bukan diagnosis
 - Bahasa manusiawi, bukan label klinis
-- User bercerita → sistem merespons dengan empati
+- User bercerita → sistem merespons dengan empati **dan kreativitas**
 - Pertanyaan follow-up spesifik untuk **setiap path emosi** (e.g., Happy.Proud.Confident vs Happy.Accepted.Respected)
-- **Chat memory**: sistem ingat konteks percakapan dalam session (seperti ChatGPT)
+- **Chat memory**: sistem ingat konteks percakapan dalam session DAN **cross-session history** (journey awareness)
+- **Personalized narrative**: Gemini membaca data dari database untuk respons yang **personal dan journey-aware**
+- **Creative narrative**: Gemini diberi kebebasan menulis panjang dan kreatif, tidak dibatasi template kaku
 - Hanya 1 jenis pertanyaan: **Reflection Questions (ABCD)** per emotion path
 
 ---
@@ -55,14 +57,20 @@ yang spesifik untuk **kombinasi emosi lengkap**, dan menghasilkan narasi reflekt
 │                                                                     │
 │  Hanya dipanggil untuk 2 hal:                                       │
 │                                                                     │
-│  1. DETECT EMOTION dari cerita user                                 │
-│     Input: teks cerita user                                         │
-│     Output: { primary, secondary, tertiary, confidence }            │
-│     → Gemini langsung deteksi sampai TERTIARY                       │
+│  1. DETECT EMOTION dari cerita user + HISTORY CONTEXT               │
+│     Input: teks cerita user + ringkasan 5 session terakhir          │
+│     Output: { primary, secondary, tertiary, confidence, notes }     │
+│     → Gemini deteksi sampai TERTIARY dengan awareness trend user    │
 │                                                                     │
-│  2. GENERATE NARRATIVE reflektif                                    │
-│     Input: emosi final + cerita + jawaban user                      │
-│     Output: narasi empatik (bukan diagnosis)                        │
+│  2. GENERATE NARRATIVE reflektif + PERSONALIZED + CREATIVE          │
+│     Input: emosi final + cerita lengkap + skor validasi + HISTORY   │
+│     Output: narasi PANJANG, mendalam, empatik, journey-aware        │
+│                                                                     │
+│     ⭐ NARRATIVE TIDAK DIBATASI PANJANGNYA                          │
+│     → Gemini diberi kebebasan menulis sekreatif mungkin             │
+│     → Boleh pakai metafora, analogi, storytelling balik             │
+│     → Fokus: refleksi mendalam, bukan ringkasan singkat             │
+│     → Tujuan: user merasa benar-benar didengar dan dipahami         │
 │                                                                     │
 │  Sisanya BUKAN Gemini.                                              │
 └─────────────────────────────────────────────────────────────────────┘
@@ -167,6 +175,8 @@ yang spesifik untuk **kombinasi emosi lengkap**, dan menghasilkan narasi reflekt
 │ final_primary      VARCHAR  │  emosi setelah validasi
 │ final_secondary    VARCHAR  │  emosi setelah validasi
 │ final_tertiary     VARCHAR  │  emosi setelah validasi
+│ story_text    TEXT          │  cerita user (full)
+│ story_summary VARCHAR(200)  │  ringkasan cerita untuk inject history
 │ status        ENUM          │  'active','completed','abandoned'
 │ started_at    DATETIME      │
 │ ended_at      DATETIME      │  nullable
@@ -425,22 +435,26 @@ AUTH
   POST   /api/auth/login
 
 SESSION
-  POST   /api/sessions                      → mulai session baru
+  POST   /api/sessions                      → mulai session baru (+ load history)
   GET    /api/sessions/:id                  → detail session
-  PATCH  /api/sessions/:id/end              → akhiri session
+  PATCH  /api/sessions/:id/end              → akhiri session (+ save story_summary)
 
 CHAT (flow engine)
   POST   /api/chat/message                  → kirim jawaban + terima respons
          Body: { sessionId, answer?, flowState }
          Response: { botMessage, nextFlowState, questions? }
 
-  GET    /api/chat/:sessionId/history       → riwayat chat
+  GET    /api/chat/:sessionId/history       → riwayat chat dalam session
+
+HISTORY (untuk memory inject)
+  GET    /api/history/:userId               → 5 session terakhir user (formatted untuk prompt)
+  GET    /api/history/:userId/raw           → raw session data (untuk frontend display)
 
 EMOTION
   GET    /api/emotions/wheel                → ambil semua emotion wheel dari DB
   GET    /api/emotions/wheel/:primary       → ambil secondary options
   GET    /api/emotions/:sessionId/log       → emotion log per session
-  GET    /api/emotions/user/:userId/history  → semua emotion logs user
+  GET    /api/emotions/user/:userId/history  → semua emotion logs user (trend analysis)
 
 QUESTIONS (dari DB)
   GET    /api/questions/:emotionKey         → pertanyaan untuk full path (e.g., "Happy.Proud.Confident")
@@ -450,20 +464,31 @@ QUESTIONS (dari DB)
 
 ```
 POST   /api/detect-emotion
-       Body: { text }
-       Response: { primary, secondary, tertiary, confidence, reasoning }
-       → Gemini deteksi langsung sampai tertiary
+       Body: {
+         text: "cerita user...",
+         history_context: "Previous sessions:\n• Feb 5: SAD.LONELY..."  ← 🆕
+       }
+       Response: { primary, secondary, tertiary, confidence, journey_note }
+       → Gemini deteksi dengan awareness journey user
 
 POST   /api/generate-narrative
-       Body: { emotions, user_story, validation_scores }
-       Response: { narrative, tone, key_themes }
+       Body: {
+         emotions: { primary, secondary, tertiary },
+         user_story: "...",
+         validation_scores: 5,
+         history_context: "Previous sessions:\n..."  ← 🆕
+       }
+       Response: { narrative, journey_acknowledgment, tone }
+       → Gemini generate narrative journey-aware
 
 GET    /api/health
        Response: { status: "ok", gemini_connected: true }
 ```
 
-**Catatan:** Tidak ada endpoint `/api/emotion-naming` lagi.
-Gemini hanya dipanggil 2x per session: detect + narrative.
+**Catatan:**
+
+- Gemini dipanggil 2x per session dengan history context
+- Backend query history dari DB → format → kirim ke AI Service
 
 ---
 
@@ -529,150 +554,333 @@ Setiap POST /api/chat/message, backend cek state → tentukan step berikutnya.
 
 ---
 
-## 11. Chat Memory & Context Management
+## 11. Chat Memory & Context Management (Memory Inject)
 
-**Apakah chatbot ini punya memory seperti ChatGPT?**
+**Apakah chatbot ini punya memory? ✅ YA — Cross-Session History Inject**
 
-✅ **Ya, dalam session yang sama:**
+### 📍 Arsitektur Memory
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│ DALAM 1 SESSION (Conversation Memory)                      │
-├─────────────────────────────────────────────────────────────┤
-│ • Backend menyimpan semua chat_messages per session_id     │
-│ • Saat generate narrative, Gemini mendapat:                │
-│   - Cerita user (storytelling)                             │
-│   - Emosi terdeteksi                                       │
-│   - Validation scores                                      │
-│ • Frontend bisa tampilkan riwayat chat dalam session       │
-│   (GET /api/chat/:sessionId/history)                       │
-│ • User bisa scroll up lihat percakapan sebelumnya          │
-└─────────────────────────────────────────────────────────────┘
-```
+Chatbot ini menggunakan pendekatan **Memory Inject**: data dari database di-inject ke prompt Gemini sehingga AI "sadar" siapa user dan perjalanan emosionalnya.
 
-⚠️ **Terbatas untuk context narrative:**
+**Dalam 1 Session:**
 
-- Gemini **hanya dipanggil 2x** per session (detect + narrative)
-- Tidak ada "conversational back-and-forth" seperti ChatGPT
-- Setelah narrative ditampilkan → session selesai
-- Jika user ingin chat lagi → mulai session baru
+- Backend menyimpan semua chat_messages per session_id
+- Cerita user disimpan di `sessions.story_text`
+- Saat generate narrative → seluruh konteks dikirim ke Gemini
 
-📊 **Antar session (Historical Memory):**
+**Antar Session (Journey Awareness):**
+
+- Backend query 5 session terakhir user dari database
+- Format jadi ringkasan: tanggal + emosi + summary cerita
+- Inject ke prompt Gemini → AI tahu "perjalanan" user
+- Narrative jadi personal: "Senang lihat kamu improve dari kemarin"
+
+### 🔄 Alur Data: Database → Gemini
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ CROSS-SESSION HISTORY                                       │
-├─────────────────────────────────────────────────────────────┤
-│ • User bisa lihat riwayat semua session sebelumnya          │
-│   (GET /api/emotions/user/:userId/history)                  │
-│ • Data tersimpan: emotion logs, narratives, timestamps      │
-│ • Berguna untuk trend analysis (backlog feature)            │
-│ • Tapi TIDAK otomatis di-inject ke prompt Gemini            │
-│   (berbeda dengan ChatGPT yang selalu ingat chat history)   │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│ DATABASE (MySQL via Sequelize)                                      │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  sessions                                                           │
+│  ├── final_primary, final_secondary, final_tertiary                │
+│  ├── story_summary (ringkasan cerita untuk inject)                 │
+│  └── ended_at                                                       │
+│                                                                     │
+│  emotion_logs                                                       │
+│  ├── primary_emotion, secondary_emotion, tertiary_emotion          │
+│  ├── confidence                                                     │
+│  └── narrative (narasi yang sudah digenerate)                      │
+│                                                                     │
+│  users                                                              │
+│  └── name (untuk personalisasi panggilan)                          │
+│                                                                     │
+└────────────────────────────────────┬────────────────────────────────┘
+                                     │ Backend query & format
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ CONTEXT STRING (yang di-inject ke prompt Gemini)                   │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  user_context:                                                      │
+│  ├── Nama user                                                      │
+│  ├── Total sesi sebelumnya                                         │
+│  └── Jenis user (new/returning)                                    │
+│                                                                     │
+│  journey_context:                                                   │
+│  ├── Tanggal + emosi + ringkasan cerita (5 sesi terakhir)         │
+│  ├── Pola yang terdeteksi (trending up/down, recurring emotion)    │
+│  └── Catatan khusus (kalau ada tema berulang)                      │
+│                                                                     │
+│  current_context:                                                   │
+│  ├── Cerita lengkap user sesi ini                                  │
+│  ├── Emosi yang terdeteksi + confidence                            │
+│  └── Skor validasi (5 soal ABCD)                                   │
+│                                                                     │
+└────────────────────────────────────┬────────────────────────────────┘
+                                     │
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ GEMINI PROMPT (dengan semua context di atas)                       │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Kesimpulan:**
+### 📊 Perbandingan: Tanpa vs Dengan History Inject
 
-| Fitur                          | Chatbot Ini       | ChatGPT          |
-| ------------------------------ | ----------------- | ---------------- |
-| Memory dalam 1 session         | ✅ Ya             | ✅ Ya            |
-| Conversational multi-turn chat | ❌ Tidak          | ✅ Ya            |
-| Riwayat session tersimpan      | ✅ Ya (di DB)     | ✅ Ya            |
-| Auto-inject history ke prompt  | ❌ Tidak (manual) | ✅ Ya (otomatis) |
-| Flow                           | Linear (5 steps)  | Free-form dialog |
+| Aspek                 | TANPA History Inject             | DENGAN History Inject (arsitektur ini)             |
+| --------------------- | -------------------------------- | -------------------------------------------------- |
+| **Narrative**         | Generic: "Kamu merasa senang..." | Personal: "Senang lihat kamu improve dari kemarin" |
+| **Context**           | Hanya cerita current session     | Cerita + 5 session terakhir + profil user          |
+| **Journey Awareness** | ❌ Tidak tahu trend              | ✅ Tahu user naik/turun emotionally                |
+| **Empati**            | Standar                          | Deep & personal (journey-aware)                    |
+| **User Experience**   | Functional                       | Meaningful & memorable                             |
 
 ---
 
-### 🔍 Penjelasan: Apa itu "Auto-Inject History ke Prompt"?
+## 11.1 Prompt Template Philosophy — Narrative Generation
 
-**Contoh ChatGPT (Auto-Inject ✅):**
+**Prinsip utama: Gemini adalah "teman bijak" yang mendengar, bukan psikolog yang mendiagnosis.**
 
-```
-User: "Aku lagi sedih"
-  ↓
-ChatGPT API dipanggil dengan:
-  {
-    messages: [
-      { role: "user", content: "Aku lagi sedih" }
-    ]
-  }
-  ↓
-Bot: "Kenapa kamu sedih? Cerita dong"
+### 🎯 Tujuan Narrative
 
-User: "Karena putus cinta"  ← Message kedua
-  ↓
-ChatGPT API dipanggil LAGI dengan FULL HISTORY:
-  {
-    messages: [
-      { role: "user", content: "Aku lagi sedih" },        ← HISTORY
-      { role: "assistant", content: "Kenapa kamu sedih..." }, ← HISTORY
-      { role: "user", content: "Karena putus cinta" }      ← NEW
-    ]
-  }
-  ↓
-Bot: "Oh maaf dengar itu. Sudah berapa lama kalian bersama?"
-     ↑ Bot "ingat" percakapan sebelumnya karena history otomatis dikirim
-```
+Narrative bukan sekedar menjelaskan emosi yang terdeteksi. Narrative adalah **refleksi mendalam** yang:
 
-**Chatbot Ini (Manual/Tidak Auto-Inject ❌):**
+- Menemani user memahami dirinya sendiri
+- Mengakui perjalanan emosional user (kalau ada history)
+- Memvalidasi perasaan tanpa menghakimi
+- Memberikan insight tanpa menggurui
+- Menawarkan perspektif tanpa memaksa
+- Menggunakan bahasa yang hangat dan personal
 
-```
-User: [Bercerita panjang tentang perasaannya]
-  ↓
-Gemini API Call #1: Detect Emotion
-  {
-    text: "cerita user..."
-  }
-  ↓ hanya cerita, TIDAK include chat history sebelumnya
+### 📝 Elemen Prompt Template untuk Narrative
 
-Response: { primary: "Sad", secondary: "Lonely", tertiary: "Isolated" }
+**1. Role Definition (Siapa Gemini dalam konteks ini)**
 
-↓ (User jawab 5 pertanyaan validasi)
+- Teman yang bijak dan hangat, bukan terapis
+- Pendengar yang penuh empati
+- Seseorang yang menghargai keberanian user untuk bercerita
+- Tidak memberikan diagnosis atau saran klinis
 
-Gemini API Call #2: Generate Narrative
-  {
-    user_story: "cerita user...",
-    emotions: { primary: "Sad", secondary: "Lonely", tertiary: "Isolated" },
-    validation_score: 5
-  }
-  ↓ hanya data yang DIPILIH manual, bukan semua chat history
+**2. User Context Injection (Data dari database)**
 
-Response: { narrative: "Dalam beberapa waktu terakhir..." }
+- Nama user (untuk personalisasi)
+- Jumlah sesi sebelumnya (new user vs returning user)
+- History 5 sesi terakhir (tanggal, emosi, ringkasan cerita)
+- Pola yang muncul (kalau ada: recurring theme, trend)
 
-↓ Session SELESAI, tidak ada bolak-balik lagi
-```
+**3. Current Session Context**
 
-**Perbedaan Kunci:**
+- Cerita lengkap user di sesi ini
+- Emosi yang terdeteksi (primary.secondary.tertiary)
+- Tingkat confidence deteksi
+- Skor validasi (berapa soal dijawab benar)
 
-| Aspek                          | ChatGPT                                        | Chatbot Ini                                               |
-| ------------------------------ | ---------------------------------------------- | --------------------------------------------------------- |
-| **Setiap user ngirim pesan**   | API dipanggil + SEMUA history dikirim otomatis | API hanya dipanggil 2x (detect + narrative)               |
-| **Context yang dikirim ke AI** | Full conversation history                      | Hanya data spesifik (cerita + emosi)                      |
-| **Jumlah API call**            | Banyak (setiap message)                        | Cuma 2x per session                                       |
-| **Bot "ingat" percakapan**     | Ya, otomatis                                   | Cukup untuk generate narrative, tapi tidak conversational |
+**4. Output Instructions (Bagaimana narrative ditulis)**
 
-**Kenapa chatbot ini tidak auto-inject?**
+- Panjang: Tidak dibatasi, tulis selengkap yang dirasa perlu
+- Gaya: Conversational, hangat, personal
+- Struktur: Bebas mengalir, tidak perlu bullet points
+- Boleh pakai emoji secukupnya untuk kehangatan
+- Akui journey kalau ada history
+- Validasi perasaan sebelum memberikan perspektif
+- Akhiri dengan sentiment positif atau kata-kata supportive
 
-✅ **Keuntungan:**
+### 🌟 Filosofi Narrative Panjang
 
-- Lebih murah (Gemini cuma dipanggil 2x)
-- Flow terkontrol (tidak perlu handle edge case conversational)
-- Fokus ke tujuan: detect emosi → validate → narrative
+Narrative diharapkan **panjang dan mendalam** karena:
 
-❌ **Trade-off:**
+1. **User sudah invest waktu bercerita** → respons singkat terasa tidak menghargai
+2. **Emosi itu kompleks** → perlu penjelasan yang nuanced
+3. **Ini bukan FAQ bot** → ini companion yang menemani refleksi
+4. **Personalisasi butuh ruang** → mengakui journey butuh beberapa kalimat
+5. **Closure yang bermakna** → user perlu merasa "didengar sepenuhnya"
 
-- Tidak bisa tanya-jawab bebas seperti ChatGPT
-- User tidak bisa "lanjutin" percakapan setelah narrative
+### 📋 Komponen Narrative yang Diharapkan
 
-**Jika ingin fitur conversational seperti ChatGPT:**  
-Bisa ditambahkan nanti dengan:
+**Untuk User Baru (Belum Ada History):**
 
-- Socket.IO untuk real-time streaming
-- Context window management (inject chat history ke Gemini prompt setiap request)
-- Flow state yang lebih fleksibel (bukan linear)
+- Apresiasi keberanian bercerita
+- Refleksi mendalam tentang emosi yang terdeteksi
+- Penjelasan mengapa emosi itu masuk akal dalam konteks ceritanya
+- Validasi: perasaan itu wajar dan valid
+- Insight: apa yang mungkin sedang terjadi dalam diri user
+- Perspektif: cara lain melihat situasi (tanpa menggurui)
+- Penutup: kata-kata supportive dan encouraging
 
-→ Masuk backlog sebagai **"Conversational Mode"**
+**Untuk Returning User (Ada History):**
+
+- Semua komponen di atas, PLUS:
+- Acknowledgment journey: "Terakhir kali kamu merasakan X, sekarang Y..."
+- Pattern recognition: "Aku lihat ada pola..." (kalau ada)
+- Progress celebration: "Ini perkembangan yang positif..." (kalau membaik)
+- Empathy for struggle: "Aku mengerti ini masih berat..." (kalau masih sama/memburuk)
+- Continuity: merasa seperti percakapan berkelanjutan, bukan sesi terisolasi
+
+### 🎨 Kreativitas Narrative
+
+Gemini diberi kebebasan untuk:
+
+- Menggunakan metafora yang relevan dengan cerita user
+- Membuat analogi yang membantu user memahami emosinya
+- Menyisipkan pertanyaan retoris untuk refleksi lebih dalam
+- Menggunakan storytelling balik (menggambarkan ulang situasi user dengan perspektif baru)
+- Memberikan "nama" pada perasaan yang mungkin sulit diungkapkan user
+
+**Yang Tidak Boleh:**
+
+- Memberikan diagnosis (ini bukan klinis)
+- Menyarankan terapi/profesional help (kecuali user explicitly butuh)
+- Menghakimi keputusan atau perasaan user
+- Memberikan solusi langsung (ini tentang refleksi, bukan problem-solving)
+- Terlalu pendek atau generik
+
+---
+
+## 11.2 Struktur Prompt Template — Detect Emotion
+
+Prompt untuk deteksi emosi berisi:
+
+**Bagian 1: Role & Context**
+
+- Gemini bertindak sebagai emotion analyst yang sensitif dan nuanced
+- Paham Feeling Wheel taxonomy (7 primary → secondary → tertiary)
+- Aware bahwa user punya journey (kalau ada history)
+
+**Bagian 2: User Journey Injection**
+
+- History 5 session terakhir (tanggal, emosi, ringkasan cerita)
+- Pattern yang terdeteksi ("recurring anxiety", "trending better", dll)
+- Kalau new user: statement bahwa ini user baru
+
+**Bagian 3: Current Story**
+
+- Cerita lengkap yang ditulis user di sesi ini
+- Tidak dipotong atau diringkas
+
+**Bagian 4: Output Format**
+
+- Primary emotion (dari 7 opsi: Happy, Sad, Angry, Fearful, Surprised, Disgusted, Bad)
+- Secondary emotion (spesifik ke primary)
+- Tertiary emotion (paling spesifik)
+- Confidence score (0.0 - 1.0)
+- Journey note (observasi tentang pattern, kalau relevan)
+
+---
+
+## 11.3 Struktur Prompt Template — Generate Narrative
+
+**Ini adalah prompt paling penting di sistem — menghasilkan output yang user lihat dan rasakan.**
+
+### Bagian 1: Role Definition
+
+Gemini diminta menjadi:
+
+- Sahabat yang bijak dan hangat
+- Pendengar yang penuh perhatian
+- Seseorang yang menghargai keberanian bercerita
+- BUKAN terapis, BUKAN psikolog, BUKAN counselor
+- Tujuan: menemani refleksi, bukan memberikan diagnosis
+
+### Bagian 2: User Profile Injection
+
+Data dari database yang di-inject:
+
+- Nama user (untuk personalisasi panggilan)
+- Status: new user atau returning user
+- Jumlah sesi sebelumnya
+- Kalau returning: ringkasan 5 sesi terakhir dengan:
+  - Tanggal session
+  - Emosi yang terdeteksi (full path)
+  - Ringkasan singkat cerita
+
+### Bagian 3: Current Session Data
+
+- Cerita lengkap user di sesi ini (tidak dipotong)
+- Emosi yang terdeteksi: primary.secondary.tertiary
+- Confidence level deteksi AI
+- Hasil validasi: skor dari 5 pertanyaan ABCD
+- Journey note dari deteksi (kalau ada pattern)
+
+### Bagian 4: Narrative Instructions
+
+Gemini diberitahu untuk:
+
+**Panjang & Kedalaman:**
+
+- Tulis selengkap dan sepanjang yang dirasa perlu
+- Tidak ada batasan kata — kualitas lebih penting dari kuantitas
+- Ini BUKAN summary atau ringkasan cepat
+- User sudah invest waktu bercerita → respons harus setimpal
+
+**Struktur yang Diharapkan:**
+
+- Pembukaan hangat yang menyapa user secara personal
+- Acknowledgment journey (kalau returning user)
+- Refleksi tentang cerita yang diceritakan user
+- Penjelasan tentang emosi yang terdeteksi dalam konteks ceritanya
+- Validasi: mengapa perasaan itu masuk akal dan valid
+- Insight: apa yang mungkin sedang terjadi dalam diri user
+- Perspektif alternatif (TANPA menggurui)
+- Penutup yang warm dan encouraging
+
+**Gaya Bahasa:**
+
+- Bahasa Indonesia yang natural, seperti ngobrol dengan teman
+- Boleh pakai emoji secukupnya untuk kehangatan (tidak berlebihan)
+- Personal: sebut nama user, refer ke cerita spesifik mereka
+- Hindari bahasa klinis atau jargon psikologi
+- Hindari bullet points — tulis mengalir seperti surat
+
+**Kreativitas:**
+
+- Boleh pakai metafora yang relevan dengan cerita user
+- Boleh pakai analogi untuk menjelaskan emosi
+- Boleh sisipkan pertanyaan retoris untuk refleksi
+- Boleh "ceritakan ulang" situasi user dengan framing baru
+- Boleh kasih "nama" pada perasaan yang sulit diungkapkan
+
+**Yang Tidak Boleh:**
+
+- Diagnosis (ini bukan klinis)
+- Saran untuk cari bantuan profesional (kecuali diminta)
+- Menghakimi keputusan atau perasaan
+- Solusi langsung atau problem-solving
+- Terlalu singkat atau generik
+- Copy-paste template yang sama untuk semua user
+
+### Bagian 5: Output Expectations
+
+Gemini menghasilkan:
+
+- Narrative text: string panjang berisi refleksi
+- Journey acknowledged: boolean
+- Key insights: array of strings (untuk internal logging)
+
+---
+
+## 11.4 Contoh Output Narrative yang Diharapkan
+
+**Skenario:** Returning user (4 sesi sebelumnya), cerita tentang keberhasilan kecil
+
+**❌ Narrative yang TIDAK diinginkan (terlalu pendek/generik):**
+
+> Kamu merasa senang! Itu emosi yang positif. Terus pertahankan ya.
+
+**✅ Narrative yang DIINGINKAN (personal, mendalam, journey-aware):**
+
+> Hai [Nama]! Terima kasih sudah kembali berbagi cerita hari ini. Senang sekali mendengar kabar baik darimu kali ini.
+>
+> Kalau aku lihat ke belakang, perjalananmu beberapa hari terakhir cukup intens ya. Dari perasaan kesepian setelah pindah kota, lalu rindu yang dalam pada teman-teman lama, kemudian kekhawatiran soal adaptasi... dan sekarang kamu datang dengan cerita yang berbeda. Kamu cerita tentang [detail spesifik dari cerita user].
+>
+> Ada sesuatu yang menarik yang aku tangkap dari ceritamu. Perasaan "diterima" yang kamu rasakan ini — itu bukan sesuatu yang datang begitu saja. Itu adalah hasil dari keberanianmu untuk membuka diri, meskipun sebelumnya ada keraguan dan ketakutan. Kamu memilih untuk tetap mencoba, tetap hadir, tetap memberi kesempatan pada orang-orang baru untuk mengenalmu.
+>
+> Emosi yang kamu rasakan sekarang — _valued_, merasa dihargai dan punya tempat — itu adalah buah dari proses yang sudah kamu jalani. Kadang kita lupa bahwa perasaan nyaman itu butuh waktu untuk tumbuh. Dan kamu sudah memberikan waktu itu pada dirimu sendiri.
+>
+> Yang membuatku terkesan adalah bagaimana kamu menceritakan momen [detail spesifik]. Ada kebanggaan yang tersirat di sana, meski mungkin kamu sendiri tidak sadar. Itu sah banget untuk dimiliki dan dirayakan.
+>
+> Perjalanan emosi dari minggu kemarin ke hari ini menunjukkan sesuatu tentang dirimu — bahwa kamu punya resilience yang mungkin kadang kamu remehkan sendiri. Dari titik terendah kemarin, kamu tidak stuck di sana. Kamu terus bergerak.
+>
+> Ke depan, ingat bahwa perasaan nyaman ini bukan berarti tidak akan ada hari yang berat lagi. Tapi sekarang kamu tahu bahwa kamu mampu melaluinya. Dan kalau sewaktu-waktu perlu berbagi cerita lagi, aku di sini. 💙
 
 ---
 
@@ -693,6 +901,8 @@ mhcm-chatbot/
 │   │   │   │   └── QuestionCard.tsx       # Kartu pilihan ganda ABCD, reusable untuk semua level
 │   │   │   ├── Narrative/
 │   │   │   │   └── NarrativeDisplay.tsx   # Tampilkan narasi reflektif dari Gemini, styling khusus
+│   │   │   ├── Journey/
+│   │   │   │   └── JourneyPanel.tsx       # 🆕 Panel sidebar: ringkasan perjalanan emosi sebelumnya
 │   │   │   └── Layout/
 │   │   │       ├── Header.tsx             # Navbar atas, judul app, tombol session baru
 │   │   │       └── MainLayout.tsx         # Layout wrapper (header + content area)
@@ -702,7 +912,8 @@ mhcm-chatbot/
 │   │   │   └── HistoryPage.tsx            # Riwayat session & emotion logs user
 │   │   ├── hooks/
 │   │   │   ├── useChat.ts                 # Custom hook: kirim pesan, terima response, kelola state chat
-│   │   │   └── useSession.ts             # Custom hook: mulai/akhiri session, track flow state
+│   │   │   ├── useSession.ts              # Custom hook: mulai/akhiri session, track flow state
+│   │   │   └── useHistory.ts              # 🆕 Custom hook: fetch journey/history untuk display sidebar
 │   │   ├── services/
 │   │   │   └── api.ts                     # Axios instance + semua API calls ke backend
 │   │   ├── types/
@@ -733,6 +944,7 @@ mhcm-chatbot/
 │   │   │   └── index.js                   # Semua route definitions, mapping URL → controller
 │   │   ├── services/
 │   │   │   ├── flowEngine.js              # STATE MACHINE: cek flow_state → tentukan step berikutnya
+│   │   │   ├── historyService.js          # 🆕 Query & format session history untuk inject ke prompt
 │   │   │   ├── questionEngine.js          # Query pertanyaan dari DB by emotion_key + level
 │   │   │   ├── scoringEngine.js           # Hitung score jawaban ABCD, tentukan confirmed/re-detect
 │   │   │   └── aiClient.js               # HTTP client ke FastAPI AI Service (axios)
@@ -755,11 +967,14 @@ mhcm-chatbot/
 │   │   │   └── narrative_routes.py        # POST /api/generate-narrative endpoint
 │   │   ├── services/
 │   │   │   ├── gemini_client.py           # Wrapper Google Gemini API: init model, send prompt, parse
-│   │   │   ├── emotion_detector.py        # Kirim cerita ke Gemini → parse primary/secondary/tertiary
-│   │   │   └── narrative_generator.py     # Kirim emosi+cerita ke Gemini → return narasi reflektif
+│   │   │   ├── emotion_detector.py        # Kirim cerita+history ke Gemini → parse emotion + journey note
+│   │   │   └── narrative_generator.py     # Kirim emosi+cerita+history → narasi PANJANG + KREATIF
 │   │   ├── prompts/
-│   │   │   ├── detect_emotion.py          # Prompt template: "Analisis cerita, deteksi emosi sampai tertiary"
-│   │   │   └── generate_narrative.py      # Prompt template: "Buat narasi reflektif, bukan diagnosis"
+│   │   │   ├── detect_emotion.py          # Prompt template deteksi emosi (dengan history inject)
+│   │   │   └── generate_narrative.py      # ⭐ Prompt template narasi PANJANG, KREATIF, PERSONALIZED
+│   │   │                                  # → Tidak ada batasan panjang
+│   │   │                                  # → Bebas metafora, analogi, storytelling
+│   │   │                                  # → User profile + journey dari DB di-inject
 │   │   └── schemas/
 │   │       └── models.py                  # Pydantic models: request/response schemas
 │   ├── requirements.txt                   # Dependencies: fastapi, uvicorn, google-generativeai, pydantic
@@ -772,28 +987,98 @@ mhcm-chatbot/
 
 ---
 
-## 13. Yang Belum Termasuk (Backlog)
+## 13. Yang Belum Termasuk (Backlog & Roadmap)
 
-| Feature                            | Status    | Catatan                               |
-| ---------------------------------- | --------- | ------------------------------------- |
-| Trend-Aware Response (time series) | ⏳ Nanti  | Butuh data history dulu, tambah nanti |
-| Emotion Wheel visual UI (D3/chart) | ⏳ Nanti  | Bisa tambah setelah core flow jalan   |
-| WebSocket real-time chat           | ⏳ Nanti  | REST dulu cukup                       |
-| User authentication (JWT)          | ⏳ Nanti  | Bisa anonymous dulu                   |
-| Rate limiting Gemini calls         | ⏳ Nanti  | Free tier ada limit                   |
-| Deploy (Docker/Cloud)              | ⏳ Nanti  | Lokal dulu                            |
-| Seed semua data emosi ke DB        | 🔜 Segera | Dari spreadsheet Excel yang sudah ada |
+### ✅ MVP Phase 1 (Sekarang) — History Inject
+
+| Feature                        | Status      | Catatan                                    |
+| ------------------------------ | ----------- | ------------------------------------------ |
+| Cross-session history inject   | ✅ Termasuk | Query 5 session → inject ke Gemini prompt  |
+| Personalized narrative         | ✅ Termasuk | Journey-aware: "Senang lihat kamu improve" |
+| Emotion detection with context | ✅ Termasuk | Gemini tahu trend emosi user sebelumnya    |
+| Seed semua data emosi ke DB    | 🔜 Segera   | Dari spreadsheet Excel yang sudah ada      |
+| User authentication (JWT)      | 🔜 Segera   | Untuk identifikasi user & session history  |
+
+### 🔜 Phase 2 (Nanti) — RAG untuk Resource Personalization
+
+| Feature                            | Status     | Catatan                                    |
+| ---------------------------------- | ---------- | ------------------------------------------ |
+| RAG untuk PDF psychology resources | ⏳ Phase 2 | Retrieve artikel relevan berdasarkan emosi |
+| Vector DB (Chroma/Pinecone)        | ⏳ Phase 2 | Embed & store psychology articles          |
+| Resource recommendation            | ⏳ Phase 2 | "Artikel ini cocok untuk kondisimu..."     |
+
+### ⏳ Phase 3 (Future) — LangChain Refactor
+
+| Feature                  | Status     | Catatan                                   |
+| ------------------------ | ---------- | ----------------------------------------- |
+| LangChain PromptTemplate | ⏳ Phase 3 | Cleaner prompt management                 |
+| LangChain OutputParser   | ⏳ Phase 3 | Auto-validate JSON output dengan Pydantic |
+| LangChain Memory         | ⏳ Phase 3 | Automatic context management              |
+
+### 📦 Backlog (Nice to Have)
+
+| Feature                       | Status   | Catatan                              |
+| ----------------------------- | -------- | ------------------------------------ |
+| Trend-Aware Visual (D3 Chart) | ⏳ Nanti | Visualisasi journey emosi user       |
+| Emotion Wheel visual UI       | ⏳ Nanti | Interactive wheel untuk review       |
+| WebSocket real-time chat      | ⏳ Nanti | Typing indicator, streaming response |
+| Rate limiting Gemini calls    | ⏳ Nanti | Free tier ada limit                  |
+| Deploy (Docker/Cloud)         | ⏳ Nanti | Lokal dulu                           |
 
 ---
 
-_Document ini adalah brief arsitektur v3.0 (revisi).
+## 14. Roadmap Timeline
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ DEVELOPMENT ROADMAP                                                 │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│ PHASE 1: MVP dengan History Inject (Sekarang)                      │
+│ ═══════════════════════════════════════════════                    │
+│ Minggu 1-4:  Setup backend, DB schema, models                      │
+│ Minggu 5-6:  AI Service (detect + narrative dengan history)        │
+│ Minggu 7-8:  Flow engine, history inject logic                     │
+│ Minggu 9-10: Frontend chat UI                                       │
+│ Minggu 11-12: Testing, seed data, polish                            │
+│                                                                     │
+│ → LAUNCH MVP v1.0 (3 bulan)                                         │
+│                                                                     │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│ PHASE 2: RAG untuk Resources (Setelah MVP stabil)                  │
+│ ═══════════════════════════════════════════════════                │
+│ Minggu 13-14: Setup Chroma vector DB                                │
+│ Minggu 15-16: Embed psychology PDFs                                 │
+│ Minggu 17-18: Integrate retriever ke narrative                      │
+│                                                                     │
+│ → LAUNCH v2.0 dengan Resource Recommendation (+6 minggu)           │
+│                                                                     │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│ PHASE 3: LangChain Refactor (Setelah RAG jalan)                    │
+│ ═══════════════════════════════════════════════════                │
+│ Minggu 19-20: Refactor prompts ke PromptTemplate                   │
+│ Minggu 21-22: Add OutputParsers, Memory abstraction                │
+│                                                                     │
+│ → LAUNCH v3.0 dengan Clean Architecture (+4 minggu)                │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+_Document ini adalah brief arsitektur v4.0 (Memory Inject).
 Belum ada kode. Data emotion wheel dari spreadsheet akan di-seed ke DB saat implementasi._
 
-_Perubahan v3.0:_
+_Perubahan v4.0:_
 
-- Pertanyaan spesifik per **full emotion path** (bukan per level)
-- Chat **memory dalam session** (seperti ChatGPT, tapi linear flow)
-- Total pertanyaan: **5 soal** per session (bukan 15 bertahap)
-- Flow disederhanakan: 5 steps (bukan 7)
+- ✅ **Cross-session history inject**: Gemini menerima 5 session terakhir
+- ✅ **Personalized narrative**: Journey-aware responses
+- ✅ **Emotion detection with context**: Gemini tahu trend user
+- ✅ Database schema: Tambah `story_text` & `story_summary` di sessions
+- ✅ Backend: Tambah `historyService.js` untuk query & format history
+- ✅ AI Service: Update prompts untuk menerima history context
+- ✅ Roadmap: Phase 1 (MVP) → Phase 2 (RAG) → Phase 3 (LangChain)
 
-_Selanjutnya: implementasi dimulai dari service mana dulu?_
+_Selanjutnya: implementasi dimulai dari Backend (historyService + models)_

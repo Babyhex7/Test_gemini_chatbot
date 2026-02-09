@@ -1,0 +1,250 @@
+{
+  "happy": {
+    "type": "primary",
+    "core_meaning": "afek positif; memperkuat keterhubungan, eksplorasi, dan pemeliharaan perilaku adaptif. Dalam dimensi, happy berkaitan valence positif dan variasi arousal (tenang-tinggi)",
+    "keywords": ["pleasure", "reward", "connection", "growth", "openness"],
+    "secondary": {
+      "playful": {
+        "description": "senang yang ringan dan ekspresif; dorongan bermain/bercanda",
+        "keywords": [
+          "lightness",
+          "spontaneity",
+          "fun",
+          "humor",
+          "social-bonding"
+        ],
+        "tertiary": {
+          "aroused": {
+            "description": "teraktivasi secara positif; energi naik",
+            "keywords": [
+              "energized",
+              "activated",
+              "lively",
+              "engaged",
+              "high-arousal"
+            ]
+          },
+          "cheeky": {
+            "description": "nakal-menggemaskan; berani menggoda ringan",
+            "keywords": [
+              "teasing",
+              "bold",
+              "mischievous",
+              "humorous",
+              "playful-risk"
+            ]
+          }
+        }
+      },
+      "content": {
+        "description": "puas dan cukup; ketenangan positif",
+        "keywords": [
+          "satisfied",
+          "settled",
+          "okayness",
+          "ease",
+          "gratitude-leaning"
+        ],
+        "tertiary": {
+          "free": {
+            "description": "lega/merdeka; tidak terbebani",
+            "keywords": [
+              "liberated",
+              "relief",
+              "spacious",
+              "unburdened",
+              "open"
+            ]
+          },
+          "joyful": {
+            "description": "gembira hangat; rasa bahagia yang mengalir",
+            "keywords": ["joy", "delight", "uplift", "smile", "warmth"]
+          }
+        }
+      },
+      "interested": {
+        "description": "tertarik; ingin tahu dan mengeksplorasi",
+        "keywords": [
+          "curiosity",
+          "learning",
+          "exploration",
+          "attention",
+          "engagement"
+        ],
+        "tertiary": {
+          "curious": {
+            "description": "ingin memahami/menyelidiki",
+            "keywords": ["wonder", "inquiry", "explore", "question", "discover"]
+          },
+          "inquisitive": {
+            "description": "rasa ingin tahu yang aktif dan terarah",
+            "keywords": [
+              "probing",
+              "ask",
+              "investigate",
+              "analyze",
+              "seek-info"
+            ]
+          }
+        }
+      },
+      "proud": {
+        "description": "senang karena pencapaian/kompetensi meningkat",
+        "keywords": [
+          "achievement",
+          "competence",
+          "self-respect",
+          "mastery",
+          "confidence"
+        ],
+        "tertiary": {
+          "successful": {
+            "description": "merasa berhasil mencapai target",
+            "keywords": [
+              "accomplishment",
+              "goal-met",
+              "win",
+              "progress",
+              "efficacy"
+            ]
+          },
+          "confident": {
+            "description": "yakin pada kemampuan diri",
+            "keywords": [
+              "self-efficacy",
+              "assured",
+              "capable",
+              "steady",
+              "bold"
+            ]
+          }
+        }
+      },
+      "accepted": {
+        "description": "senang karena diterima/diakui dalam relasi/kelompok",
+        "keywords": [
+          "belonging",
+          "inclusion",
+          "validation",
+          "safety",
+          "warmth"
+        ],
+        "tertiary": {
+          "respected": {
+            "description": "dihargai martabat dan kontribusinya",
+            "keywords": ["dignity", "recognition", "esteem", "trust", "value"]
+          },
+          "valued": {
+            "description": "merasa penting/berharga bagi orang lain",
+            "keywords": [
+              "appreciation",
+              "significance",
+              "worth",
+              "cared-for",
+              "matter"
+            ]
+          }
+        }
+      },
+      "powerful": {
+        "description": "rasa mampu/berdaya; agency meningkat",
+        "keywords": [
+          "agency",
+          "strength",
+          "influence",
+          "capability",
+          "control"
+        ],
+        "tertiary": {
+          "courageous": {
+            "description": "berani bertindak meski ada risiko",
+            "keywords": [
+              "bravery",
+              "face-fear",
+              "integrity",
+              "action",
+              "resilience"
+            ]
+          },
+          "creative": {
+            "description": "terbuka menghasilkan ide/solusi baru",
+            "keywords": [
+              "originality",
+              "imagination",
+              "generative",
+              "playful-thinking",
+              "innovate"
+            ]
+          }
+        }
+      },
+      "peaceful": {
+        "description": "tenang dan aman; tubuh dan pikiran rileks",
+        "keywords": ["calm", "safe", "settled", "relaxed", "harmony"],
+        "tertiary": {
+          "loving": {
+            "description": "afeksi hangat; ingin memberi/merawat",
+            "keywords": ["care", "closeness", "warmth", "compassion", "bond"]
+          },
+          "thankful": {
+            "description": "syukur; mengakui kebaikan yang diterima",
+            "keywords": [
+              "gratitude",
+              "appreciation",
+              "warmth",
+              "humility",
+              "contentment"
+            ]
+          }
+        }
+      },
+      "trusting": {
+        "description": "percaya; berani membuka diri pada orang/sistem",
+        "keywords": ["safety", "reliance", "openness", "faith", "connection"],
+        "tertiary": {
+          "sensitive": {
+            "description": "peka; mudah menangkap nuansa emosi/kebutuhan",
+            "keywords": ["attuned", "empathic", "tender", "receptive", "aware"]
+          },
+          "intimate": {
+            "description": "kedekatan emosional; rasa terhubung dalam",
+            "keywords": [
+              "closeness",
+              "disclosure",
+              "bonding",
+              "warmth",
+              "safety"
+            ]
+          }
+        }
+      },
+      "optimistic": {
+        "description": "berharap; melihat kemungkinan baik ke depan",
+        "keywords": [
+          "hope",
+          "future-positive",
+          "perseverance",
+          "confidence",
+          "resilience"
+        ],
+        "tertiary": {
+          "hopeful": {
+            
+            "description": "memiliki harapan realistis untuk membaik",
+            "keywords": [
+              "possibility",
+              "motivation",
+              "uplift",
+              "patience",
+              "direction"
+            ]
+          },
+          "inspired": {
+            "description": "terdorong oleh makna/ide; ingin bergerak",
+            "keywords": ["meaning", "energized", "vision", "purpose", "uplift"]
+          }
+        }
+      }
+    }
+  }
+}
