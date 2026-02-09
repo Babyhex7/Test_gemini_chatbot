@@ -1,14 +1,32 @@
 {
-  "version": "2.0",
-  "source": "Gloria Willcox Feeling Wheel",
-  "primary_emotions": {
+  "meta": {
+    "title": "The Feeling Wheel",
+    "author": "Gloria Willcox/Wilcox",
+    "version": "2.0",
+    "description": "Roda emosi untuk literasi emosi dan ekspansi kosakata emosi"
+  },
+  "theoretical_foundations": [
+    {
+      "name": "Pendekatan emosi dasar (discrete/basic emotions)",
+      "description": "Memetakan emosi inti seperti marah, takut, jijik, sedih, senang, terkejut sebagai kategori utama yang mudah dikenali"
+    },
+    {
+      "name": "Pendekatan dimensi (valence-arousal)",
+      "description": "Afek sebagai kombinasi kenyamanan-ketidaknyamanan (valence) dan aktivasi (arousal)"
+    },
+    {
+      "name": "Pendekatan appraisal (penilaian kognitif)",
+      "description": "Emosi dipicu/dibedakan oleh cara individu menilai situasi (ancaman, kehilangan, ketidakadilan)"
+    },
+    {
+      "name": "Temuan modern",
+      "description": "Emosi banyak ragam dan bergradasi, tersambung oleh gradien kontinu"
+    }
+  ],
+  "emotions": {
     "fearful": {
-      "id": "fearful",
-      "label": {
-        "en": "Fearful",
-        "id": "Takut"
-      },
-      "description": "Keadaan ancaman (nyata/dirasakan) yang memicu kewaspadaan, proteksi diri, dan kebutuhan mencari rasa aman.",
+      "type": "primary",
+      "core_meaning": "keadaan ancaman (nyata/dirasakan) yang memicu kewaspadaan, proteksi diri, dan kebutuhan mencari rasa aman. Dalam appraisal, takut sering terkait penilaian bahaya/ancaman dan keterbatasan sumber daya coping",
       "keywords": [
         "threat",
         "safety-seeking",
@@ -16,11 +34,9 @@
         "uncertainty",
         "protection"
       ],
-      "secondary_emotions": {
+      "secondary": {
         "scared": {
-          "id": "scared",
-          "label": { "en": "Scared", "id": "Ketakutan" },
-          "description": "Respons takut yang kuat dan cepat; fokus pada bahaya segera.",
+          "description": "respons takut yang kuat dan cepat; fokus pada bahaya segera",
           "keywords": [
             "alarm",
             "startle",
@@ -28,11 +44,9 @@
             "avoidance",
             "hypervigilance"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "helpless": {
-              "id": "helpless",
-              "label": { "en": "Helpless", "id": "Tidak Berdaya" },
-              "description": "Merasa tidak punya kendali/kemampuan untuk melindungi diri.",
+              "description": "merasa tidak punya kendali/kemampuan untuk melindungi diri",
               "keywords": [
                 "powerless",
                 "stuck",
@@ -42,9 +56,7 @@
               ]
             },
             "frightened": {
-              "id": "frightened",
-              "label": { "en": "Frightened", "id": "Ketakutan Intens" },
-              "description": "Takut intens dengan respons tubuh jelas (tegang, kaget, gemetar).",
+              "description": "takut intens dengan respons tubuh jelas (tegang, kaget, gemetar)",
               "keywords": [
                 "panic-leaning",
                 "shaking",
@@ -56,9 +68,7 @@
           }
         },
         "anxious": {
-          "id": "anxious",
-          "label": { "en": "Anxious", "id": "Cemas" },
-          "description": "Takut yang lebih menggantung; dominan kekhawatiran antisipatif.",
+          "description": "takut yang lebih menggantung; dominan kekhawatiran antisipatif",
           "keywords": [
             "anticipation",
             "worry-loop",
@@ -66,11 +76,9 @@
             "uncertainty",
             "rumination"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "overwhelmed": {
-              "id": "overwhelmed",
-              "label": { "en": "Overwhelmed", "id": "Kewalahan" },
-              "description": "Cemas karena tuntutan terasa melebihi kapasitas.",
+              "description": "cemas karena tuntutan terasa melebihi kapasitas",
               "keywords": [
                 "overload",
                 "flooding",
@@ -80,9 +88,7 @@
               ]
             },
             "worried": {
-              "id": "worried",
-              "label": { "en": "Worried", "id": "Khawatir" },
-              "description": "Memikirkan kemungkinan buruk berulang-ulang.",
+              "description": "memikirkan kemungkinan buruk berulang-ulang",
               "keywords": [
                 "concern",
                 "what-if",
@@ -94,9 +100,7 @@
           }
         },
         "insecure": {
-          "id": "insecure",
-          "label": { "en": "Insecure", "id": "Tidak Aman" },
-          "description": "Takut terkait harga diri/posisi; merasa tidak cukup aman secara sosial/kompetensi.",
+          "description": "takut terkait harga diri/posisi; merasa tidak cukup aman secara sosial/kompetensi",
           "keywords": [
             "self-doubt",
             "evaluation",
@@ -104,11 +108,9 @@
             "fragile",
             "uncertainty"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "inadequate": {
-              "id": "inadequate",
-              "label": { "en": "Inadequate", "id": "Tidak Memadai" },
-              "description": "Merasa kemampuan tidak memadai untuk tuntutan.",
+              "description": "merasa kemampuan tidak memadai untuk tuntutan",
               "keywords": [
                 "not-enough",
                 "incompetent",
@@ -118,9 +120,7 @@
               ]
             },
             "inferior": {
-              "id": "inferior",
-              "label": { "en": "Inferior", "id": "Rendah Diri" },
-              "description": "Menilai diri lebih rendah dari orang lain.",
+              "description": "menilai diri lebih rendah dari orang lain",
               "keywords": [
                 "lesser-than",
                 "compare",
@@ -132,9 +132,7 @@
           }
         },
         "weak": {
-          "id": "weak",
-          "label": { "en": "Weak", "id": "Lemah" },
-          "description": "Rasa rapuh secara fisik/mental; energi turun untuk menghadapi ancaman.",
+          "description": "rasa rapuh secara fisik/mental; energi turun untuk menghadapi ancaman",
           "keywords": [
             "depleted",
             "fragile",
@@ -142,11 +140,9 @@
             "vulnerable",
             "fatigue"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "worthless": {
-              "id": "worthless",
-              "label": { "en": "Worthless", "id": "Tidak Berharga" },
-              "description": "Penilaian diri sangat negatif; merasa tidak bernilai.",
+              "description": "penilaian diri sangat negatif; merasa tidak bernilai",
               "keywords": [
                 "self-contempt",
                 "empty-worth",
@@ -156,9 +152,7 @@
               ]
             },
             "insignificant": {
-              "id": "insignificant",
-              "label": { "en": "Insignificant", "id": "Tidak Berarti" },
-              "description": "Merasa tidak berarti/tidak diperhitungkan.",
+              "description": "merasa tidak berarti/tidak diperhitungkan",
               "keywords": [
                 "unseen",
                 "irrelevant",
@@ -170,9 +164,7 @@
           }
         },
         "rejected": {
-          "id": "rejected",
-          "label": { "en": "Rejected", "id": "Ditolak" },
-          "description": "Takut yang berakar pada penolakan sosial; kebutuhan diterima tidak terpenuhi.",
+          "description": "takut yang berakar pada penolakan sosial; kebutuhan diterima tidak terpenuhi",
           "keywords": [
             "belonging",
             "exclusion",
@@ -180,11 +172,9 @@
             "disconnection",
             "rejection"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "excluded": {
-              "id": "excluded",
-              "label": { "en": "Excluded", "id": "Dikucilkan" },
-              "description": "Merasa dikeluarkan dari kelompok/akses/relasi.",
+              "description": "merasa dikeluarkan dari kelompok/akses/relasi",
               "keywords": [
                 "left-out",
                 "isolated-socially",
@@ -194,9 +184,7 @@
               ]
             },
             "persecuted": {
-              "id": "persecuted",
-              "label": { "en": "Persecuted", "id": "Dianiaya" },
-              "description": "Merasa diperlakukan tidak adil/diincar.",
+              "description": "merasa diperlakukan tidak adil/diincar",
               "keywords": [
                 "targeted",
                 "unfairness",
@@ -208,9 +196,7 @@
           }
         },
         "threatened": {
-          "id": "threatened",
-          "label": { "en": "Threatened", "id": "Terancam" },
-          "description": "Merasa ada bahaya yang mendekat; kesiagaan meningkat.",
+          "description": "merasa ada bahaya yang mendekat; kesiagaan meningkat",
           "keywords": [
             "danger-near",
             "defensive",
@@ -218,11 +204,9 @@
             "guarded",
             "protect-self"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "nervous": {
-              "id": "nervous",
-              "label": { "en": "Nervous", "id": "Gugup" },
-              "description": "Gelisah/tegang menghadapi situasi sosial/tugas.",
+              "description": "gelisah/tegang menghadapi situasi sosial/tugas",
               "keywords": [
                 "jittery",
                 "tense",
@@ -232,9 +216,7 @@
               ]
             },
             "exposed": {
-              "id": "exposed",
-              "label": { "en": "Exposed", "id": "Terbuka" },
-              "description": "Merasa terbuka/terlihat; takut dinilai atau diserang.",
+              "description": "merasa terbuka/terlihat; takut dinilai atau diserang",
               "keywords": [
                 "vulnerable",
                 "seen-too-much",
@@ -248,12 +230,8 @@
       }
     },
     "angry": {
-      "id": "angry",
-      "label": {
-        "en": "Angry",
-        "id": "Marah"
-      },
-      "description": "Respons terhadap hambatan, ancaman batas diri, atau ketidakadilan; menyiapkan energi untuk menegakkan batas/aksi.",
+      "type": "primary",
+      "core_meaning": "respons terhadap hambatan, ancaman batas diri, atau ketidakadilan; menyiapkan energi untuk menegakkan batas/aksi",
       "keywords": [
         "boundary",
         "injustice",
@@ -261,11 +239,9 @@
         "tension",
         "protest"
       ],
-      "secondary_emotions": {
+      "secondary": {
         "let_down": {
-          "id": "let_down",
-          "label": { "en": "Let Down", "id": "Dikecewakan" },
-          "description": "Marah karena harapan/kepercayaan dilanggar.",
+          "description": "marah karena harapan/kepercayaan dilanggar",
           "keywords": [
             "disappointment",
             "unmet-expectation",
@@ -273,11 +249,9 @@
             "hurt",
             "protest"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "betrayed": {
-              "id": "betrayed",
-              "label": { "en": "Betrayed", "id": "Dikhianati" },
-              "description": "Merasa dikhianati oleh pihak yang dipercaya.",
+              "description": "merasa dikhianati oleh pihak yang dipercaya",
               "keywords": [
                 "trust-rupture",
                 "violated-expectation",
@@ -287,9 +261,7 @@
               ]
             },
             "resentful": {
-              "id": "resentful",
-              "label": { "en": "Resentful", "id": "Dendam" },
-              "description": "Marah yang dipendam; mengungkit ketidakadilan.",
+              "description": "marah yang dipendam; mengungkit ketidakadilan",
               "keywords": [
                 "bitterness",
                 "score-keeping",
@@ -301,9 +273,7 @@
           }
         },
         "humiliated": {
-          "id": "humiliated",
-          "label": { "en": "Humiliated", "id": "Terhina" },
-          "description": "Marah bercampur malu karena direndahkan.",
+          "description": "marah bercampur malu karena direndahkan",
           "keywords": [
             "shame-trigger",
             "public-exposure",
@@ -311,11 +281,9 @@
             "power-loss",
             "heat"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "disrespected": {
-              "id": "disrespected",
-              "label": { "en": "Disrespected", "id": "Tidak Dihormati" },
-              "description": "Merasa tidak dihargai martabatnya.",
+              "description": "merasa tidak dihargai martabatnya",
               "keywords": [
                 "dignity",
                 "boundary",
@@ -325,9 +293,7 @@
               ]
             },
             "ridiculed": {
-              "id": "ridiculed",
-              "label": { "en": "Ridiculed", "id": "Diejek" },
-              "description": "Ditertawakan/dipermalukan.",
+              "description": "ditertawakan/dipermalukan",
               "keywords": [
                 "mockery",
                 "shame",
@@ -339,9 +305,7 @@
           }
         },
         "bitter": {
-          "id": "bitter",
-          "label": { "en": "Bitter", "id": "Pahit" },
-          "description": "Marah yang mengeras karena luka/ketidakadilan berulang.",
+          "description": "marah yang mengeras karena luka/ketidakadilan berulang",
           "keywords": [
             "hard-feel",
             "grievance",
@@ -349,11 +313,9 @@
             "pain",
             "stuckness"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "indignant": {
-              "id": "indignant",
-              "label": { "en": "Indignant", "id": "Jengkel" },
-              "description": "Marah bermoral: ini tidak pantas/tidak adil.",
+              "description": "marah bermoral: ini tidak pantas/tidak adil",
               "keywords": [
                 "moral-anger",
                 "injustice",
@@ -363,9 +325,7 @@
               ]
             },
             "violated": {
-              "id": "violated",
-              "label": { "en": "Violated", "id": "Dilanggar" },
-              "description": "Batas diri dilanggar (fisik/psikologis).",
+              "description": "batas diri dilanggar (fisik/psikologis)",
               "keywords": [
                 "boundary-breach",
                 "unsafe",
@@ -377,9 +337,7 @@
           }
         },
         "mad": {
-          "id": "mad",
-          "label": { "en": "Mad", "id": "Geram" },
-          "description": "Marah aktif; dorongan kuat untuk melawan/menuntut.",
+          "description": "marah aktif; dorongan kuat untuk melawan/menuntut",
           "keywords": [
             "agitation",
             "heat",
@@ -387,11 +345,9 @@
             "confront",
             "attack-readiness"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "furious": {
-              "id": "furious",
-              "label": { "en": "Furious", "id": "Murka" },
-              "description": "Marah intens; kontrol diri mudah turun.",
+              "description": "marah intens; kontrol diri mudah turun",
               "keywords": [
                 "rage",
                 "explosive",
@@ -401,9 +357,7 @@
               ]
             },
             "jealous": {
-              "id": "jealous",
-              "label": { "en": "Jealous", "id": "Cemburu" },
-              "description": "Marah karena ancaman kehilangan relasi/status.",
+              "description": "marah karena ancaman kehilangan relasi/status",
               "keywords": [
                 "rivalry",
                 "insecurity",
@@ -415,15 +369,11 @@
           }
         },
         "aggressive": {
-          "id": "aggressive",
-          "label": { "en": "Aggressive", "id": "Agresif" },
-          "description": "Marah yang mendorong perilaku menyerang/menekan.",
+          "description": "marah yang mendorong perilaku menyerang/menekan",
           "keywords": ["confront", "dominate", "push", "intimidate", "force"],
-          "tertiary_emotions": {
+          "tertiary": {
             "provoked": {
-              "id": "provoked",
-              "label": { "en": "Provoked", "id": "Terpancing" },
-              "description": "Merasa dipancing hingga marah.",
+              "description": "merasa dipancing hingga marah",
               "keywords": [
                 "triggered",
                 "irritation",
@@ -433,9 +383,7 @@
               ]
             },
             "hostile": {
-              "id": "hostile",
-              "label": { "en": "Hostile", "id": "Bermusuhan" },
-              "description": "Sikap bermusuhan; menganggap pihak lain lawan.",
+              "description": "sikap bermusuhan; menganggap pihak lain lawan",
               "keywords": [
                 "antagonistic",
                 "suspicious",
@@ -447,9 +395,7 @@
           }
         },
         "frustrated": {
-          "id": "frustrated",
-          "label": { "en": "Frustrated", "id": "Frustrasi" },
-          "description": "Marah karena terhambat/terkunci; tujuan tidak tercapai.",
+          "description": "marah karena terhambat/terkunci; tujuan tidak tercapai",
           "keywords": [
             "blocked-goal",
             "stuck",
@@ -457,11 +403,9 @@
             "impatience",
             "irritation"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "infuriated": {
-              "id": "infuriated",
-              "label": { "en": "Infuriated", "id": "Sangat Marah" },
-              "description": "Sangat marah karena pemicu berat/berulang.",
+              "description": "sangat marah karena pemicu berat/berulang",
               "keywords": [
                 "extreme-anger",
                 "boiling",
@@ -471,9 +415,7 @@
               ]
             },
             "annoyed": {
-              "id": "annoyed",
-              "label": { "en": "Annoyed", "id": "Kesal" },
-              "description": "Marah ringan; terganggu oleh hal kecil/berulang.",
+              "description": "marah ringan; terganggu oleh hal kecil/berulang",
               "keywords": [
                 "irritated",
                 "bothered",
@@ -485,9 +427,7 @@
           }
         },
         "distant": {
-          "id": "distant",
-          "label": { "en": "Distant", "id": "Menjauh" },
-          "description": "Marah yang membuat menarik diri (proteksi).",
+          "description": "marah yang membuat menarik diri (proteksi)",
           "keywords": [
             "disengage",
             "cold",
@@ -495,11 +435,9 @@
             "numb-leaning",
             "boundary"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "withdrawn": {
-              "id": "withdrawn",
-              "label": { "en": "Withdrawn", "id": "Menarik Diri" },
-              "description": "Menjauh untuk mengurangi konflik/ancaman.",
+              "description": "menjauh untuk mengurangi konflik/ancaman",
               "keywords": [
                 "retreat",
                 "silent",
@@ -509,9 +447,7 @@
               ]
             },
             "numb": {
-              "id": "numb",
-              "label": { "en": "Numb", "id": "Mati Rasa" },
-              "description": "Mati rasa; respons emosi ditekan/terputus.",
+              "description": "mati rasa; respons emosi ditekan/terputus",
               "keywords": [
                 "shutdown",
                 "flat",
@@ -523,9 +459,7 @@
           }
         },
         "critical": {
-          "id": "critical",
-          "label": { "en": "Critical", "id": "Kritis" },
-          "description": "Marah dalam bentuk menilai/menyerang lewat kritik.",
+          "description": "marah dalam bentuk menilai/menyerang lewat kritik",
           "keywords": [
             "judgment",
             "fault-finding",
@@ -533,11 +467,9 @@
             "superiority",
             "distrust"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "sceptical": {
-              "id": "sceptical",
-              "label": { "en": "Sceptical", "id": "Skeptis" },
-              "description": "Curiga/meragukan; menahan kepercayaan.",
+              "description": "curiga/meragukan; menahan kepercayaan",
               "keywords": [
                 "doubt",
                 "mistrust",
@@ -547,9 +479,7 @@
               ]
             },
             "dismissive": {
-              "id": "dismissive",
-              "label": { "en": "Dismissive", "id": "Meremehkan" },
-              "description": "Meremehkan/mengabaikan pihak lain.",
+              "description": "meremehkan/mengabaikan pihak lain",
               "keywords": [
                 "invalidate",
                 "minimize",
@@ -563,12 +493,8 @@
       }
     },
     "disgusted": {
-      "id": "disgusted",
-      "label": {
-        "en": "Disgusted",
-        "id": "Jijik"
-      },
-      "description": "Penolakan terhadap sesuatu yang dianggap menjijikkan/tercemar (fisik atau moral); fungsi protektif untuk menjauh dari sumber bahaya/ketidakselarasan nilai.",
+      "type": "primary",
+      "core_meaning": "penolakan terhadap sesuatu yang dianggap menjijikkan/tercemar (fisik atau moral); fungsi protektif untuk menjauh dari sumber bahaya/ketidakselarasan nilai",
       "keywords": [
         "aversion",
         "contamination",
@@ -576,11 +502,9 @@
         "moral-disapproval",
         "distance"
       ],
-      "secondary_emotions": {
+      "secondary": {
         "disapproving": {
-          "id": "disapproving",
-          "label": { "en": "Disapproving", "id": "Tidak Setuju" },
-          "description": "Penolakan bernuansa moral/norma; ini tidak benar/pantas.",
+          "description": "penolakan bernuansa moral/norma; ini tidak benar/pantas",
           "keywords": [
             "norm",
             "moral-evaluation",
@@ -588,11 +512,9 @@
             "criticism",
             "boundary"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "judgmental": {
-              "id": "judgmental",
-              "label": { "en": "Judgmental", "id": "Menghakimi" },
-              "description": "Menilai orang/aksi secara keras.",
+              "description": "menilai orang/aksi secara keras",
               "keywords": [
                 "harsh-evaluation",
                 "blame",
@@ -602,9 +524,7 @@
               ]
             },
             "embarrassed": {
-              "id": "embarrassed",
-              "label": { "en": "Embarrassed", "id": "Malu" },
-              "description": "Malu/risih sosial; ingin menutup diri.",
+              "description": "malu/risih sosial; ingin menutup diri",
               "keywords": [
                 "self-conscious",
                 "exposure",
@@ -616,9 +536,7 @@
           }
         },
         "disappointed": {
-          "id": "disappointed",
-          "label": { "en": "Disappointed", "id": "Kecewa" },
-          "description": "Rasa tidak puas karena hasil tidak sesuai harapan (dengan nada menolak).",
+          "description": "rasa tidak puas karena hasil tidak sesuai harapan (dengan nada menolak)",
           "keywords": [
             "unmet",
             "dissatisfied",
@@ -626,11 +544,9 @@
             "low-reward",
             "discouragement"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "appalled": {
-              "id": "appalled",
-              "label": { "en": "Appalled", "id": "Terkejut Jijik" },
-              "description": "Kaget-jijik secara moral; mengerikan.",
+              "description": "kaget-jijik secara moral; mengerikan",
               "keywords": [
                 "moral-shock",
                 "disgust+surprise",
@@ -640,9 +556,7 @@
               ]
             },
             "revolted": {
-              "id": "revolted",
-              "label": { "en": "Revolted", "id": "Muak" },
-              "description": "Jijik kuat; dorongan menjauh sangat besar.",
+              "description": "jijik kuat; dorongan menjauh sangat besar",
               "keywords": [
                 "strong-aversion",
                 "recoil",
@@ -654,9 +568,7 @@
           }
         },
         "awful": {
-          "id": "awful",
-          "label": { "en": "Awful", "id": "Mengerikan" },
-          "description": "Penilaian sangat negatif; rasa tidak tahan.",
+          "description": "penilaian sangat negatif; rasa tidak tahan",
           "keywords": [
             "terrible",
             "unbearable",
@@ -664,11 +576,9 @@
             "distressed",
             "repulse"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "nauseated": {
-              "id": "nauseated",
-              "label": { "en": "Nauseated", "id": "Mual" },
-              "description": "Jijik sampai sensasi mual.",
+              "description": "jijik sampai sensasi mual",
               "keywords": [
                 "queasy",
                 "stomach-turning",
@@ -678,9 +588,7 @@
               ]
             },
             "detestable": {
-              "id": "detestable",
-              "label": { "en": "Detestable", "id": "Menjijikkan" },
-              "description": "Sangat membenci/menjijikkan (moral/karakter).",
+              "description": "sangat membenci/menjijikkan (moral/karakter)",
               "keywords": [
                 "contempt-leaning",
                 "repugnant",
@@ -692,9 +600,7 @@
           }
         },
         "repelled": {
-          "id": "repelled",
-          "label": { "en": "Repelled", "id": "Tertolak" },
-          "description": "Tertolak; ingin menjauh/menolak kontak.",
+          "description": "tertolak; ingin menjauh/menolak kontak",
           "keywords": [
             "push-away",
             "avoidance",
@@ -702,17 +608,13 @@
             "distance",
             "protect"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "horrified": {
-              "id": "horrified",
-              "label": { "en": "Horrified", "id": "Ngeri" },
-              "description": "Jijik + takut/terkejut; rasa ngeri.",
+              "description": "jijik + takut/terkejut; rasa ngeri",
               "keywords": ["horror", "shock", "threat", "aversion", "freeze"]
             },
             "hesitant": {
-              "id": "hesitant",
-              "label": { "en": "Hesitant", "id": "Ragu" },
-              "description": "Ragu mendekat karena tidak nyaman/curiga.",
+              "description": "ragu mendekat karena tidak nyaman/curiga",
               "keywords": [
                 "reluctance",
                 "caution",
@@ -726,12 +628,8 @@
       }
     },
     "sad": {
-      "id": "sad",
-      "label": {
-        "en": "Sad",
-        "id": "Sedih"
-      },
-      "description": "Respons terhadap kehilangan, kekecewaan mendalam, atau kebutuhan akan dukungan; mendorong refleksi dan pencarian koneksi/pertolongan.",
+      "type": "primary",
+      "core_meaning": "respons terhadap kehilangan, kekecewaan mendalam, atau kebutuhan akan dukungan; mendorong refleksi dan pencarian koneksi/pertolongan",
       "keywords": [
         "loss",
         "low-energy",
@@ -739,11 +637,9 @@
         "yearning",
         "comfort-seeking"
       ],
-      "secondary_emotions": {
+      "secondary": {
         "lonely": {
-          "id": "lonely",
-          "label": { "en": "Lonely", "id": "Kesepian" },
-          "description": "Sedih karena kebutuhan koneksi tidak terpenuhi.",
+          "description": "sedih karena kebutuhan koneksi tidak terpenuhi",
           "keywords": [
             "disconnection",
             "longing",
@@ -751,11 +647,9 @@
             "emptiness",
             "belonging"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "isolated": {
-              "id": "isolated",
-              "label": { "en": "Isolated", "id": "Terisolasi" },
-              "description": "Terpisah/terasing dari orang lain.",
+              "description": "terpisah/terasing dari orang lain",
               "keywords": [
                 "alone",
                 "cut-off",
@@ -765,9 +659,7 @@
               ]
             },
             "abandoned": {
-              "id": "abandoned",
-              "label": { "en": "Abandoned", "id": "Ditinggalkan" },
-              "description": "Merasa ditinggalkan saat membutuhkan.",
+              "description": "merasa ditinggalkan saat membutuhkan",
               "keywords": [
                 "left",
                 "rejected",
@@ -779,21 +671,15 @@
           }
         },
         "vulnerable": {
-          "id": "vulnerable",
-          "label": { "en": "Vulnerable", "id": "Rentan" },
-          "description": "Sedih dengan rasa rapuh; mudah terluka.",
+          "description": "sedih dengan rasa rapuh; mudah terluka",
           "keywords": ["fragile", "exposed", "tender", "unsafe", "sensitivity"],
-          "tertiary_emotions": {
+          "tertiary": {
             "victimised": {
-              "id": "victimised",
-              "label": { "en": "Victimised", "id": "Menjadi Korban" },
-              "description": "Merasa menjadi korban perlakuan orang/keadaan.",
+              "description": "merasa menjadi korban perlakuan orang/keadaan",
               "keywords": ["powerless", "unfair", "hurt", "blame", "stuck"]
             },
             "fragile": {
-              "id": "fragile",
-              "label": { "en": "Fragile", "id": "Rapuh" },
-              "description": "Mudah runtuh secara emosi; butuh perlindungan.",
+              "description": "mudah runtuh secara emosi; butuh perlindungan",
               "keywords": [
                 "delicate",
                 "low-resilience",
@@ -805,9 +691,7 @@
           }
         },
         "despair": {
-          "id": "despair",
-          "label": { "en": "Despair", "id": "Putus Asa" },
-          "description": "Sedih berat dengan hilangnya harapan.",
+          "description": "sedih berat dengan hilangnya harapan",
           "keywords": [
             "hopeless",
             "darkness",
@@ -815,17 +699,13 @@
             "helplessness",
             "collapse"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "grief": {
-              "id": "grief",
-              "label": { "en": "Grief", "id": "Duka" },
-              "description": "Sedih karena kehilangan (orang/relasi/arti).",
+              "description": "sedih karena kehilangan (orang/relasi/arti)",
               "keywords": ["mourning", "longing", "ache", "remembrance", "loss"]
             },
             "powerless": {
-              "id": "powerless",
-              "label": { "en": "Powerless", "id": "Tidak Berdaya" },
-              "description": "Tidak berdaya menghadapi keadaan.",
+              "description": "tidak berdaya menghadapi keadaan",
               "keywords": [
                 "no-agency",
                 "stuck",
@@ -837,9 +717,7 @@
           }
         },
         "guilty": {
-          "id": "guilty",
-          "label": { "en": "Guilty", "id": "Bersalah" },
-          "description": "Sedih karena merasa bersalah/tidak sesuai nilai.",
+          "description": "sedih karena merasa bersalah/tidak sesuai nilai",
           "keywords": [
             "responsibility",
             "regret",
@@ -847,11 +725,9 @@
             "self-blame",
             "repair"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "ashamed": {
-              "id": "ashamed",
-              "label": { "en": "Ashamed", "id": "Malu" },
-              "description": "Menilai diri buruk; ingin bersembunyi.",
+              "description": "menilai diri buruk; ingin bersembunyi",
               "keywords": [
                 "self-condemnation",
                 "exposure",
@@ -861,9 +737,7 @@
               ]
             },
             "remorseful": {
-              "id": "remorseful",
-              "label": { "en": "Remorseful", "id": "Menyesal" },
-              "description": "Penyesalan mendalam dan dorongan memperbaiki.",
+              "description": "penyesalan mendalam dan dorongan memperbaiki",
               "keywords": [
                 "regret",
                 "repair",
@@ -875,9 +749,7 @@
           }
         },
         "depressed": {
-          "id": "depressed",
-          "label": { "en": "Depressed", "id": "Tertekan" },
-          "description": "Sedih berkepanjangan/berat; energi dan minat turun.",
+          "description": "sedih berkepanjangan/berat; energi dan minat turun",
           "keywords": [
             "low-mood",
             "anhedonia",
@@ -885,11 +757,9 @@
             "withdrawal",
             "heaviness"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "empty": {
-              "id": "empty",
-              "label": { "en": "Empty", "id": "Hampa" },
-              "description": "Hampa; tidak ada rasa/arti.",
+              "description": "hampa; tidak ada rasa/arti",
               "keywords": [
                 "hollow",
                 "numb-leaning",
@@ -899,9 +769,7 @@
               ]
             },
             "inferior": {
-              "id": "inferior_sad",
-              "label": { "en": "Inferior", "id": "Rendah Diri" },
-              "description": "Merasa rendah/tidak mampu (dalam nuansa sedih).",
+              "description": "merasa rendah/tidak mampu (dalam nuansa sedih)",
               "keywords": [
                 "lesser-than",
                 "self-doubt",
@@ -913,9 +781,7 @@
           }
         },
         "hurt": {
-          "id": "hurt",
-          "label": { "en": "Hurt", "id": "Terluka" },
-          "description": "Sedih karena tersakiti; luka relasional/emosional.",
+          "description": "sedih karena tersakiti; luka relasional/emosional",
           "keywords": [
             "pain",
             "sensitivity",
@@ -923,11 +789,9 @@
             "wound",
             "protection"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "disappointed": {
-              "id": "disappointed_sad",
-              "label": { "en": "Disappointed", "id": "Kecewa" },
-              "description": "Sedih karena hasil/relasi tidak seperti harapan.",
+              "description": "sedih karena hasil/relasi tidak seperti harapan",
               "keywords": [
                 "letdown",
                 "unmet",
@@ -937,9 +801,7 @@
               ]
             },
             "embarrassed": {
-              "id": "embarrassed_sad",
-              "label": { "en": "Embarrassed", "id": "Malu" },
-              "description": "Sedih + malu; ingin menghindar.",
+              "description": "sedih + malu; ingin menghindar",
               "keywords": [
                 "awkward",
                 "self-conscious",
@@ -953,18 +815,12 @@
       }
     },
     "happy": {
-      "id": "happy",
-      "label": {
-        "en": "Happy",
-        "id": "Bahagia"
-      },
-      "description": "Afek positif; memperkuat keterhubungan, eksplorasi, dan pemeliharaan perilaku adaptif.",
+      "type": "primary",
+      "core_meaning": "afek positif; memperkuat keterhubungan, eksplorasi, dan pemeliharaan perilaku adaptif. Dalam dimensi, happy berkaitan valence positif dan variasi arousal (tenang-tinggi)",
       "keywords": ["pleasure", "reward", "connection", "growth", "openness"],
-      "secondary_emotions": {
+      "secondary": {
         "playful": {
-          "id": "playful",
-          "label": { "en": "Playful", "id": "Riang" },
-          "description": "Senang yang ringan dan ekspresif; dorongan bermain/bercanda.",
+          "description": "senang yang ringan dan ekspresif; dorongan bermain/bercanda",
           "keywords": [
             "lightness",
             "spontaneity",
@@ -972,11 +828,9 @@
             "humor",
             "social-bonding"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "aroused": {
-              "id": "aroused",
-              "label": { "en": "Aroused", "id": "Bergairah" },
-              "description": "Teraktivasi secara positif; energi naik.",
+              "description": "teraktivasi secara positif; energi naik",
               "keywords": [
                 "energized",
                 "activated",
@@ -986,9 +840,7 @@
               ]
             },
             "cheeky": {
-              "id": "cheeky",
-              "label": { "en": "Cheeky", "id": "Usil" },
-              "description": "Nakal-menggemaskan; berani menggoda ringan.",
+              "description": "nakal-menggemaskan; berani menggoda ringan",
               "keywords": [
                 "teasing",
                 "bold",
@@ -1000,9 +852,7 @@
           }
         },
         "content": {
-          "id": "content",
-          "label": { "en": "Content", "id": "Puas" },
-          "description": "Puas dan cukup; ketenangan positif.",
+          "description": "puas dan cukup; ketenangan positif",
           "keywords": [
             "satisfied",
             "settled",
@@ -1010,11 +860,9 @@
             "ease",
             "gratitude-leaning"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "free": {
-              "id": "free",
-              "label": { "en": "Free", "id": "Bebas" },
-              "description": "Lega/merdeka; tidak terbebani.",
+              "description": "lega/merdeka; tidak terbebani",
               "keywords": [
                 "liberated",
                 "relief",
@@ -1024,17 +872,13 @@
               ]
             },
             "joyful": {
-              "id": "joyful",
-              "label": { "en": "Joyful", "id": "Gembira" },
-              "description": "Gembira hangat; rasa bahagia yang mengalir.",
+              "description": "gembira hangat; rasa bahagia yang mengalir",
               "keywords": ["joy", "delight", "uplift", "smile", "warmth"]
             }
           }
         },
         "interested": {
-          "id": "interested",
-          "label": { "en": "Interested", "id": "Tertarik" },
-          "description": "Tertarik; ingin tahu dan mengeksplorasi.",
+          "description": "tertarik; ingin tahu dan mengeksplorasi",
           "keywords": [
             "curiosity",
             "learning",
@@ -1042,11 +886,9 @@
             "attention",
             "engagement"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "curious": {
-              "id": "curious",
-              "label": { "en": "Curious", "id": "Penasaran" },
-              "description": "Ingin memahami/menyelidiki.",
+              "description": "ingin memahami/menyelidiki",
               "keywords": [
                 "wonder",
                 "inquiry",
@@ -1056,9 +898,7 @@
               ]
             },
             "inquisitive": {
-              "id": "inquisitive",
-              "label": { "en": "Inquisitive", "id": "Ingin Tahu" },
-              "description": "Rasa ingin tahu yang aktif dan terarah.",
+              "description": "rasa ingin tahu yang aktif dan terarah",
               "keywords": [
                 "probing",
                 "ask",
@@ -1070,9 +910,7 @@
           }
         },
         "proud": {
-          "id": "proud",
-          "label": { "en": "Proud", "id": "Bangga" },
-          "description": "Senang karena pencapaian/kompetensi meningkat.",
+          "description": "senang karena pencapaian/kompetensi meningkat",
           "keywords": [
             "achievement",
             "competence",
@@ -1080,11 +918,9 @@
             "mastery",
             "confidence"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "successful": {
-              "id": "successful",
-              "label": { "en": "Successful", "id": "Sukses" },
-              "description": "Merasa berhasil mencapai target.",
+              "description": "merasa berhasil mencapai target",
               "keywords": [
                 "accomplishment",
                 "goal-met",
@@ -1094,9 +930,7 @@
               ]
             },
             "confident": {
-              "id": "confident",
-              "label": { "en": "Confident", "id": "Percaya Diri" },
-              "description": "Yakin pada kemampuan diri.",
+              "description": "yakin pada kemampuan diri",
               "keywords": [
                 "self-efficacy",
                 "assured",
@@ -1108,9 +942,7 @@
           }
         },
         "accepted": {
-          "id": "accepted",
-          "label": { "en": "Accepted", "id": "Diterima" },
-          "description": "Senang karena diterima/diakui dalam relasi/kelompok.",
+          "description": "senang karena diterima/diakui dalam relasi/kelompok",
           "keywords": [
             "belonging",
             "inclusion",
@@ -1118,17 +950,13 @@
             "safety",
             "warmth"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "respected": {
-              "id": "respected",
-              "label": { "en": "Respected", "id": "Dihormati" },
-              "description": "Dihargai martabat dan kontribusinya.",
+              "description": "dihargai martabat dan kontribusinya",
               "keywords": ["dignity", "recognition", "esteem", "trust", "value"]
             },
             "valued": {
-              "id": "valued",
-              "label": { "en": "Valued", "id": "Dihargai" },
-              "description": "Merasa penting/berharga bagi orang lain.",
+              "description": "merasa penting/berharga bagi orang lain",
               "keywords": [
                 "appreciation",
                 "significance",
@@ -1140,9 +968,7 @@
           }
         },
         "powerful": {
-          "id": "powerful",
-          "label": { "en": "Powerful", "id": "Berdaya" },
-          "description": "Rasa mampu/berdaya; agency meningkat.",
+          "description": "rasa mampu/berdaya; agency meningkat",
           "keywords": [
             "agency",
             "strength",
@@ -1150,11 +976,9 @@
             "capability",
             "control"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "courageous": {
-              "id": "courageous",
-              "label": { "en": "Courageous", "id": "Berani" },
-              "description": "Berani bertindak meski ada risiko.",
+              "description": "berani bertindak meski ada risiko",
               "keywords": [
                 "bravery",
                 "face-fear",
@@ -1164,9 +988,7 @@
               ]
             },
             "creative": {
-              "id": "creative",
-              "label": { "en": "Creative", "id": "Kreatif" },
-              "description": "Terbuka menghasilkan ide/solusi baru.",
+              "description": "terbuka menghasilkan ide/solusi baru",
               "keywords": [
                 "originality",
                 "imagination",
@@ -1178,21 +1000,15 @@
           }
         },
         "peaceful": {
-          "id": "peaceful",
-          "label": { "en": "Peaceful", "id": "Damai" },
-          "description": "Tenang dan aman; tubuh dan pikiran rileks.",
+          "description": "tenang dan aman; tubuh dan pikiran rileks",
           "keywords": ["calm", "safe", "settled", "relaxed", "harmony"],
-          "tertiary_emotions": {
+          "tertiary": {
             "loving": {
-              "id": "loving",
-              "label": { "en": "Loving", "id": "Penuh Kasih" },
-              "description": "Afeksi hangat; ingin memberi/merawat.",
+              "description": "afeksi hangat; ingin memberi/merawat",
               "keywords": ["care", "closeness", "warmth", "compassion", "bond"]
             },
             "thankful": {
-              "id": "thankful",
-              "label": { "en": "Thankful", "id": "Bersyukur" },
-              "description": "Syukur; mengakui kebaikan yang diterima.",
+              "description": "syukur; mengakui kebaikan yang diterima",
               "keywords": [
                 "gratitude",
                 "appreciation",
@@ -1204,15 +1020,11 @@
           }
         },
         "trusting": {
-          "id": "trusting",
-          "label": { "en": "Trusting", "id": "Percaya" },
-          "description": "Percaya; berani membuka diri pada orang/sistem.",
+          "description": "percaya; berani membuka diri pada orang/sistem",
           "keywords": ["safety", "reliance", "openness", "faith", "connection"],
-          "tertiary_emotions": {
+          "tertiary": {
             "sensitive": {
-              "id": "sensitive",
-              "label": { "en": "Sensitive", "id": "Peka" },
-              "description": "Peka; mudah menangkap nuansa emosi/kebutuhan.",
+              "description": "peka; mudah menangkap nuansa emosi/kebutuhan",
               "keywords": [
                 "attuned",
                 "empathic",
@@ -1222,9 +1034,7 @@
               ]
             },
             "intimate": {
-              "id": "intimate",
-              "label": { "en": "Intimate", "id": "Intim" },
-              "description": "Kedekatan emosional; rasa terhubung dalam.",
+              "description": "kedekatan emosional; rasa terhubung dalam",
               "keywords": [
                 "closeness",
                 "disclosure",
@@ -1236,9 +1046,7 @@
           }
         },
         "optimistic": {
-          "id": "optimistic",
-          "label": { "en": "Optimistic", "id": "Optimis" },
-          "description": "Berharap; melihat kemungkinan baik ke depan.",
+          "description": "berharap; melihat kemungkinan baik ke depan",
           "keywords": [
             "hope",
             "future-positive",
@@ -1246,11 +1054,9 @@
             "confidence",
             "resilience"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "hopeful": {
-              "id": "hopeful",
-              "label": { "en": "Hopeful", "id": "Penuh Harapan" },
-              "description": "Memiliki harapan realistis untuk membaik.",
+              "description": "memiliki harapan realistis untuk membaik",
               "keywords": [
                 "possibility",
                 "motivation",
@@ -1260,9 +1066,7 @@
               ]
             },
             "inspired": {
-              "id": "inspired",
-              "label": { "en": "Inspired", "id": "Terinspirasi" },
-              "description": "Terdorong oleh makna/ide; ingin bergerak.",
+              "description": "terdorong oleh makna/ide; ingin bergerak",
               "keywords": [
                 "meaning",
                 "energized",
@@ -1276,18 +1080,12 @@
       }
     },
     "surprised": {
-      "id": "surprised",
-      "label": {
-        "en": "Surprised",
-        "id": "Terkejut"
-      },
-      "description": "Respons terhadap sesuatu yang tidak terduga; meningkatkan perhatian dan pembaruan informasi.",
+      "type": "primary",
+      "core_meaning": "respons terhadap sesuatu yang tidak terduga; meningkatkan perhatian dan pembaruan informasi. Dalam dimensi, surprise sering berenergi sedang-tinggi dan valence bisa netral/positif/negatif tergantung konteks",
       "keywords": ["unexpected", "orienting", "attention", "novelty", "update"],
-      "secondary_emotions": {
+      "secondary": {
         "excited": {
-          "id": "excited",
-          "label": { "en": "Excited", "id": "Bersemangat" },
-          "description": "Surprise bernuansa positif; antusias karena hal baru.",
+          "description": "surprise bernuansa positif; antusias karena hal baru",
           "keywords": [
             "enthusiasm",
             "high-energy",
@@ -1295,11 +1093,9 @@
             "approach",
             "anticipation"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "energetic": {
-              "id": "energetic",
-              "label": { "en": "Energetic", "id": "Berenergi" },
-              "description": "Tenaga naik; siap beraksi.",
+              "description": "tenaga naik; siap beraksi",
               "keywords": [
                 "vitality",
                 "activation",
@@ -1309,9 +1105,7 @@
               ]
             },
             "eager": {
-              "id": "eager",
-              "label": { "en": "Eager", "id": "Antusias" },
-              "description": "Ingin segera memulai/mengejar hal baru.",
+              "description": "ingin segera memulai/mengejar hal baru",
               "keywords": [
                 "motivated",
                 "keen",
@@ -1323,9 +1117,7 @@
           }
         },
         "amazed": {
-          "id": "amazed",
-          "label": { "en": "Amazed", "id": "Kagum" },
-          "description": "Takjub; merasa wow karena sesuatu luar biasa.",
+          "description": "takjub; merasa wow karena sesuatu luar biasa",
           "keywords": [
             "wonder",
             "astonishment",
@@ -1333,11 +1125,9 @@
             "admiration",
             "awe"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "astonished": {
-              "id": "astonished",
-              "label": { "en": "Astonished", "id": "Tertegun" },
-              "description": "Sangat terkejut sampai sulit bereaksi sejenak.",
+              "description": "sangat terkejut sampai sulit bereaksi sejenak",
               "keywords": [
                 "stunned",
                 "disbelief",
@@ -1347,9 +1137,7 @@
               ]
             },
             "awe": {
-              "id": "awe",
-              "label": { "en": "Awe", "id": "Takjub" },
-              "description": "Takjub bercampur hormat; terasa besar.",
+              "description": "takjub bercampur hormat; terasa besar",
               "keywords": [
                 "vastness",
                 "reverence",
@@ -1361,9 +1149,7 @@
           }
         },
         "confused": {
-          "id": "confused",
-          "label": { "en": "Confused", "id": "Bingung" },
-          "description": "Surprise yang mengacaukan pemahaman; butuh klarifikasi.",
+          "description": "surprise yang mengacaukan pemahaman; butuh klarifikasi",
           "keywords": [
             "uncertainty",
             "unclear",
@@ -1371,11 +1157,9 @@
             "mixed-signals",
             "searching"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "perplexed": {
-              "id": "perplexed",
-              "label": { "en": "Perplexed", "id": "Bingung Sekali" },
-              "description": "Bingung karena tidak menemukan pola/penjelasan.",
+              "description": "bingung karena tidak menemukan pola/penjelasan",
               "keywords": [
                 "puzzling",
                 "stuck-thinking",
@@ -1385,9 +1169,7 @@
               ]
             },
             "disillusioned": {
-              "id": "disillusioned",
-              "label": { "en": "Disillusioned", "id": "Kecewa Berat" },
-              "description": "Kaget karena realita tidak sesuai ekspektasi/idealisme.",
+              "description": "kaget karena realita tidak sesuai ekspektasi/idealisme",
               "keywords": [
                 "letdown",
                 "reality-check",
@@ -1399,15 +1181,11 @@
           }
         },
         "startled": {
-          "id": "startled",
-          "label": { "en": "Startled", "id": "Kaget" },
-          "description": "Kaget refleks; respons cepat terhadap stimulus mendadak.",
+          "description": "kaget refleks; respons cepat terhadap stimulus mendadak",
           "keywords": ["reflex", "jump", "sudden", "alert", "spike"],
-          "tertiary_emotions": {
+          "tertiary": {
             "dismayed": {
-              "id": "dismayed",
-              "label": { "en": "Dismayed", "id": "Cemas Kaget" },
-              "description": "Kaget bernuansa negatif; khawatir/kecewa.",
+              "description": "kaget bernuansa negatif; khawatir/kecewa",
               "keywords": [
                 "alarmed",
                 "discouraged",
@@ -1417,9 +1195,7 @@
               ]
             },
             "shocked": {
-              "id": "shocked",
-              "label": { "en": "Shocked", "id": "Terguncang" },
-              "description": "Kaget kuat; tidak menyangka intens.",
+              "description": "kaget kuat; tidak menyangka intens",
               "keywords": [
                 "stunned",
                 "disbelief",
@@ -1433,12 +1209,8 @@
       }
     },
     "bad": {
-      "id": "bad",
-      "label": {
-        "en": "Bad",
-        "id": "Tidak Baik"
-      },
-      "description": "Label umum untuk afek tidak nyaman tingkat sedang yang sering terkait kelelahan, stres, tuntutan, kebosanan; berguna sebagai alarm awal sebelum mengerucut ke emosi lain.",
+      "type": "primary",
+      "core_meaning": "label umum untuk afek tidak nyaman tingkat sedang yang sering terkait kelelahan, stres, tuntutan, kebosanan; berguna sebagai alarm awal sebelum mengerucut ke emosi lain. Konsep ini selaras dengan gagasan afek sebagai keadaan inti (core affect) yang kemudian ditafsirkan",
       "keywords": [
         "discomfort",
         "low-resource",
@@ -1446,11 +1218,9 @@
         "dullness",
         "need-reset"
       ],
-      "secondary_emotions": {
+      "secondary": {
         "tired": {
-          "id": "tired",
-          "label": { "en": "Tired", "id": "Lelah" },
-          "description": "Sumber daya energi menurun; butuh istirahat.",
+          "description": "sumber daya energi menurun; butuh istirahat",
           "keywords": [
             "fatigue",
             "low-energy",
@@ -1458,11 +1228,9 @@
             "rest",
             "slowdown"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "sleepy": {
-              "id": "sleepy",
-              "label": { "en": "Sleepy", "id": "Mengantuk" },
-              "description": "Mengantuk; dorongan tidur kuat.",
+              "description": "mengantuk; dorongan tidur kuat",
               "keywords": [
                 "drowsy",
                 "heavy-eyes",
@@ -1472,9 +1240,7 @@
               ]
             },
             "unfocussed": {
-              "id": "unfocussed",
-              "label": { "en": "Unfocussed", "id": "Tidak Fokus" },
-              "description": "Sulit konsentrasi; perhatian mudah buyar.",
+              "description": "sulit konsentrasi; perhatian mudah buyar",
               "keywords": [
                 "distractible",
                 "scattered",
@@ -1486,9 +1252,7 @@
           }
         },
         "stressed": {
-          "id": "stressed",
-          "label": { "en": "Stressed", "id": "Stres" },
-          "description": "Tekanan internal karena tuntutan > kapasitas.",
+          "description": "tekanan internal karena tuntutan > kapasitas",
           "keywords": [
             "strain",
             "tension",
@@ -1496,11 +1260,9 @@
             "coping",
             "pressure"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "out_of_control": {
-              "id": "out_of_control",
-              "label": { "en": "Out of Control", "id": "Tidak Terkendali" },
-              "description": "Merasa situasi/reaksi diri tidak terkendali.",
+              "description": "merasa situasi/reaksi diri tidak terkendali",
               "keywords": [
                 "chaos",
                 "no-agency",
@@ -1510,9 +1272,7 @@
               ]
             },
             "overwhelmed": {
-              "id": "overwhelmed_stressed",
-              "label": { "en": "Overwhelmed", "id": "Kewalahan" },
-              "description": "Beban terasa menumpuk; kapasitas mental penuh.",
+              "description": "beban terasa menumpuk; kapasitas mental penuh",
               "keywords": [
                 "overloaded",
                 "flooded",
@@ -1524,15 +1284,11 @@
           }
         },
         "busy": {
-          "id": "busy",
-          "label": { "en": "Busy", "id": "Sibuk" },
-          "description": "Banyak tugas; perhatian terpecah dan tempo tinggi.",
+          "description": "banyak tugas; perhatian terpecah dan tempo tinggi",
           "keywords": ["multitask", "demand", "time-pressure", "pace", "load"],
-          "tertiary_emotions": {
+          "tertiary": {
             "rushed": {
-              "id": "rushed",
-              "label": { "en": "Rushed", "id": "Terburu-buru" },
-              "description": "Dikejar waktu; bergerak terlalu cepat.",
+              "description": "dikejar waktu; bergerak terlalu cepat",
               "keywords": [
                 "hurry",
                 "time-scarcity",
@@ -1542,9 +1298,7 @@
               ]
             },
             "pressured": {
-              "id": "pressured",
-              "label": { "en": "Pressured", "id": "Tertekan" },
-              "description": "Merasa dituntut/ditagih hasil.",
+              "description": "merasa dituntut/ditagih hasil",
               "keywords": [
                 "demand",
                 "expectation",
@@ -1556,9 +1310,7 @@
           }
         },
         "bored": {
-          "id": "bored",
-          "label": { "en": "Bored", "id": "Bosan" },
-          "description": "Stimulasi/arti rendah; minat turun.",
+          "description": "stimulasi/arti rendah; minat turun",
           "keywords": [
             "under-stimulated",
             "low-interest",
@@ -1566,11 +1318,9 @@
             "disengaged",
             "dull"
           ],
-          "tertiary_emotions": {
+          "tertiary": {
             "apathetic": {
-              "id": "apathetic",
-              "label": { "en": "Apathetic", "id": "Apatis" },
-              "description": "Tidak peduli; energi motivasi sangat rendah.",
+              "description": "tidak peduli; energi motivasi sangat rendah",
               "keywords": [
                 "indifferent",
                 "numb-leaning",
@@ -1580,9 +1330,7 @@
               ]
             },
             "indifferent": {
-              "id": "indifferent",
-              "label": { "en": "Indifferent", "id": "Tidak Peduli" },
-              "description": "Netral dingin; tidak terlalu berpengaruh.",
+              "description": "netral dingin; tidak terlalu berpengaruh",
               "keywords": [
                 "unconcerned",
                 "neutral",
@@ -1595,5 +1343,45 @@
         }
       }
     }
-  }
+  },
+  "clinical_notes": {
+    "purpose": "Alat literasi emosi (emotion vocabulary expansion). Membantu klien/siswa/guru bergerak dari label umum ke label spesifik, karena pelabelan spesifik biasanya mempermudah regulasi emosi dan komunikasi kebutuhan",
+    "warning": "Hindari menganggap roda emosi sebagai diagnosis. Ia adalah peta bahasa; pengalaman nyata bersifat kontekstual dan bisa bergradasi"
+  },
+  "references": [
+    {
+      "author": "Willcox/Wilcox, G.",
+      "title": "The Feeling Wheel",
+      "type": "manuscript"
+    },
+    {
+      "author": "Ekman, P.",
+      "year": 1999,
+      "title": "Basic Emotions"
+    },
+    {
+      "author": "Russell, J. A.",
+      "year": 1980,
+      "title": "A Circumplex Model of Affect"
+    },
+    {
+      "author": "Posner, J. et al.",
+      "year": 2005,
+      "title": "The circumplex model of affect: an integrative approach"
+    },
+    {
+      "author": "Lazarus",
+      "title": "Appraisal & stress appraisal"
+    },
+    {
+      "author": "Cowen, A. S., & Keltner, D.",
+      "year": 2017,
+      "title": "Self-report captures 27 distinct categories of emotion"
+    },
+    {
+      "author": "Gross, J. J.",
+      "year": "1998/2002",
+      "title": "Model proses regulasi emosi"
+    }
+  ]
 }
