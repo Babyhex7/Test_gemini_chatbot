@@ -7,7 +7,7 @@
 
 ### Variables
 @baseUrl = http://localhost:5000
-@token = YOUR_TOKEN_HERE
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoidGVzdEBleGFtcGxlMi5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiaWF0IjoxNzcwNjMwODYxLCJleHAiOjE3NzEyMzU2NjEsImlzcyI6Im1oY20tY2hhdGJvdCJ9.dzCQhjWXSMMijjphHAc95_JCQvewHiMUaCcj2v8cBuU
 
 ###############################################
 # PUBLIC ENDPOINTS (Tidak perlu token)
@@ -30,10 +30,9 @@ POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-  "nama": "Test User",
-  "email": "test@example.com",
-  "password": "password123",
-  "tanggal_lahir": "2000-01-15"
+  "name": "Test User",
+  "email": "test@example2.com",
+  "password": "password123"
 }
 
 ### 4. Login - Dapatkan token
@@ -42,7 +41,7 @@ POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test@example2.com",
   "password": "password123"
 }
 
@@ -66,8 +65,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "nama": "Test User Updated",
-  "tanggal_lahir": "2000-01-20"
+  "name": "Test User Updated"
 }
 
 ### 7. Change Password - Ganti password
@@ -76,7 +74,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "oldPassword": "password123",
+  "currentPassword": "password123",
   "newPassword": "newpassword456"
 }
 
@@ -90,10 +88,9 @@ POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-  "nama": "Bagas Test",
+  "name": "Bagas Test",
   "email": "bagas@test.com",
-  "password": "bagas123",
-  "tanggal_lahir": "1998-05-10"
+  "password": "bagas123"
 }
 
 ###
@@ -124,10 +121,9 @@ POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-  "nama": "Duplicate User",
+  "name": "Duplicate User",
   "email": "test@example.com",
-  "password": "password123",
-  "tanggal_lahir": "2000-01-15"
+  "password": "password123"
 }
 
 ### Error 2: Login dengan password salah (harus error 401)
@@ -157,12 +153,12 @@ GET {{baseUrl}}/api/auth/me
 Content-Type: application/json
 Authorization: Bearer invalid_token_here
 
-### Error 6: Change password dengan old password salah (harus error 400)
+### Error 6: Change password dengan old password salah (harus error 401)
 PUT {{baseUrl}}/api/auth/password
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "oldPassword": "wrongoldpassword",
+  "currentPassword": "wrongoldpassword",
   "newPassword": "newpassword456"
 }
